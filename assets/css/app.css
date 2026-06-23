@@ -1,0 +1,84 @@
+body {
+    margin: 0;
+    background: #f4f6f9;
+    font-family: sans-serif;  /* ← fixed san-serf */
+}
+
+/* Sidebar */
+#sidebar {
+    width: 220px;
+    height: 100vh;
+    background: rgba(33, 190, 59, 0.7);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar-brand {
+    padding: 10px;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 700;
+    border-bottom: 1px solid #3d5166;
+}
+
+.sidebar-nav { flex: 1; padding: 10px 0; }  /* ← added semicolon */
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    color: rgb(65, 66, 71);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.sidebar-link:hover, .sidebar-link.active {  /* ← added dot */
+    background: rgba(64, 138, 67, 0.81);
+    color: #fff;
+}
+
+.sidebar-footer {
+    border-top: 1px solid #3d5166;
+    padding: 20px 0;
+}
+
+/* Topbar */
+#topbar {
+    height: 40px;
+    background: #fff;
+    margin-left: 220px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid #e3e6f0;
+    justify-content: space-between;
+}
+#topbar:hover { background: #fff; }  /* stays white on hover */
+
+.topbar-user { font-size: 14px; color: #555; }
+
+/* stop any link inside topbar from getting sidebar hover styles */
+/* Stop topbar hover */
+#topbar {
+    background: #fff !important;
+    transition: none !important;
+}
+
+#topbar:hover {
+    background: #fff !important;
+    transition: none !important;
+}
+
+/* Main Content */
+#main-content {
+    margin-left: 220px;
+    padding: 20px;
+    min-height: calc(100vh - 60px);  /* ← added space before 60px */
+    margin-top: 60px;
+}
+#topbar .sidebar-link:hover {
+    background: none !important;
+    color: #555 !important;
+}
