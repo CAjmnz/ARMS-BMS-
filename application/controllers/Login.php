@@ -1,25 +1,20 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+session_start();
 
-class Login extends CI_Controller {
+// Hardcoded for now — later replace with a DB query
+$valid_user = "admin";
+$valid_pass = "1234";
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
-	public function index()
-	{
-		$this->load->view('login');
-	}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
+
+    if ($username === $valid_user && $password === $valid_pass) {
+        $_SESSION["user"] = $username;         // store user in session
+        header("Location: dashboard.php");     // redirect to dashboard
+        exit();
+    } else {
+        $error = "Invalid username or password.";
+    }
 }
+?>
