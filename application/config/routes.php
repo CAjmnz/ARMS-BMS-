@@ -54,5 +54,6 @@ $route['auth']               = 'auth/index';
 $route['auth/login']         = 'auth/login';
 $route['auth/logout']        = 'auth/logout';
 $route['dashboard']          = 'dashboard/index';
+$route['items']              = 'items/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -13,11 +13,15 @@
            class="sidebar-link <?= ($current === 'users') ? 'active' : '' ?>">
             <i class="fas fa-users"></i> Users
         </a>
-
+        <a href="<?= base_url('items') ?>"
+           class="sidebar-link <?= ($current === 'items') ? 'active' : '' ?>">
+            <i class="fas fa-user-circle"></i> Items
+        </a>
         <a href="<?= base_url('myprofile') ?>"
            class="sidebar-link <?= ($current === 'profile') ? 'active' : '' ?>">
             <i class="fas fa-user-circle"></i> My Profile
         </a>
+
     </nav>
 
     <div class="sidebar-footer">
