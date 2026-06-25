@@ -1,5 +1,7 @@
 var BASE_URL = "<?= base_url() ?>";
-
+$(document).on('click', '.btnEdit', function () {
+    console.log('Edit clicked, ID:', $(this).data('id'));
+});
 $(document).ready(function () {
 
     // Init DataTable

@@ -20,7 +20,9 @@
 <script src="<?= base_url('assets/js/app.js') ?>"></script>
 <!-- 8. Dashboard module -->
 <script src="<?= base_url('assets/js/modules/dashboard.main.js') ?>"></script>
-<!-- 9. Users module -->
+<!-- 9. items module-->
+<script src="<?= base_url('assets/js/modules/items.main.js') ?>"></script>
+<!-- 10. Users module -->
 <script src="<?= base_url('assets/js/modules/users.main.js') ?>"></script>
 
 <?php if (isset($page_scripts)): ?>

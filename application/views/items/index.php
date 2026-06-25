@@ -28,20 +28,20 @@
                     <label style="font-size:13px;">Status</label>
                     <select name="status" class="form-control form-control-sm">
                         <option value="">All Status</option>
-                        <option value="available"   <?= ($this->input->get('status') == 'available')   ? 'selected' : '' ?>>Available</option>
-                        <option value="in_use"      <?= ($this->input->get('status') == 'in_use')      ? 'selected' : '' ?>>In Use</option>
+                        <option value="available" <?= ($this->input->get('status') == 'available')   ? 'selected' : '' ?>>Available</option>
+                        <option value="in_use" <?= ($this->input->get('status') == 'in_use')      ? 'selected' : '' ?>>In Use</option>
                         <option value="unavailable" <?= ($this->input->get('status') == 'unavailable') ? 'selected' : '' ?>>Unavailable</option>
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label style="font-size:13px;">Date From</label>
                     <input type="date" name="date_from" class="form-control form-control-sm"
-                           value="<?= $this->input->get('date_from') ?>">
+                        value="<?= $this->input->get('date_from') ?>">
                 </div>
                 <div class="col-md-3">
                     <label style="font-size:13px;">Date To</label>
                     <input type="date" name="date_to" class="form-control form-control-sm"
-                           value="<?= $this->input->get('date_to') ?>">
+                        value="<?= $this->input->get('date_to') ?>">
                 </div>
                 <div class="col-md-3 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-primary btn-sm">
@@ -92,15 +92,23 @@
                             <td><?= date('M d, Y h:i A', strtotime($item->created_at)) ?></td>
                             <td><?= date('M d, Y h:i A', strtotime($item->updated_at)) ?></td>
                             <td>
-                                <button class="btn btn-primary btn-sm btnEdit"
-                                        data-id="<?= $item->id ?>">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-sm btnDelete"
-                                        data-id="<?= $item->id ?>"
-                                        data-name="<?= htmlspecialchars($item->name) ?>">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                        id="dropdownMenu2" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <button class="dropdown-item btnEdit" data-id="<?= $item->id ?>">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                        <button class="dropdown-item btnDelete"
+                                            data-id="<?= $item->id ?>"
+                                            data-name="<?= htmlspecialchars($item->name) ?>">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
