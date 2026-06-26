@@ -61,11 +61,16 @@
             <thead style="background:#f8f9fa;">
                 <tr>
                     <th>#</th>
-                    <th>Barcode</th>
-                    <th>Name</th>
+                    <th>Item Name</th>
                     <th>Category</th>
-                    <th>Quantity</th>
+                    <th>Brand</th>
+                    <th>model</th>
+                    <th>Serial Number</th>
+                    <th>Total Quantity</th>
+                    <th>Available Quantity</th>
+                    <th>Borrowed Quantity</th>
                     <th>Status</th>
+                    <th>Location</th>
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Action</th>
@@ -76,10 +81,14 @@
                     <?php foreach ($items as $i => $item): ?>
                         <tr>
                             <td><?= $i + 1 ?></td>
-                            <td><?= htmlspecialchars($item->barcode) ?></td>
-                            <td><?= htmlspecialchars($item->name) ?></td>
+                            <td><?= htmlspecialchars($item->item_name) ?></td>
                             <td><?= htmlspecialchars($item->category) ?></td>
-                            <td><?= $item->quantity ?></td>
+                            <td><?= htmlspecialchars($item->brand ?? '-') ?></td>
+                            <td><?= htmlspecialchars($item->Model ?? '-') ?></td>
+                            <td><?= htmlspecialchars($item->serial_number ?? '-') ?></td>
+                            <td><?= $item->total_quantity ?? $item->quantity ?></td>
+                            <td><?= $item->available_quantity ?? '-' ?></td>
+                            <td><?= $item->borrowed_quantity ?? '-' ?></td>
                             <td>
                                 <?php if ($item->status === 'available'): ?>
                                     <span class="badge badge-success">Available</span>
@@ -89,22 +98,22 @@
                                     <span class="badge badge-danger">Unavailable</span>
                                 <?php endif; ?>
                             </td>
+                            <td><?= htmlspecialchars($item->location ?? '-') ?></td>
                             <td><?= date('M d, Y h:i A', strtotime($item->created_at)) ?></td>
                             <td><?= date('M d, Y h:i A', strtotime($item->updated_at)) ?></td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                        id="dropdownMenu2" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <div class="dropdown-menu">
                                         <button class="dropdown-item btnEdit" data-id="<?= $item->id ?>">
                                             <i class="fas fa-edit"></i> Edit
                                         </button>
                                         <button class="dropdown-item btnDelete"
                                             data-id="<?= $item->id ?>"
-                                            data-name="<?= htmlspecialchars($item->name) ?>">
+                                            data-name="<?= htmlspecialchars($item->item_name) ?>">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </div>
@@ -112,10 +121,6 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="9" class="text-center">No items found.</td>
-                    </tr>
                 <?php endif; ?>
             </tbody>
         </table>
@@ -123,7 +128,7 @@
 
     <!-- Add/Edit Modal -->
     <div class="modal fade" id="itemModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitle">Add Item</h5>
@@ -133,31 +138,69 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="item_id">
-                    <div class="form-group">
-                        <label>Barcode</label>
-                        <input type="text" class="form-control" id="barcode" placeholder="Barcode">
+                    <div class="form-row">
+                        <div class="form-group col-6 mb-2">
+                            <div class="field-wrap">
+                                <label>Item Name</label>
+                                <input type="text" class="form-control" id="item_name" placeholder="Item Name">
+                            </div>
+                        </div>
+                        <div class="form-group col-6 mb-2">
+                            <div class="field-wrap">
+                                <label>Category</label>
+                                <input type="text" class="form-control" id="category" placeholder="Category">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Item Name</label>
-                        <input type="text" class="form-control" id="name" placeholder="Item Name">
+                    <div class="form-row">
+                        <div class="form-group col-6 mb-2">
+                            <label>Brand</label>
+                            <input type="text" class="form-control" id="brand" placeholder="Brand">
+                        </div>
+                        <div class="form-group col-6 mb-2">
+                            <label>Model</label>
+                            <input type="text" class="form-control" id="Model" placeholder="Model">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <input type="text" class="form-control" id="category" placeholder="Category">
+                    <div class="form-row">
+                        <div class="form-group col-6 md-2">
+                            <label>Serial Number</label>
+                            <input type="text" class="form-control" id="serial_number" placeholder="Serial number">
+                        </div>
+                        <div class="form-group col-6 mb-6">
+                            <label>Quantity</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" min="0">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Quantity</label>
-                        <input type="number" class="form-control" id="quantity" placeholder="Quantity" min="0">
+                    <div class="form-row">
+                        <div class="form-group col-6 md-2">
+                            <label>Available Quantity</label>
+                            <input type="number" class="form-control" id="available_quantity" placeholder="Available Quantity" min="0">
+                        </div>
+                        <div class="form-group col-6 mb-2">
+                            <label>Borrowed Quantity</label>
+                            <input type="number" class="form-control" id="borrowed_+quantity" placeholder="Borrowed Quantity" min="0">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select class="form-control" id="status">
-                            <option value="available">Available</option>
-                            <option value="in_use">In Use</option>
-                            <option value="unavailable">Unavailable</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group col-6 mb-2">
+                            <div class="field-wrap">
+                                <label>Status</label>
+                                <select class="form-control" id="status">
+                                    <option value="available">Available</option>
+                                    <option value="in_use">In Use</option>
+                                    <option value="unavailable">Unavailable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-6 mb-2">
+                            <div class="field-wrap">
+                                <label>location</label>
+                                <input type="text" class="form-control" id="location" placeholder="Location">
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </div> <!-- ← modal-body closes HERE -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-success" id="btnSave">Save</button>
@@ -165,5 +208,4 @@
             </div>
         </div>
     </div>
-</div>
-<?php $this->load->view('templates/footer'); ?>
+    <?php $this->load->view('templates/footer'); ?>

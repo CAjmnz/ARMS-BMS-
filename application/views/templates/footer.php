@@ -1,7 +1,6 @@
 <!-- BASE_URL for JS — uppercase, matches all module files -->
-<script>
-    var BASE_URL = "<?= base_url() ?>";
-</script>
+
+
 
 <!-- 1. jQuery FIRST -->
 <script src="<?= base_url('assets/js/jquery-3.7.1.min.js') ?>"></script>
@@ -14,12 +13,17 @@
 <script src="<?= base_url('assets/js/sweetalert2.all.min.js') ?>"></script>
 <!-- 5. Chart.js -->
 <script src="<?= base_url('assets/js/chart.umd.min.js') ?>"></script>
+
+<script>
+    var BASE_URL = "<?= base_url() ?>";
+</script>
+
 <!-- 6. App config (needs BASE_URL) -->
 <script src="<?= base_url('assets/js/config.js') ?>"></script>
 <!-- 7. App core -->
 <script src="<?= base_url('assets/js/app.js') ?>"></script>
 <!-- 8. Dashboard module -->
-<script src="<?= base_url('assets/js/modules/dashboard.main.js') ?>"></script>
+
 <!-- 9. items module-->
 <script src="<?= base_url('assets/js/modules/items.main.js') ?>"></script>
 <!-- 10. Users module -->
