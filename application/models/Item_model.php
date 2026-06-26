@@ -31,7 +31,7 @@ class Item_model extends CI_Model{
     public function insert($data){
         return $this->db->insert($this->table,$data);
     }
-    public function update($data){
+    public function update($id,$data){
         $this->db->where('id',$id);
         return $this->db->update($this->table, $data);
     }

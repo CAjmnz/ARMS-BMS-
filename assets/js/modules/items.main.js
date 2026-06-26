@@ -1,6 +1,4 @@
-$(document).on("click", ".btnEdit", function () {
-	console.log("Edit clicked, ID:", $(this).data("id"));
-});
+
 $(document).ready(function () {
 	// Destroy existing DataTable if already initialized
 	if ($.fn.DataTable.isDataTable("#itemsTable")) {
@@ -69,10 +67,10 @@ $(document).ready(function () {
 		var brand = $("#brand").val().trim();
 		var model = $("#model").val().trim();
 		var serial_number = $("#serial_number").val().trim();
-		var quantity = $("#quantity").val();
-		var available_quantity = $("#available_quantity").val();
-		var borrowed_quantity = $("#borrowed_quantity").val();
-		var status = $("#status").val();
+		var quantity = $("#quantity").val().trim();
+		var available_quantity = $("#available_quantity").val().trim();
+		var borrowed_quantity = $("#borrowed_quantity").val().trim();
+		var status = $("#status").val().trim();
 		var item_location = $("#location").val().trim();
 
 		if (!item_name || !category || quantity === "") {

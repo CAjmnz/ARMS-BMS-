@@ -44,7 +44,7 @@ class Items extends CI_Controller
             'item_name'          => trim($this->input->post('item_name')),
             'category'           => trim($this->input->post('category')),
             'brand'              => trim($this->input->post('brand')),
-            'model'              => trim($this->input->post('model')),
+            'Model'              => trim($this->input->post('model')),
             'serial_number'      => trim($this->input->post('serial_number')),
             'quantity'           => (int) $this->input->post('quantity'),
             'available_quantity' => (int) $this->input->post('available_quantity'),
@@ -59,18 +59,24 @@ class Items extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'Failed to add item.']);
         }
     }
-
-    public function update($id)
-    {
+    public function get($id) {
+        $item = $this->Item_model->get_by_id($id);
+        if ($item) {
+            echo json_encode(['success' => true, 'item' => $item]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Item not found.']);
+        }
+    }
+    public function update($id) {
         if ($this->input->method() !== 'post') {
             redirect('items');
         }
-
+    
         $data = [
             'item_name'          => trim($this->input->post('item_name')),
             'category'           => trim($this->input->post('category')),
             'brand'              => trim($this->input->post('brand')),
-            'model'              => trim($this->input->post('model')),
+            'Model'              => trim($this->input->post('model')),
             'serial_number'      => trim($this->input->post('serial_number')),
             'quantity'           => (int) $this->input->post('quantity'),
             'available_quantity' => (int) $this->input->post('available_quantity'),
@@ -78,7 +84,7 @@ class Items extends CI_Controller
             'status'             => $this->input->post('status'),
             'location'           => trim($this->input->post('location')),
         ];
-
+    
         if ($this->Item_model->update($id, $data)) {
             echo json_encode(['success' => true, 'message' => 'Item updated successfully.']);
         } else {

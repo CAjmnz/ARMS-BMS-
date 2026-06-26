@@ -65,10 +65,10 @@
                     <th>Category</th>
                     <th>Brand</th>
                     <th>model</th>
-                    <th>Serial Number</th>
-                    <th>Total Quantity</th>
-                    <th>Available Quantity</th>
-                    <th>Borrowed Quantity</th>
+                    <th>Serial Num</th>
+                    <th>Total Qty</th>
+                    <th>Available Qty</th>
+                    <th>Borrowed Qty</th>
                     <th>Status</th>
                     <th>Location</th>
                     <th>Created At</th>
@@ -159,7 +159,7 @@
                         </div>
                         <div class="form-group col-6 mb-2">
                             <label>Model</label>
-                            <input type="text" class="form-control" id="Model" placeholder="Model">
+                            <input type="text" class="form-control" id="model" placeholder="Model">
                         </div>
                     </div>
                     <div class="form-row">
@@ -179,7 +179,7 @@
                         </div>
                         <div class="form-group col-6 mb-2">
                             <label>Borrowed Quantity</label>
-                            <input type="number" class="form-control" id="borrowed_+quantity" placeholder="Borrowed Quantity" min="0">
+                            <input type="number" class="form-control" id="borrowed_quantity" placeholder="Borrowed Quantity" min="0">
                         </div>
                     </div>
                     <div class="form-row">
