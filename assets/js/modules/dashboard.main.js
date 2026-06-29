@@ -13,9 +13,9 @@
                 columnDefs: [{ orderable: false, targets: 0 }],
                 language: {
                     search:       'Search:',
-                    lengthMenu:   'Show _MENU_ entries',
-                    info:         'Showing _START_ to _END_ of _TOTAL_ entries',
-                    infoEmpty:    'Showing 0 to 0 of 0 entries',
+                    lengthMenu:   'Show _MENU_',
+                    info:         'Showing _START_ to _END_ of _TOTAL_',
+                    infoEmpty:    'Showing 0 to 0 of 0',
                     infoFiltered: '(filtered from _MAX_ total)',
                     paginate: {
                         first:    'First',

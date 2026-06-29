@@ -6,7 +6,7 @@
 
     <!-- Page Header -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h4 style="margin:0; font-weight:700; color:#333;">Item Management</h4>
+        <h4 style="margin:0; font-weight:700; color:#333;">Item Management * Master List</h4>
         <button class="btn btn-success btn-sm" id="btnAddItem">
             <i class="fas fa-plus"></i> Add Item
         </button>
