@@ -59,7 +59,9 @@ class Items extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'Failed to add item.']);
         }
     }
-    public function get($id) {
+    //get individual item
+    public function get($id)
+    {
         $item = $this->Item_model->get_by_id($id);
         if ($item) {
             echo json_encode(['success' => true, 'item' => $item]);
@@ -67,11 +69,13 @@ class Items extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'Item not found.']);
         }
     }
-    public function update($id) {
+    // update item
+    public function update($id)
+    {
         if ($this->input->method() !== 'post') {
             redirect('items');
         }
-    
+
         $data = [
             'item_name'          => trim($this->input->post('item_name')),
             'category'           => trim($this->input->post('category')),
@@ -84,7 +88,7 @@ class Items extends CI_Controller
             'status'             => $this->input->post('status'),
             'location'           => trim($this->input->post('location')),
         ];
-    
+
         if ($this->Item_model->update($id, $data)) {
             echo json_encode(['success' => true, 'message' => 'Item updated successfully.']);
         } else {
@@ -107,5 +111,91 @@ class Items extends CI_Controller
     {
         $this->session->sess_destroy();
         redirect('auth');
+    }
+
+    // ajax list
+    public function ajax_list() {
+        // Get DataTables parameters
+        $draw     = $this->input->post('draw');
+        $start    = $this->input->post('start');
+        $length   = $this->input->post('length');
+        $search   = $this->input->post('search')['value'] ?? '';
+        $order    = $this->input->post('order');
+        $order_col = $order[0]['column'] ?? 0;
+        $order_dir = $order[0]['dir']    ?? 'asc';
+    
+        // Get filters
+        $filters = [
+            'status'    => $this->input->post('status'),
+            'date_from' => $this->input->post('date_from'),
+            'date_to'   => $this->input->post('date_to'),
+        ];
+    
+        // Get counts
+        $total    = $this->Item_model->count_total();
+        $filtered = $this->Item_model->count_filtered($search, $filters);
+    
+        // Get rows
+        $items = $this->Item_model->get_datatables($length, $start, $search, $order_col, $order_dir, $filters);
+    
+        // Build rows
+        $data = [];
+        $i    = (int)$start + 1;
+    
+        foreach ($items as $item) {
+    
+            // Status badge
+            if ($item->status === 'available') {
+                $badge = '<span class="badge badge-success">Available</span>';
+            } elseif ($item->status === 'in-use') {
+                $badge = '<span class="badge badge-warning">In Use</span>';
+            } else {
+                $badge = '<span class="badge badge-danger">Unavailable</span>';
+            }
+    
+            // Action dropdown
+            $action = '
+            <div class="dropdown">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item btnEdit" data-id="' . $item->id . '">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="dropdown-item btnDelete"
+                        data-id="' . $item->id . '"
+                        data-name="' . htmlspecialchars($item->item_name) . '">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>';
+    
+            $data[] = [
+                $i++,
+                htmlspecialchars($item->item_name),
+                htmlspecialchars($item->category),
+                htmlspecialchars($item->brand          ?? '-'),
+                htmlspecialchars($item->Model          ?? '-'),
+                htmlspecialchars($item->serial_number  ?? '-'),
+                $item->quantity           ?? 0,
+                $item->available_quantity ?? 0,
+                $item->borrowed_quantity  ?? 0,
+                $badge,
+                htmlspecialchars($item->location ?? '-'),
+                date('M d, Y h:i A', strtotime($item->created_at)),
+                date('M d, Y h:i A', strtotime($item->updated_at)),
+                $action,
+            ];
+        }
+    
+        // Return JSON
+        echo json_encode([
+            'draw'            => (int) $draw,
+            'recordsTotal'    => (int) $total,
+            'recordsFiltered' => (int) $filtered,
+            'data'            => $data,
+        ]);
     }
 }

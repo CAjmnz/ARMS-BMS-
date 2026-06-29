@@ -6,10 +6,16 @@ $intials = strtoupper(substr($username,0,1))?:'U';
 $page_label = isset($page_label) ? $page_label : 'Dashboard';
 ?>
 
+
 <div id="topbar">
     <div style="font-size:20px;font-weight:600;color:#333;">
-        ARMS-BMS &rsaquo; <?= htmlspecialchars($page_label) ?>
+    <button class="topbar-toggle" id="sidebarToggle" title="Toggle sidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+        A.R.M.S - Borrower's Monitoring System &rsaquo; <?= htmlspecialchars($page_label) ?>
     </div>
+
+    <span id="topbarClock"></span>
 <!--AVATAR DROPDOWN-->
 <?php
 $username        = $this->session->userdata('username') ?? '';

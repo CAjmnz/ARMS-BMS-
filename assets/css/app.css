@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background: #f4f6f9;
+    background: #ace2cd41;
     font-family: sans-serif;  /* ← fixed san-serf */
 }
 
@@ -8,18 +8,18 @@ body {
 #sidebar {
     width: 220px;
     height: 100vh;
-    background: rgba(33, 190, 59, 0.7);
+    background: rgba(3, 202, 36, 0.671);
     position: fixed;
     top: 0; left: 0;
     display: flex;
     flex-direction: column;
 }
 .sidebar-brand {
-    padding: 10px;
+    padding: 12px;
     color: #fff;
-    font-size: 25px;
+    font-size: 27px;
     font-weight: 700;
-    border-bottom: 1px solid #3d5166;
+    border-bottom: 2px solid #7a817b;
 }
 
 .sidebar-nav { flex: 1; padding: 10px 0; }  /* ← added semicolon */
@@ -27,16 +27,16 @@ body {
 .sidebar-link {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
+    gap: 15px;
+    padding: 14px 20px;
     color: rgb(65, 71, 69);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .sidebar-link:hover, .sidebar-link.active {  /* ← added dot */
-    background: rgba(64, 138, 67, 0.81);
-    color: #fff;
+    background: rgba(138, 238, 168, 0.678);
+    color: #4e614dea;
 }
 
 .sidebar-footer {
@@ -48,7 +48,7 @@ body {
 /* Topbar */
 #topbar {
     height: 80px;
-    background: rgb(107, 206, 145);
+    background: rgba(25, 207, 34, 0.712);
     margin-left: 220px;
     display: flex;
     align-items: center;
@@ -63,7 +63,7 @@ body {
 /* stop any link inside topbar from getting sidebar hover styles */
 /* Stop topbar hover */
 #topbar {
-    background: rgba(40, 236, 115, 0.801) !important;
+    background: rgba(13, 226, 24, 0.801) !important;
     transition: none !important;
 }
 
@@ -89,3 +89,9 @@ body {
     background: none !important;
     color: #555 !important;
 }
+.topbar-toggle {
+    background: none; border: none; cursor: pointer;
+    color: #5a5c69; font-size: 18px; padding: 4px 8px;
+    border-radius: 4px;
+}
+.topbar-toggle:hover { background: #f0f2f5; }

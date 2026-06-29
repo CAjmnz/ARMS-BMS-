@@ -77,51 +77,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($items)): ?>
-                    <?php foreach ($items as $i => $item): ?>
-                        <tr>
-                            <td><?= $i + 1 ?></td>
-                            <td><?= htmlspecialchars($item->item_name) ?></td>
-                            <td><?= htmlspecialchars($item->category) ?></td>
-                            <td><?= htmlspecialchars($item->brand ?? '-') ?></td>
-                            <td><?= htmlspecialchars($item->Model ?? '-') ?></td>
-                            <td><?= htmlspecialchars($item->serial_number ?? '-') ?></td>
-                            <td><?= $item->total_quantity ?? $item->quantity ?></td>
-                            <td><?= $item->available_quantity ?? '-' ?></td>
-                            <td><?= $item->borrowed_quantity ?? '-' ?></td>
-                            <td>
-                                <?php if ($item->status === 'available'): ?>
-                                    <span class="badge badge-success">Available</span>
-                                <?php elseif ($item->status === 'in_use'): ?>
-                                    <span class="badge badge-warning">In Use</span>
-                                <?php else: ?>
-                                    <span class="badge badge-danger">Unavailable</span>
-                                <?php endif; ?>
-                            </td>
-                            <td><?= htmlspecialchars($item->location ?? '-') ?></td>
-                            <td><?= date('M d, Y h:i A', strtotime($item->created_at)) ?></td>
-                            <td><?= date('M d, Y h:i A', strtotime($item->updated_at)) ?></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button class="dropdown-item btnEdit" data-id="<?= $item->id ?>">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </button>
-                                        <button class="dropdown-item btnDelete"
-                                            data-id="<?= $item->id ?>"
-                                            data-name="<?= htmlspecialchars($item->item_name) ?>">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
             </tbody>
         </table>
     </div>

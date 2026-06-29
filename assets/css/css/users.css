@@ -1,0 +1,340 @@
+/* ── Field validation ──────────────────────────────────────────────── */
+.field-wrap {
+    position: relative;
+    width: 100%;
+}
+.field-wrap input.is-invalid,
+.field-wrap select.is-invalid {
+    border: 1.5px solid #dc3545 !important;
+    box-shadow: none !important;
+    padding-right: 36px !important;
+}
+.field-error-icon {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #dc3545;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 10;
+}
+.field-wrap.has-error .field-error-icon {
+    display: block;
+}
+.field-error-icon .error-tooltip {
+    display: none;
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1e1e2e;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 9999;
+    letter-spacing: .2px;
+}
+.field-error-icon .error-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 0 5px 6px;
+    border-style: solid;
+    border-color: transparent transparent transparent #1e1e2e;
+}
+.field-error-icon:hover .error-tooltip {
+    display: block;
+}
+.error-line {
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+/* ── Form states ───────────────────────────────────────────────────── */
+.is-invalid {
+    border: 1px solid #dc3545 !important;
+    box-shadow: 0 0 4px rgba(220,53,69,.4);
+}
+.is-valid {
+    border: 1px solid #28a745 !important;
+    box-shadow: 0 0 4px rgba(40,167,69,.4);
+}
+
+/* ── Avatars ───────────────────────────────────────────────────────── */
+.profile-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #16c784;
+    flex-shrink: 0;
+}
+
+/* Used by the inline initials fallback in ajax_list() */
+.profile-initials-sm {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #16c784;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+/* Large initials (profile page etc.) */
+.profile-initials {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #16c784;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* ── Table ─────────────────────────────────────────────────────────── */
+.loading-table {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ── CRITICAL: allow Bootstrap dropdowns to escape table overflow ──── */
+/*
+   DataTables wraps the table in .dataTables_wrapper which often has
+   overflow:hidden or overflow:auto — this clips the dropdown menu.
+   The fix: make the wrapper scrollable on x only, never clip on y,
+   and give the dropdown a high enough z-index to sit above everything.
+*/
+.dataTables_wrapper {
+    overflow-x: auto;
+    overflow-y: visible !important;
+}
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: visible !important;
+}
+
+/* Dropdown menu z-index — must beat modal backdrop (1040) only when
+   NOT inside a modal; inside a modal Bootstrap handles it already. */
+#usersTable .dropdown-menu {
+    z-index: 1050;
+}
+
+/* ── Action buttons ────────────────────────────────────────────────── */
+.action-btn {
+    transition: all .2s ease;
+}
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+.btn-see-more {
+    background: none;
+    border: none;
+    padding: 2px 0 0;
+    color: #721c24;
+    font-size: .79rem;
+    text-decoration: underline;
+    cursor: pointer;
+    display: inline-block;
+}
+.btn-see-more:focus { outline: none; }
+
+/* ── Custom table dropdown (bypasses Bootstrap DOM-binding issue) ──── */
+.rms-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.rms-dropdown-menu.show{
+    display: block;
+
+}
+.rms-dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 9999;
+    min-width: 130px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.15);
+}
+.rms-dropdown-menu.show {
+    display: block;
+}
+.rms-dropdown-menu .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 6px 16px;
+    font-size: .875rem;
+    color: #343a40;
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration:none;
+   
+}
+.rms-dropdown-menu .dropdown-item:hover {
+    background: #f8f9fa;
+    color: #343a40;
+}
+.rms-dropdown-menu .dropdown-item.text-danger {
+    color: #dc3545 !important;
+}
+.rms-dropdown-menu .dropdown-item.text-danger:hover{
+    background-color: #fff5f5
+}
+.dropdown-menu {
+    z-index: 9999;
+}
+/* ── Drive-style grid ─────────────────────────── */
+.drive-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.drive-card {
+    width: 120px;
+    border: 1px solid #c9ddf0;
+    border-radius: 8px;
+    overflow: visible;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+
+.drive-card:hover {
+    box-shadow: 0 3px 10px rgba(0,0,0,.15);
+}
+
+.drive-card-thumb {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    font-size: 2.2rem;
+    overflow: hidden;
+}
+
+.drive-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.drive-card-info {
+    padding: 5px 7px;
+    border-top: 1px solid #dee2e6;
+}
+
+.drive-card-name {
+    font-size:large.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #343a40;
+}
+
+.drive-card-type {
+    font-size: .65rem;
+    color: #6c757d;
+}
+
+.drive-card-actions {
+   position: absolute;
+   top:4px;
+   right: 4px;
+   z-index: 10;
+
+
+}
+
+/* Remove  button on preview cards */
+.drive-card-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.45);
+    color: #fff;
+    font-size: .7rem;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    display: none;
+}
+
+.drive-card:hover .drive-card-remove {
+    display: block
+}
+
+.drive-card-action{
+    padding: 4px 5px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.drive-card .rms-dropdown-menu {
+    right: 0;
+    left: auto;
+    min-width: 100px;
+}
+
+.drive-card .rms-dropdown-menu .dropdown-item.text-danger{
+    color: #dc3545 !important;
+}
+
+.drive-card .rms-dropdown-menu .dropdown-item:hover{
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+.drive-card .rms-dropdown-menu .dropdown-item.text-danger:hover {
+    background-color: #fff5f5;
+    color: #dc3545 !important;
+}
+
+.drive-card-checkbox{
+    position: absolute;
+    top:8px;
+    left:6px;
+    z-index: 10;
+}
+
+.drive-card-checkbox
+input[type="checkbox"]{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.drive-card.selected{
+    border-color: #007bff;
+    box-shadow:0 0 0 2px
+rgba(0.,123,255,.35);
+}
