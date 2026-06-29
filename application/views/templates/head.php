@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="base-url" content="<?= base_url() ?>">
-    <title><?= isset($title) ? htmlspecialchars($title) : 'RMS' ?></title>
+    <title><?= isset($title) ? htmlspecialchars($title) : 'ARMS-BMS' ?></title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/bootstrap.min.css') ?>">

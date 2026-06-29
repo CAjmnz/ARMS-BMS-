@@ -15,18 +15,19 @@
         </a>
         <a href="<?= base_url('items') ?>"
            class="sidebar-link <?= ($current === 'items') ? 'active' : '' ?>">
-            <i class="fas fa-user-circle"></i> Items
+           <i class="bi bi-clipboard-check-fill"></i>Items
         </a>
-        <a href="<?= base_url('myprofile') ?>"
-           class="sidebar-link <?= ($current === 'profile') ? 'active' : '' ?>">
-            <i class="fas fa-user-circle"></i> My Profile
+        <a href="<?= base_url('item_Itemized') ?>"
+           class="sidebar-link <?= ($current === 'item-itemized') ? 'active' : '' ?>">
+           <i class="bi bi-clipboard-data-fill"></i>Item-Itemized
         </a>
+        
 
     </nav>
 
     <div class="sidebar-footer">
-        <a href="<?= base_url('dashboard/logout') ?>" class="sidebar-link">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
+        <label class="sidebar-link"> @ARMS-BMS 2026 </label> 
+            
+        
     </div>
 </div>
