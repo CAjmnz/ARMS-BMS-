@@ -10,11 +10,15 @@ class Auth extends CI_Controller
         $this->load->model('User_model');
         $this->load->library('session');
         $this->load->helper('url');
+        $this->load->helper(array('form', 'url'));
+        $this->load->library('form_validation');
+
     }
 
     // Shows the login form
     public function index()
     {
+        
         $this->load->view('auth/login');
     }
 

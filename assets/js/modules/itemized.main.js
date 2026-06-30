@@ -6,18 +6,18 @@ $(document).ready(function () {
     var dateToFilter   = '';
 
     // Destroy if already initialized
-    if ($.fn.DataTable.isDataTable('#itemsTable')) {
-        $('#itemsTable').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#itemizedTable')) {
+        $('#itemizedTable').DataTable().destroy();
     }
 
     // Init server-side DataTable
-    var table = $('#itemsTable').DataTable({
+    var table = $('#itemizedTable').DataTable({
         processing : true,
         serverSide : true,
         lengthMenu : [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],  
         pageLength : 5,  // ← default on load
         ajax: {
-            url  : BASE_URL + 'items/ajax_list',
+            url  : BASE_URL + 'itemized/ajax_list',
             type : 'POST',
             data : function (d) {
                 d.status    = statusFilter;
@@ -89,7 +89,7 @@ $(document).ready(function () {
     $(document).on('click', '.btnEdit', function () {
         var id = $(this).data('id');
         $.ajax({
-            url      : BASE_URL + 'items/get/' + id,
+            url      : BASE_URL + 'itemized/get/' + id,
             type     : 'GET',
             dataType : 'json',
             success  : function (res) {
@@ -133,7 +133,7 @@ $(document).ready(function () {
             return;
         }
 
-        var url = id ? BASE_URL + 'items/update/' + id : BASE_URL + 'items/store';
+        var url = id ? BASE_URL + 'itemized/update/' + id : BASE_URL + 'itemized/store';
 
         $.post(url, {
             item_name          : item_name,
@@ -148,7 +148,7 @@ $(document).ready(function () {
             location           : item_location
         }, function (res) {
             if (res.success) {
-                $('#itemModal').modal('hide');
+                $('#itemizedModal').modal('hide');
                 Swal.fire('Success', res.message, 'success').then(function () {
                     table.ajax.reload();
                 });
@@ -177,7 +177,7 @@ $(document).ready(function () {
             confirmButtonText : 'Yes, delete it!'
         }).then(function (result) {
             if (result.isConfirmed) {
-                $.post(BASE_URL + 'items/delete/' + id, function (res) {
+                $.post(BASE_URL + 'itemized/delete/' + id, function (res) {
                     if (res.success) {
                         Swal.fire('Deleted!', res.message, 'success').then(function () {
                             table.ajax.reload();

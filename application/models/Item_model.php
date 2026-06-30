@@ -35,15 +35,18 @@ class Item_model extends CI_Model
     {
         return $this->db->insert($this->table, $data);
     }
+    //update item
     public function update($id, $data)
     {
         $this->db->where('id', $id);
         return $this->db->update($this->table, $data);
     }
+    //delete item
     public function delete($id)
     {
         return $this->db->delete($this->table, ['id' => $id]);
     }
+    // barcode future 
     public function barcode_exists($barcode, $exclude_id = null)
     {
         $this->db->where('barcode', $barcode);

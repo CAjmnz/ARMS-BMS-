@@ -58,8 +58,9 @@ $route['auth/logout']        = 'auth/logout';
 $route['dashboard']          = 'dashboard/index';
 //items routes
 $route['items']              = 'items/index';
-
 $route['items/ajax_list']    = 'items/ajax_list';
 $route['items/get/(:num)'] = 'items/get/$1';
+//itemized
+$routes['itemized']         = 'itemized/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

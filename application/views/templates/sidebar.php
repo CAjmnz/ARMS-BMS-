@@ -17,8 +17,8 @@
            class="sidebar-link <?= ($current === 'items') ? 'active' : '' ?>">
            <i class="bi bi-clipboard-check-fill"></i>Items
         </a>
-        <a href="<?= base_url('item_Itemized') ?>"
-           class="sidebar-link <?= ($current === 'item-itemized') ? 'active' : '' ?>">
+        <a href="<?= base_url('itemized') ?>"
+           class="sidebar-link <?= ($current === 'itemized') ? 'active' : '' ?>">
            <i class="bi bi-clipboard-data-fill"></i>Item-Itemized
         </a>
         

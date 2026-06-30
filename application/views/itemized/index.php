@@ -6,7 +6,7 @@
 
     <!-- Page Header -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h4 style="margin:0; font-weight:700; color:#333;">Item Management * Master List</h4>
+        <h4 style="margin:0; font-weight:700; color:#333;">Item Management * Itemized</h4>
         <button class="btn btn-success btn-sm" id="btnAddItem">
             <i class="fas fa-plus"></i> Add Item
         </button>
@@ -22,7 +22,7 @@
 
     <!-- Filters -->
     <div style="background:#fff; border-radius:8px; padding:15px; margin-bottom:20px; border:1px solid #e3e6f0;">
-        <form method="GET" action="<?= base_url('items') ?>">
+        <form method="GET" action="<?= base_url('itemized') ?>">
             <div class="row">
                 <div class="col-md-3">
                     <label style="font-size:13px;">Status</label>
@@ -47,7 +47,7 @@
                     <button type="submit" class="btn btn-primary btn-sm">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="<?= base_url('items') ?>" class="btn btn-secondary btn-sm">
+                    <a href="<?= base_url('itemized') ?>" class="btn btn-secondary btn-sm">
                         <i class="fas fa-times"></i> Reset
                     </a>
                 </div>
@@ -57,20 +57,15 @@
 
     <!-- Table -->
     <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
-        <table class="table table-bordered table-hover" id="itemsTable">
+        <table class="table table-bordered table-hover" id="itemizedTable">
             <thead style="background:#f8f9fa;">
                 <tr>
                     <th>#</th>
-                    <th>Item Name</th>
-                    <th>Category</th>
-                    <th>Brand</th>
-                    <th>model</th>
-                    <th>Serial Num</th>
-                    <th>Total Qty</th>
-                    <th>Available Qty</th>
-                    <th>Borrowed Qty</th>
+                    <th>Item ID</th>
+                    <th>Unit Num</th>
                     <th>Status</th>
-                    <th>Location</th>
+                    <th>Item Condition</th>
+                    <th>Item Description</th>
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Action</th>
