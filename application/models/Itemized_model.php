@@ -35,7 +35,6 @@ class Itemized_model extends CI_Model
         $this->db->select('itemized,*,items.item_name');
         $this->db->from($this->table);
         $this->db->join('items','items.id = itemized.item_id');
-
         $this->db->where('itemized.id', $id);
         return $this->db->get()->row();
     }
@@ -71,6 +70,11 @@ class Itemized_model extends CI_Model
     {
         return $this->db->delete($this->table, ['item.id' => $item_id]);
     }
+    // Count total records 
+    public function count_total()
+    {
+        return $this->db->count_all($this->table);
+    }
     // Count filtered records
     public function count_filtered($search = '', $filters = [])
     {
@@ -83,21 +87,20 @@ class Itemized_model extends CI_Model
     }
     // Get paginated rows (with search + filters + sort)
     public function get_datatables($limit, $start, $search = '', $order_col = 0, $order_dir = 'asc', $filters = [])
-    {
-        $this->db->select('itemized, *,items.item_name');
-        $this->db->from($this->table);
-        $this->db->join('items', 'items.id = itemized.item_id');
+{
+    $this->db->select('itemized.*, items.item_name');
+    $this->db->from($this->table);
+    $this->db->join('items', 'items.id = itemized.item_id');
 
-        $this->_apply_filters($filters);
-        $this->_apply_search($search);
+    $this->_apply_filters($filters);
+    $this->_apply_search($search);
 
-        $col = isset($this->columns[$order_col]) ? $this->columns[$order_col] : 'id';
-        $this->db->order_by($col, $order_dir);
-        $this->db->limit($limit, $start);
+    $col = isset($this->columns[$order_col]) ? $this->columns[$order_col] : 'id';
+    $this->db->order_by('itemized.' . $col, $order_dir);
+    $this->db->limit($limit, $start);
 
-        return $this->db->get($this->table)->result();
-    }
-
+    return $this->db->get()->result();
+}
     // Private — apply filters
     private function _apply_filters($filters = [])
     {

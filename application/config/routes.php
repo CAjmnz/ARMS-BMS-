@@ -61,6 +61,12 @@ $route['items']              = 'items/index';
 $route['items/ajax_list']    = 'items/ajax_list';
 $route['items/get/(:num)'] = 'items/get/$1';
 //itemized
-$routes['itemized']         = 'itemized/index';
+$route['itemized']         = 'itemized/index';
+$route['itemized/ajax_list'] = 'itemized/ajax_list';
+$route['itemized/store'] = 'itemized/store';
+$route['itemized/get/(:num)'] = 'itemized/get/$1';
+$route['itemized/update/(:num)'] = 'itemized/update/$1';
+$route['itemized/delete/(:num)'] = 'itemized/delete/$1';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
