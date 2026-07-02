@@ -6,7 +6,7 @@ class Itemized_model extends CI_Model
     private $table = 'itemized';
 
 
-  //Searchable/sortable columns for DataTables
+    //Searchable/sortable columns for DataTables
     private $columns = [
         0  => 'id',
         1  => 'item_id',
@@ -19,29 +19,29 @@ class Itemized_model extends CI_Model
     ];
 
     // Get all itemized unit (joined with parent item info)
-    public function get_all($filters =[])
+    public function get_all($filters = [])
     {
-       $this->db->select('itemized.*,items.item_name');
-       $this->db->from($this->table);
-       $this->db->join('items','items.id = itemized.item_id');
+        $this->db->select('itemized.*,items.item_name');
+        $this->db->from($this->table);
+        $this->db->join('items', 'items.id = itemized.item_id');
 
-       $this->_apply_filters($filters);
-       $this->db->order_by('itemized.created_at','DESC');
-       return $this->db->get()->result();
+        $this->_apply_filters($filters);
+        $this->db->order_by('itemized.created_at', 'DESC');
+        return $this->db->get()->result();
     }
     // Get single unit ID 
     public function get_by_id($id)
     {
         $this->db->select('itemized,*,items.item_name');
         $this->db->from($this->table);
-        $this->db->join('items','items.id = itemized.item_id');
+        $this->db->join('items', 'items.id = itemized.item_id');
         $this->db->where('itemized.id', $id);
         return $this->db->get()->row();
     }
     //Get all units belonging to one item
     public function get_by_item_id($item_id)
     {
-        return $this->db->get_where($this->table,['item_id' => $item_id])->result();
+        return $this->db->get_where($this->table, ['item_id' => $item_id])->result();
     }
 
     // Add new unit
@@ -55,15 +55,15 @@ class Itemized_model extends CI_Model
         return $this->db->insert_batch($this->table, $data);
     }
     // Update unit 
-    public function update($id,$data)
+    public function update($id, $data)
     {
-        $this->db->where('id',$id);
-        return $this->db->update($this->table,$data);
+        $this->db->where('id', $id);
+        return $this->db->update($this->table, $data);
     }
     // Delete unit
     public function delete($id)
     {
-        return $this->db->delete($this->table,['id' => $id]);
+        return $this->db->delete($this->table, ['id' => $id]);
     }
     // Delete all units belonging to an item (used when item is deleted)
     public function delete_by_item_id($item_id)
@@ -79,28 +79,27 @@ class Itemized_model extends CI_Model
     public function count_filtered($search = '', $filters = [])
     {
         $this->db->from($this->table);
-        $this->db->join('items','items.id = itemized.item_id');
+        $this->db->join('items', 'items.id = itemized.item_id');
         $this->_apply_filters($filters);
         $this->_apply_search($search);
         return $this->db->count_all_results();
-
     }
     // Get paginated rows (with search + filters + sort)
     public function get_datatables($limit, $start, $search = '', $order_col = 0, $order_dir = 'asc', $filters = [])
-{
-    $this->db->select('itemized.*, items.item_name');
-    $this->db->from($this->table);
-    $this->db->join('items', 'items.id = itemized.item_id');
+    {
+        $this->db->select('itemized.*, items.item_name');
+        $this->db->from($this->table);
+        $this->db->join('items', 'items.id = itemized.item_id');
 
-    $this->_apply_filters($filters);
-    $this->_apply_search($search);
+        $this->_apply_filters($filters);
+        $this->_apply_search($search);
 
-    $col = isset($this->columns[$order_col]) ? $this->columns[$order_col] : 'id';
-    $this->db->order_by('itemized.' . $col, $order_dir);
-    $this->db->limit($limit, $start);
+        $col = isset($this->columns[$order_col]) ? $this->columns[$order_col] : 'id';
+        $this->db->order_by('itemized.' . $col, $order_dir);
+        $this->db->limit($limit, $start);
 
-    return $this->db->get()->result();
-}
+        return $this->db->get()->result();
+    }
     // Private — apply filters
     private function _apply_filters($filters = [])
     {
@@ -108,7 +107,7 @@ class Itemized_model extends CI_Model
             $this->db->where('itemized.status', $filters['status']);
         }
         if (!empty($filter['item_condition'])) {
-            $this->db->where('itemized.item_condition',$filters['item_condition']);
+            $this->db->where('itemized.item_condition', $filters['item_condition']);
         }
         if (!empty($filters['date_from'])) {
             $this->db->where('DATE(itemized.created_at) >=', $filters['date_from']);

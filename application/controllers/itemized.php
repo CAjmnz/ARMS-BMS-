@@ -19,9 +19,12 @@ class Itemized extends CI_Controller
     // Show itemized page
     public function index()
     {
+        $this->load->model('Item_model');
+    
         $data['title']      = 'Itemized - ARMS-BMS';
         $data['page_label'] = 'Itemized';
-
+        $data['items']      = $this->Item_model->get_all();  // for dropdown
+    
         $this->load->view('itemized/index', $data);
     }
 

@@ -1,9 +1,9 @@
 $(document).ready(function () {
 
-    // Filter variables
-    var statusFilter   = '';
-    var dateFromFilter = '';
-    var dateToFilter   = '';
+    var statusFilter    = '';
+    var conditionFilter = '';
+    var dateFromFilter  = '';
+    var dateToFilter    = '';
 
     // Destroy if already initialized
     if ($.fn.DataTable.isDataTable('#itemizedTable')) {
@@ -14,75 +14,69 @@ $(document).ready(function () {
     var table = $('#itemizedTable').DataTable({
         processing : true,
         serverSide : true,
-        lengthMenu : [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],  
-        pageLength : 5,  // ← default on load
+        lengthMenu : [[5, 10, 25, 50], [5, 10, 25, 50]],
+        pageLength : 10,
         ajax: {
             url  : BASE_URL + 'itemized/ajax_list',
             type : 'POST',
             data : function (d) {
-                d.status    = statusFilter;
-                d.date_from = dateFromFilter;
-                d.date_to   = dateToFilter;
+                d.status         = statusFilter;
+                d.item_condition = conditionFilter;
+                d.date_from      = dateFromFilter;
+                d.date_to        = dateToFilter;
             }
         },
         columns: [
             { data: 0 },
             { data: 1 },
             { data: 2 },
-            { data: 3 },
+            { data: 3, orderable: false },
             { data: 4 },
             { data: 5 },
             { data: 6 },
             { data: 7 },
-            { data: 8 },
-            { data: 9,  orderable: false },
-            { data: 10 },
-            { data: 11 },
-            { data: 12 },
-            { data: 13, orderable: false }
+            { data: 8, orderable: false }
         ],
         order: [[0, 'asc']],
         language: {
-            emptyTable : 'No items found.',
+            emptyTable : 'No units found.',
             processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'
         }
     });
 
     // Filter form submit
-    $('form').on('submit', function (e) {
+    $('#filterForm').on('submit', function (e) {
         e.preventDefault();
-        statusFilter   = $('select[name="status"]').val()   || '';
-        dateFromFilter = $('input[name="date_from"]').val() || '';
-        dateToFilter   = $('input[name="date_to"]').val()   || '';
+        statusFilter    = $('select[name="status"]').val()         || '';
+        conditionFilter = $('select[name="item_condition"]').val() || '';
+        dateFromFilter  = $('input[name="date_from"]').val()       || '';
+        dateToFilter    = $('input[name="date_to"]').val()         || '';
         table.ajax.reload();
     });
 
     // Reset filters
     $('#btnReset').on('click', function () {
         $('select[name="status"]').val('');
+        $('select[name="item_condition"]').val('');
         $('input[name="date_from"]').val('');
         $('input[name="date_to"]').val('');
-        statusFilter   = '';
-        dateFromFilter = '';
-        dateToFilter   = '';
+        statusFilter    = '';
+        conditionFilter = '';
+        dateFromFilter  = '';
+        dateToFilter    = '';
         table.ajax.reload();
     });
 
     // Open Add Modal
-    $('#btnAddItem').click(function () {
-        $('#modalTitle').text('Add Item');
-        $('#item_id').val('');
-        $('#item_name').val('');
-        $('#category').val('');
-        $('#brand').val('');
-        $('#model').val('');
-        $('#serial_number').val('');
-        $('#quantity').val('');
-        $('#available_quantity').val('');
-        $('#borrowed_quantity').val('');
-        $('#status').val('available');
-        $('#location').val('');
-        $('#itemModal').modal('show');
+    $('#btnAddUnit').click(function () {
+        $('#modalTitle').text('Add Unit');
+        $('#unit_id').val('');
+        $('#unit_item_id').val('');
+        $('#unit_no').val('');
+        $('#unit_status').val('available');
+        $('#unit_condition').val('new');
+        $('#unit_description').val('');
+        $('#unitModal').modal('show');
     });
 
     // Open Edit Modal
@@ -94,19 +88,14 @@ $(document).ready(function () {
             dataType : 'json',
             success  : function (res) {
                 if (res.success) {
-                    $('#modalTitle').text('Edit Item');
-                    $('#item_id').val(res.item.id);
-                    $('#item_name').val(res.item.item_name);
-                    $('#category').val(res.item.category);
-                    $('#brand').val(res.item.brand);
-                    $('#model').val(res.item.Model);
-                    $('#serial_number').val(res.item.serial_number);
-                    $('#quantity').val(res.item.quantity);
-                    $('#available_quantity').val(res.item.available_quantity);
-                    $('#borrowed_quantity').val(res.item.borrowed_quantity);
-                    $('#status').val(res.item.status);
-                    $('#location').val(res.item.location);
-                    $('#itemModal').modal('show');
+                    $('#modalTitle').text('Edit Unit');
+                    $('#unit_id').val(res.item.id);
+                    $('#unit_item_id').val(res.item.item_id);
+                    $('#unit_no').val(res.item.unit_no);
+                    $('#unit_status').val(res.item.status);
+                    $('#unit_condition').val(res.item.item_condition);
+                    $('#unit_description').val(res.item.item_description);
+                    $('#unitModal').modal('show');
                 } else {
                     Swal.fire('Error', res.message, 'error');
                 }
@@ -115,20 +104,15 @@ $(document).ready(function () {
     });
 
     // Save (Add or Edit)
-    $('#btnSave').click(function () {
-        var id                 = $('#item_id').val();
-        var item_name          = $('#item_name').val().trim();
-        var category           = $('#category').val().trim();
-        var brand              = $('#brand').val().trim();
-        var model              = $('#model').val().trim();
-        var serial_number      = $('#serial_number').val().trim();
-        var quantity           = $('#quantity').val();
-        var available_quantity = $('#available_quantity').val();
-        var borrowed_quantity  = $('#borrowed_quantity').val();
-        var status             = $('#status').val();
-        var item_location      = $('#location').val().trim();
+    $('#btnSaveUnit').click(function () {
+        var id          = $('#unit_id').val();
+        var item_id     = $('#unit_item_id').val();
+        var unit_no     = $('#unit_no').val();
+        var status      = $('#unit_status').val();
+        var condition   = $('#unit_condition').val();
+        var description = $('#unit_description').val().trim();
 
-        if (!item_name || !category || quantity === '') {
+        if (!item_id || !unit_no) {
             Swal.fire('Warning', 'Please fill in required fields.', 'warning');
             return;
         }
@@ -136,19 +120,14 @@ $(document).ready(function () {
         var url = id ? BASE_URL + 'itemized/update/' + id : BASE_URL + 'itemized/store';
 
         $.post(url, {
-            item_name          : item_name,
-            category           : category,
-            brand              : brand,
-            model              : model,
-            serial_number      : serial_number,
-            quantity           : quantity,
-            available_quantity : available_quantity,
-            borrowed_quantity  : borrowed_quantity,
-            status             : status,
-            location           : item_location
+            item_id          : item_id,
+            unit_no          : unit_no,
+            status           : status,
+            item_condition   : condition,
+            item_description : description
         }, function (res) {
             if (res.success) {
-                $('#itemizedModal').modal('hide');
+                $('#unitModal').modal('hide');
                 Swal.fire('Success', res.message, 'success').then(function () {
                     table.ajax.reload();
                 });
@@ -164,11 +143,11 @@ $(document).ready(function () {
 
     // Delete
     $(document).on('click', '.btnDelete', function () {
-        var id        = $(this).data('id');
-        var item_name = $(this).data('name');
+        var id   = $(this).data('id');
+        var name = $(this).data('name');
 
         Swal.fire({
-            title             : 'Delete ' + item_name + '?',
+            title             : 'Delete ' + name + '?',
             text              : 'This action cannot be undone.',
             icon              : 'warning',
             showCancelButton  : true,
@@ -191,4 +170,3 @@ $(document).ready(function () {
     });
 
 });
-

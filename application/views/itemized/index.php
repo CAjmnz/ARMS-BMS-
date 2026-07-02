@@ -6,9 +6,9 @@
 
     <!-- Page Header -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h4 style="margin:0; font-weight:700; color:#333;">Item Management * Itemized</h4>
-        <button class="btn btn-success btn-sm" id="btnAddItem">
-            <i class="fas fa-plus"></i> Add Item
+        <h4 style="margin:0; font-weight:700; color:#333;">Item Management &rsaquo; Itemized</h4>
+        <button class="btn btn-success btn-sm" id="btnAddUnit">
+            <i class="fas fa-plus"></i> Add Unit
         </button>
     </div>
 
@@ -22,34 +22,50 @@
 
     <!-- Filters -->
     <div style="background:#fff; border-radius:8px; padding:15px; margin-bottom:20px; border:1px solid #e3e6f0;">
-        <form method="GET" action="<?= base_url('itemized') ?>">
+        <form id="filterForm">
             <div class="row">
                 <div class="col-md-3">
                     <label style="font-size:13px;">Status</label>
                     <select name="status" class="form-control form-control-sm">
                         <option value="">All Status</option>
-                        <option value="available" <?= ($this->input->get('status') == 'available')   ? 'selected' : '' ?>>Available</option>
-                        <option value="in_use" <?= ($this->input->get('status') == 'in_use')      ? 'selected' : '' ?>>In Use</option>
-                        <option value="unavailable" <?= ($this->input->get('status') == 'unavailable') ? 'selected' : '' ?>>Unavailable</option>
+                        <option value="available">Available</option>
+                        <option value="borrowed">Borrowed</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="returned">Returned</option>
+                        <option value="overdue">Overdue</option>
+                        <option value="missing">Missing</option>
+                        <option value="damaged">Damaged</option>
+                        <option value="archived">Archived</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="disposed">Disposed</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <label style="font-size:13px;">Condition</label>
+                    <select name="item_condition" class="form-control form-control-sm">
+                        <option value="">All Conditions</option>
+                        <option value="new">New</option>
+                        <option value="excellent">Excellent</option>
+                        <option value="good">Good</option>
+                        <option value="needs repair">Needs Repair</option>
+                        <option value="under maintenance">Under Maintenance</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <label style="font-size:13px;">Date From</label>
-                    <input type="date" name="date_from" class="form-control form-control-sm"
-                        value="<?= $this->input->get('date_from') ?>">
+                    <input type="date" name="date_from" class="form-control form-control-sm">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label style="font-size:13px;">Date To</label>
-                    <input type="date" name="date_to" class="form-control form-control-sm"
-                        value="<?= $this->input->get('date_to') ?>">
+                    <input type="date" name="date_to" class="form-control form-control-sm">
                 </div>
-                <div class="col-md-3 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary btn-sm">
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary btn-sm mr-2">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="<?= base_url('itemized') ?>" class="btn btn-secondary btn-sm">
+                    <button type="button" id="btnReset" class="btn btn-secondary btn-sm">
                         <i class="fas fa-times"></i> Reset
-                    </a>
+                    </button>
                 </div>
             </div>
         </form>
@@ -61,109 +77,93 @@
             <thead style="background:#f8f9fa;">
                 <tr>
                     <th>#</th>
-                    <th>Item ID</th>
-                    <th>Unit Num</th>
+                    <th>Item Name</th>
+                    <th>Unit.No</th>
                     <th>Status</th>
-                    <th>Item Condition</th>
-                    <th>Item Description</th>
+                    <th>Condition</th>
+                    <th>Description</th>
                     <th>Created At</th>
                     <th>Updated At</th>
-                    <th>Action</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
-            <tbody>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
-    <!-- Add/Edit Modal -->
-    <div class="modal fade" id="itemModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Add Item</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
+</div>
+
+<!-- Add/Edit Modal -->
+ 
+<div class="modal fade" id="unitModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Add Unit</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="unit_id">
+
+                <div class="form-group">
+                    <label>Item <span class="text-danger">*</span></label>
+                    <select class="form-control" id="unit_item_id">
+                        <option value="">-- Select Item --</option>
+                        <?php foreach ($items as $item): ?>
+                            <option value="<?= $item->id ?>">
+                                <?= htmlspecialchars($item->item_name) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
-                <div class="modal-body">
-                    <input type="hidden" id="item_id">
-                    <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>Item Name</label>
-                                <input type="text" class="form-control" id="item_name" placeholder="Item Name">
-                            </div>
-                        </div>
-                        <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>Category</label>
-                                <select class="form-control" id="category">
-                                    <option value="electronics">Electronics</option>
-                                    <option value="furniture">Furniture</option>
-                                    <option value="tools">Tools</option>
-                                    <option value="office_equipment">Office Equipment</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                            <label>Brand</label>
-                            <input type="text" class="form-control" id="brand" placeholder="Brand">
-                        </div>
-                        <div class="form-group col-6 mb-2">
-                            <label>Model</label>
-                            <input type="text" class="form-control" id="model" placeholder="Model">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6 md-2">
-                            <label>Serial Number</label>
-                            <input type="text" class="form-control" id="serial_number" placeholder="Serial number">
-                        </div>
-                        <div class="form-group col-6 mb-6">
-                            <label>Quantity</label>
-                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" min="0">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6 md-2">
-                            <label>Available Quantity</label>
-                            <input type="number" class="form-control" id="available_quantity" placeholder="Available Quantity" min="0">
-                        </div>
-                        <div class="form-group col-6 mb-2">
-                            <label>Borrowed Quantity</label>
-                            <input type="number" class="form-control" id="borrowed_quantity" placeholder="Borrowed Quantity" min="0">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>Status</label>
-                                <select class="form-control" id="status">
-                                    <option value="available">Available</option>
-                                    <option value="in_use">In Use</option>
-                                    <option value="unavailable">Unavailable</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>location</label>
-                                <select class="form-control" id="location">
-                                    <option value="it_sys/dev_cabinet">IT Sys/Dev Cabinet</option>
-                                    <option value="training_room">Training Room</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div> <!-- ← modal-body closes HERE -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="btnSave">Save</button>
+
+                <div class="form-group">
+                    <label>Unit No. <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="unit_no" placeholder="Unit Number" min="1">
                 </div>
+
+                <div class="form-group">
+                    <label>Status <span class="text-danger">*</span></label>
+                    <select class="form-control" id="unit_status">
+                        <option value="available">Available</option>
+                        <option value="borrowed">Borrowed</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="returned">Returned</option>
+                        <option value="overdue">Overdue</option>
+                        <option value="missing">Missing</option>
+                        <option value="damaged">Damaged</option>
+                        <option value="archived">Archived</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="disposed">Disposed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Condition <span class="text-danger">*</span></label>
+                    <select class="form-control" id="unit_condition">
+                        <option value="new">New</option>
+                        <option value="excellent">Excellent</option>
+                        <option value="good">Good</option>
+                        <option value="needs repair">Needs Repair</option>
+                        <option value="under maintenance">Under Maintenance</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" id="unit_description" rows="3"
+                              placeholder="e.g. Laptop unit 1 - minor scratches"></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="btnSaveUnit">Save</button>
             </div>
         </div>
     </div>
-    <?php $this->load->view('templates/footer'); ?>
+</div>
+
+<?php $this->load->view('templates/footer'); ?>

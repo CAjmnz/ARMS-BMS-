@@ -26,7 +26,9 @@
 
 <!-- 9. items module-->
 <script src="<?= base_url('assets/js/modules/items.main.js') ?>"></script>
-<!-- 10. Users module -->
+<!-- 10. itemized module-->
+<script src="<?= base_url('assets/js/modules/itemized.main.js') ?>"></script>
+<!-- 11. Users module -->
 <script src="<?= base_url('assets/js/modules/users.main.js') ?>"></script>
 
 <?php if (isset($page_scripts)): ?>

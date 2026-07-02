@@ -1,97 +1,309 @@
-body {
-    margin: 0;
-    background: #ace2cd41;
-    font-family: sans-serif;  /* ← fixed san-serf */
+/* ─── Root Variables ─────────────────────────── */
+:root {
+    --navy:         #23457c;
+    --royal-blue:   #2563B8;
+    --green:        #22A94F;
+    --light-blue:   #a8c0e8;
+    --page-bg:      #f4f6f9;
+    --card-bg:      #ffffff;
+    --card-border:  #e3e6f0;
+    --text-dark:    #1B3A6B;
+    --text-muted:   #6c757d;
 }
 
-/* Sidebar */
+/* ─── Body ───────────────────────────────────── */
+body {
+    margin: 0;
+    background: var(--page-bg);
+    font-family: 'Lato', sans-serif;
+}
+
+/* ─── Sidebar ────────────────────────────────── */
 #sidebar {
-    width: 220px;
+    width: 230px;
     height: 100vh;
-    background: rgba(3, 202, 36, 0.671);
+    background: var(--navy);
     position: fixed;
     top: 0; left: 0;
     display: flex;
     flex-direction: column;
 }
+
 .sidebar-brand {
-    padding: 12px;
-    color: #fff;
-    font-size: 27px;
-    font-weight: 700;
-    border-bottom: 2px solid #7a817b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 4px;
+    background: var(--navy);
+   
 }
 
-.sidebar-nav { flex: 1; padding: 10px 0; }  /* ← added semicolon */
+.sidebar-brand img {
+    width: 140px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 10px 0;
+}
 
 .sidebar-link {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 14px 20px;
-    color: rgb(65, 71, 69);
+    gap: 12px;
+    padding: 12px 20px;
+    color: var(--light-blue);
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
 }
 
-.sidebar-link:hover, .sidebar-link.active {  /* ← added dot */
-    background: rgba(138, 238, 168, 0.678);
-    color: #4e614dea;
+.sidebar-link:hover,
+.sidebar-link.active {
+    background: var(--royal-blue);
+    color: #ffffff;
 }
 
 .sidebar-footer {
-    border-top: 1px solid #3d5166;
-    padding: 20px 0;
+    background: var(--navy);
+    border-top: 3px solid var(--royal-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
 }
 
-
-/* Topbar */
+/* ─── Topbar ─────────────────────────────────── */
 #topbar {
-    height: 80px;
-    background: rgba(25, 207, 34, 0.712);
+    height: 65px;
+    background: #ffffff !important;
     margin-left: 220px;
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    border-bottom: 1px solid #e3e6f0;
+    padding: 0 25px;
+    border-bottom: 3px solid var(--royal-blue);
     justify-content: space-between;
-}
-#topbar:hover { background: rgb(116, 203, 114) }  /* stays white on hover */
-
-.topbar-user { font-size: 16px; color: #555; }
-
-/* stop any link inside topbar from getting sidebar hover styles */
-/* Stop topbar hover */
-#topbar {
-    background: rgba(13, 226, 24, 0.801) !important;
     transition: none !important;
 }
 
-.topbar-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  
-    color: rgb(63, 192, 149);
-    text-decoration: none;
+#topbar:hover {
+    background: #ffffff !important;
+}
+
+.topbar-user {
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+/* Stop sidebar hover bleeding into topbar */
+#topbar a,
+#topbar a:hover {
+    background: none !important;
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+#topbar .sidebar-link:hover {
+    background: none !important;
+    color: var(--text-dark) !important;
+}
+
+.topbar-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--navy);
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.topbar-toggle:hover {
+    background: #f0f2f5;
+}
+
+/* Sidebar collapse */
+.sidebar-collapsed {
+    width: 0 !important;
+    overflow: hidden;
+}
+
+.sidebar-collapsed .sidebar-brand,
+.sidebar-collapsed .nav-label,
+.sidebar-collapsed .sidebar-footer {
+    display: none;
+}
+
+/* Topbar expands when sidebar collapses */
+.topbar-expanded {
+    margin-left: 0 !important;
+}
+
+/* Main content expands when sidebar collapses */
+.main-expanded {
+    margin-left: 0 !important;
+}
+
+/* Smooth animation */
+#sidebar {
+    transition: width 0.3s ease;
+}
+
+#topbar {
+    transition: margin-left 0.3s ease;
+}
+
+#main-content {
+    transition: margin-left 0.3s ease;
+}
+/* ─── Main Content ───────────────────────────── */
+#main-content {
+    margin-left: 230px; 
+    padding: 28px 28px 40px;
+    transition: margin-left 0.25s ease;
+    padding: 25px;
+    min-height: calc(100vh - 65px);
+    margin-top: 20px;
+}
+
+#main-content.expanded { margin-left: 68px; }
+/*─── Responsive ───────────────────────────── */
+@media (max-width: 768px) {
+    #sidebar { width: 68px; }
+    #sidebar .nav-label,
+    #sidebar .brand-text,
+    #sidebar .nav-section-label { opacity: 0; width: 0; overflow: hidden; }
+    #topbar { margin-left: 68px; }
+    #main-content { margin-left: 68px; padding: 16px; }
+}
+
+/* ─── Cards ──────────────────────────────────── */
+.card-arms {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* ─── Buttons ────────────────────────────────── */
+.btn-primary {
+    background-color: var(--royal-blue) !important;
+    border-color: var(--royal-blue) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--navy) !important;
+    border-color: var(--navy) !important;
+}
+
+.btn-success {
+    background-color: var(--green) !important;
+    border-color: var(--green) !important;
+}
+
+.btn-success:hover {
+    background-color: #1a8a3f !important;
+    border-color: #1a8a3f !important;
+}
+
+/* ─── Badges ─────────────────────────────────── */
+.badge-available    { background: #22A94F; color: #fff; }
+.badge-borrowed     { background: #f6a623; color: #fff; }
+.badge-reserved     { background: #2563B8; color: #fff; }
+.badge-returned     { background: #6c757d; color: #fff; }
+.badge-overdue      { background: #dc3545; color: #fff; }
+.badge-missing      { background: #343a40; color: #fff; }
+.badge-damaged      { background: #dc3545; color: #fff; }
+.badge-archived     { background: #6c757d; color: #fff; }
+.badge-under-review { background: #17a2b8; color: #fff; }
+.badge-disposed     { background: #6c757d; color: #fff; }
+
+/* ─── Table ──────────────────────────────────── */
+.table thead th {
+    background: var(--navy);
+    color: #ffffff;
+    border-color: var(--royal-blue);
     font-size: 13px;
 }
 
+.table-hover tbody tr:hover {
+    background: #eef4ff;
+}
 
-/* Main Content */
-#main-content {
-    margin-left: 220px;
-    padding: 20px;
-    min-height: calc(100vh - 60px);  /* ← added space before 60px */
-    margin-top: 60px;
+/* ─── Dropdown Avatar ────────────────────────── */
+.topbar-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 2px solid var(--royal-blue);
 }
-#topbar .sidebar-link:hover {
-    background: none !important;
-    color: #555 !important;
+
+/* ─── Page Header ────────────────────────────── */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
-.topbar-toggle {
-    background: none; border: none; cursor: pointer;
-    color: #5a5c69; font-size: 18px; padding: 4px 8px;
-    border-radius: 4px;
+
+.page-header h4 {
+    margin: 0;
+    font-weight: 700;
+    color: var(--navy);
 }
-.topbar-toggle:hover { background: #f0f2f5; }
+
+/* ─── Filter Bar ─────────────────────────────── */
+.filter-bar {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid var(--card-border);
+}
+
+/* ─── Login Page ─────────────────────────────── */
+.ftco-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #1B3A6B 0%, #2563B8 100%);
+}
+
+.wrap {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(27, 58, 107, 0.3);
+}
+
+.btn-primary.submit {
+    background: var(--navy) !important;
+    border-color: var(--navy) !important;
+}
+
+.btn-primary.submit:hover {
+    background: var(--royal-blue) !important;
+    border-color: var(--royal-blue) !important;
+}
+
+#topbarClock {
+    font-size: 20px;
+    color: #2c2c2eda;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
