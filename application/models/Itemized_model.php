@@ -32,7 +32,7 @@ class Itemized_model extends CI_Model
     // Get single unit ID 
     public function get_by_id($id)
     {
-        $this->db->select('itemized,*,items.item_name');
+        $this->db->select('itemized.*,items.item_name');
         $this->db->from($this->table);
         $this->db->join('items', 'items.id = itemized.item_id');
         $this->db->where('itemized.id', $id);
@@ -128,4 +128,36 @@ class Itemized_model extends CI_Model
             $this->db->group_end();
         }
     }
+    //Get the current highest unit_no for an item 
+    public function get_last_unit_no($item_id){
+        $this->db->select_max('unit_no');
+        $this->db->where('item_id', $item_id);
+        $row = $this->db->get($this->table)->row();
+        return $row->unit_no ?? 0;
+    }
+    //Count existing units for an item
+    public function count_by_item_id($item_id) {
+      return $this->db->where('item_id', $item_id)
+                      ->from($this->table)
+                      ->count_all_results();
+    }
+    //Delete extra units when quantity decreases
+    public function delete_extra_units($item_id, $keep_count){
+        //Get IDs to keep 
+        $this->db->select('id');
+        $this->db->where('item_id',$item_id);
+        $this->db->order_by('unit_no', 'ASC');
+        $this->db->limit($keep_count);
+        $rows = $this->db->get($this->table)->result();
+        $keep_ids = array_column($rows,'id');
+
+        if (!empty($keep_ids)) {
+            $this->db->where('item_id', $item_id);
+            $this->db->where_not_in('id', $keep_ids);
+            $this->db->delete($this->table);
+        } else {
+            // Delete all units for this item
+            $this->db->delete($this->table, ['item_id' => $item_id]);
+    }
+}
 }

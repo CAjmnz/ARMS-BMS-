@@ -41,7 +41,7 @@ $(document).ready(function () {
             { data: 12 },
             { data: 13, orderable: false }
         ],
-        order: [[0, 'asc']],
+        order: [[0, 'desc']],
         language: {
             emptyTable : 'No items found.',
             processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'

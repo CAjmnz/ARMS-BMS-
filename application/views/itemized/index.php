@@ -19,7 +19,8 @@
     <?php if ($this->session->flashdata('error')): ?>
         <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
     <?php endif; ?>
-
+ 
+    
     <!-- Filters -->
     <div style="background:#fff; border-radius:8px; padding:15px; margin-bottom:20px; border:1px solid #e3e6f0;">
         <form id="filterForm">
@@ -95,6 +96,7 @@
 
 <!-- Add/Edit Modal -->
  
+<!-- Add/Edit Modal -->
 <div class="modal fade" id="unitModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -107,6 +109,7 @@
             <div class="modal-body">
                 <input type="hidden" id="unit_id">
 
+                <!-- Item Dropdown -->
                 <div class="form-group">
                     <label>Item <span class="text-danger">*</span></label>
                     <select class="form-control" id="unit_item_id">
@@ -114,16 +117,23 @@
                         <?php foreach ($items as $item): ?>
                             <option value="<?= $item->id ?>">
                                 <?= htmlspecialchars($item->item_name) ?>
+                                (Current Qty: <?= $item->quantity ?>)
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Unit No. <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" id="unit_no" placeholder="Unit Number" min="1">
+                <!-- Unit Count — only shown on Add -->
+                <div class="form-group" id="unitCountGroup">
+                    <label>Number of Units to Add <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="unit_count"
+                           placeholder="How many units?" min="1" value="1">
+                    <small class="text-muted">
+                        Each unit will be auto-numbered sequentially.
+                    </small>
                 </div>
 
+                <!-- Status -->
                 <div class="form-group">
                     <label>Status <span class="text-danger">*</span></label>
                     <select class="form-control" id="unit_status">
@@ -140,6 +150,7 @@
                     </select>
                 </div>
 
+                <!-- Condition -->
                 <div class="form-group">
                     <label>Condition <span class="text-danger">*</span></label>
                     <select class="form-control" id="unit_condition">
@@ -151,10 +162,11 @@
                     </select>
                 </div>
 
+                <!-- Description -->
                 <div class="form-group">
                     <label>Description</label>
                     <textarea class="form-control" id="unit_description" rows="3"
-                              placeholder="e.g. Laptop unit 1 - minor scratches"></textarea>
+                              placeholder="e.g. Laptop unit - minor scratches"></textarea>
                 </div>
 
             </div>
@@ -165,5 +177,4 @@
         </div>
     </div>
 </div>
-
 <?php $this->load->view('templates/footer'); ?>

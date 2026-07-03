@@ -68,5 +68,7 @@ $route['itemized/get/(:num)'] = 'itemized/get/$1';
 $route['itemized/update/(:num)'] = 'itemized/update/$1';
 $route['itemized/delete/(:num)'] = 'itemized/delete/$1';
 
+$route['items/sync_itemized'] = 'items/sync_itemized';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

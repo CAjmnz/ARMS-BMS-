@@ -133,14 +133,8 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-6 md-2">
-                            <label>Available Quantity</label>
-                            <input type="number" class="form-control" id="available_quantity" placeholder="Available Quantity" min="0">
-                        </div>
-                        <div class="form-group col-6 mb-2">
-                            <label>Borrowed Quantity</label>
-                            <input type="number" class="form-control" id="borrowed_quantity" placeholder="Borrowed Quantity" min="0">
-                        </div>
+                      
+                   
                     </div>
                     <div class="form-row">
                         <div class="form-group col-6 mb-2">
@@ -148,8 +142,6 @@
                                 <label>Status</label>
                                 <select class="form-control" id="status">
                                     <option value="available">Available</option>
-                                    <option value="in_use">In Use</option>
-                                    <option value="unavailable">Unavailable</option>
                                 </select>
                             </div>
                         </div>

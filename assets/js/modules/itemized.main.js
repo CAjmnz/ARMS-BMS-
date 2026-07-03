@@ -37,7 +37,7 @@ $(document).ready(function () {
             { data: 7 },
             { data: 8, orderable: false }
         ],
-        order: [[0, 'asc']],
+        order: [[0, 'desc']],
         language: {
             emptyTable : 'No units found.',
             processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'
@@ -67,41 +67,42 @@ $(document).ready(function () {
         table.ajax.reload();
     });
 
-    // Open Add Modal
-    $('#btnAddUnit').click(function () {
-        $('#modalTitle').text('Add Unit');
-        $('#unit_id').val('');
-        $('#unit_item_id').val('');
-        $('#unit_no').val('');
-        $('#unit_status').val('available');
-        $('#unit_condition').val('new');
-        $('#unit_description').val('');
-        $('#unitModal').modal('show');
-    });
+ // Open Add Modal
+$('#btnAddUnit').click(function () {
+    $('#modalTitle').text('Add Unit');
+    $('#unit_id').val('');
+    $('#unit_item_id').val('').prop('disabled', false);
+    $('#unit_count').val(1);
+    $('#unit_status').val('available');
+    $('#unit_condition').val('new');
+    $('#unit_description').val('');
+    $('#unitCountGroup').show();  // show unit count on Add
+    $('#unitModal').modal('show');
+});
 
-    // Open Edit Modal
-    $(document).on('click', '.btnEdit', function () {
-        var id = $(this).data('id');
-        $.ajax({
-            url      : BASE_URL + 'itemized/get/' + id,
-            type     : 'GET',
-            dataType : 'json',
-            success  : function (res) {
-                if (res.success) {
-                    $('#modalTitle').text('Edit Unit');
-                    $('#unit_id').val(res.item.id);
-                    $('#unit_item_id').val(res.item.item_id);
-                    $('#unit_no').val(res.item.unit_no);
-                    $('#unit_status').val(res.item.status);
-                    $('#unit_condition').val(res.item.item_condition);
-                    $('#unit_description').val(res.item.item_description);
-                    $('#unitModal').modal('show');
-                } else {
-                    Swal.fire('Error', res.message, 'error');
-                }
+// Open Edit Modal
+$(document).on('click', '.btnEdit', function () {
+    var id = $(this).data('id');
+    $.ajax({
+        url      : BASE_URL + 'itemized/get/' + id,
+        type     : 'GET',
+        dataType : 'json',
+        success  : function (res) {
+            if (res.success) {
+                $('#modalTitle').text('Edit Unit');
+                $('#unit_id').val(res.item.id);
+                $('#unit_item_id').val(res.item.item_id).prop('disabled', true);
+                $('#unit_status').val(res.item.status);
+                $('#unit_condition').val(res.item.item_condition);
+                $('#unit_description').val(res.item.item_description);
+                $('#unitCountGroup').hide();  // hide unit count on Edit
+                $('#unitModal').modal('show');
+            } else {
+                Swal.fire('Error', res.message, 'error');
             }
-        });
+        }
     });
+});
 
     // Save (Add or Edit)
     $('#btnSaveUnit').click(function () {
@@ -121,7 +122,7 @@ $(document).ready(function () {
 
         $.post(url, {
             item_id          : item_id,
-            unit_no          : unit_no,
+            unit_count       : unit_count,
             status           : status,
             item_condition   : condition,
             item_description : description

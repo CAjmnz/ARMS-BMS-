@@ -29,27 +29,69 @@ class Itemized extends CI_Controller
     }
 
     // Add new unit
-    public function store()
-    {
+    public function store() {
         if ($this->input->method() !== 'post') {
             redirect('itemized');
         }
-
-        $data = [
-            'item_id'           => $this->input->post('item_id'),
-            'unit_no'           => $this->input->post('unit_no'),
-            'status'            => $this->input->post('status'),
-            'item_condition'    => $this->input->post('item_condition'),
-            'item_description'  => trim($this->input->post('item_description')),
-        ];
-
-        if ($this->Itemized_model->insert($data)) {
-            echo json_encode(['success' => true, 'message' => 'Unit added successfully.']);
+    
+        $item_id     = $this->input->post('item_id');
+        $unit_count  = (int) $this->input->post('unit_count') ?: 1;
+        $status      = $this->input->post('status');
+        $condition   = $this->input->post('item_condition');
+        $description = trim($this->input->post('item_description'));
+    
+        // Load item model
+        $this->load->model('Item_model');
+        $item = $this->Item_model->get_by_id($item_id);
+    
+        if (!$item) {
+            echo json_encode(['success' => false, 'message' => 'Item not found.']);
+            return;
+        }
+    
+        // Get current highest unit_no
+        $last_unit_no = $this->Itemized_model->get_last_unit_no($item_id);
+    
+        // Build batch units
+        $units = [];
+        for ($i = 1; $i <= $unit_count; $i++) {
+            $last_unit_no++;
+            $units[] = [
+                'item_id'          => $item_id,
+                'unit_no'          => $last_unit_no,
+                'status'           => $status,
+                'item_condition'   => $condition,
+                'item_description' => $description ?: $item->item_name . ' unit ' . $last_unit_no,
+            ];
+        }
+    
+        if ($this->Itemized_model->insert_batch($units)) {
+    
+            // Update parent item quantity
+            $new_quantity  = $item->quantity + $unit_count;
+            $new_available = $item->available_quantity;
+            $new_borrowed  = $item->borrowed_quantity;
+    
+            if ($status === 'available') {
+                $new_available = $item->available_quantity + $unit_count;
+            } elseif ($status === 'borrowed') {
+                $new_borrowed = $item->borrowed_quantity + $unit_count;
+            }
+    
+            $this->Item_model->update($item_id, [
+                'quantity'           => $new_quantity,
+                'available_quantity' => $new_available,
+                'borrowed_quantity'  => $new_borrowed,
+            ]);
+    
+            echo json_encode([
+                'success' => true,
+                'message' => $unit_count . ' unit(s) added successfully.'
+            ]);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to add unit.']);
+            echo json_encode(['success' => false, 'message' => 'Failed to add units.']);
         }
     }
-
     // Get single unit
     public function get($id)
     {
@@ -82,14 +124,50 @@ class Itemized extends CI_Controller
     }
 
     // Delete unit
-    public function delete($id)
-    {
+    public function delete($id) {
+        // Get the unit first so we know which item it belongs to
+        $unit = $this->Itemized_model->get_by_id($id);
+    
+        if (!$unit) {
+            echo json_encode(['success' => false, 'message' => 'Unit not found.']);
+            return;
+        }
+    
+        // Delete the unit
         if ($this->Itemized_model->delete($id)) {
-            echo json_encode(['success' => true, 'message' => 'Unit deleted successfully.']);
+    
+            // Update parent item quantity
+            $this->load->model('Item_model');
+            $item = $this->Item_model->get_by_id($unit->item_id);
+    
+            if ($item) {
+                $new_quantity = max(0, $item->quantity - 1);
+    
+                // Only decrease available_quantity if unit was available
+                $new_available = $item->available_quantity;
+                if ($unit->status === 'available') {
+                    $new_available = max(0, $item->available_quantity - 1);
+                }
+    
+                // Only decrease borrowed_quantity if unit was borrowed
+                $new_borrowed = $item->borrowed_quantity;
+                if ($unit->status === 'borrowed') {
+                    $new_borrowed = max(0, $item->borrowed_quantity - 1);
+                }
+    
+                $this->Item_model->update($unit->item_id, [
+                    'quantity'           => $new_quantity,
+                    'available_quantity' => $new_available,
+                    'borrowed_quantity'  => $new_borrowed,
+                ]);
+            }
+    
+            echo json_encode(['success' => true, 'message' => 'Unit deleted and item quantity updated.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to delete unit.']);
         }
     }
+   
 
     // AJAX list for server-side DataTables
     public function ajax_list()
