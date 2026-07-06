@@ -94,14 +94,14 @@ class Itemized extends CI_Controller
     }
     // Get single unit
     public function get($id)
-    {
-        $unit = $this->Itemized_model->get_by_id($id);
-        if ($unit) {
-            echo json_encode(['success' => true, 'item' => $unit]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Unit not found.']);
-        }
+{
+    $unit = $this->Itemized_model->get_by_id($id);
+    if ($unit) {
+        echo json_encode(['success' => true, 'item' => $unit]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Unit not found.']);
     }
+}
 
     // Update unit
     public function update($id)

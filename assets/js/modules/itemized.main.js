@@ -95,10 +95,10 @@ $(document).on('click', '.btnEdit', function () {
                 $('#unit_status').val(res.item.status);
                 $('#unit_condition').val(res.item.item_condition);
                 $('#unit_description').val(res.item.item_description);
-                $('#unitCountGroup').hide();  // hide unit count on Edit
+                $('#unitCountGroup').hide();
                 $('#unitModal').modal('show');
             } else {
-                Swal.fire('Error', res.message, 'error');
+                Swal.fire('Error', res.message, 'error');  // ← showing this
             }
         }
     });
@@ -109,7 +109,7 @@ $(document).on('click', '.btnEdit', function () {
         var id          = $('#unit_id').val();
 
         //Re-enable dropdown to read value (even if disabled)
-        $('#unit_item_id').prop('disable', false);
+        $('#unit_item_id').prop('disabled', false);
 
         var item_id     = $('#unit_item_id').val();
         var unit_count     = $('#unit_count').val() || 1;

@@ -25,6 +25,7 @@
         <a href="<?= base_url('itemized') ?>"
             class="sidebar-link <?= ($current === 'itemized') ? 'active' : '' ?>">
             <i class="fas fa-list-ul"></i> Itemized
+            
         </a>
 
 

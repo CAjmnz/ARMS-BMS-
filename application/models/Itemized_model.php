@@ -23,7 +23,7 @@ class Itemized_model extends CI_Model
     {
         $this->db->select('itemized.*,items.item_name');
         $this->db->from($this->table);
-        $this->db->join('items', 'items.id = itemized.item_id');
+        $this->db->join('items', 'items.id = itemized.item_id' ,'left');
 
         $this->_apply_filters($filters);
         $this->db->order_by('itemized.created_at', 'DESC');
@@ -34,7 +34,7 @@ class Itemized_model extends CI_Model
     {
         $this->db->select('itemized.*,items.item_name');
         $this->db->from($this->table);
-        $this->db->join('items', 'items.id = itemized.item_id');
+        $this->db->join('items', 'items.id = itemized.item_id','left');
         $this->db->where('itemized.id', $id);
         return $this->db->get()->row();
     }
@@ -79,7 +79,7 @@ class Itemized_model extends CI_Model
     public function count_filtered($search = '', $filters = [])
     {
         $this->db->from($this->table);
-        $this->db->join('items', 'items.id = itemized.item_id');
+        $this->db->join('items', 'items.id = itemized.item_id','left');
         $this->_apply_filters($filters);
         $this->_apply_search($search);
         return $this->db->count_all_results();
@@ -89,7 +89,7 @@ class Itemized_model extends CI_Model
     {
         $this->db->select('itemized.*, items.item_name');
         $this->db->from($this->table);
-        $this->db->join('items', 'items.id = itemized.item_id');
+        $this->db->join('items', 'items.id = itemized.item_id','left');
 
         $this->_apply_filters($filters);
         $this->_apply_search($search);
