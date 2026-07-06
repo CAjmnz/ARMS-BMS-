@@ -67,16 +67,16 @@ $(document).ready(function () {
         table.ajax.reload();
     });
 
- // Open Add Modal
+// Open Add Modal
 $('#btnAddUnit').click(function () {
     $('#modalTitle').text('Add Unit');
     $('#unit_id').val('');
-    $('#unit_item_id').val('').prop('disabled', false);
+    $('#unit_item_id').val('').prop('disabled', false);  // ← re-enable
     $('#unit_count').val(1);
     $('#unit_status').val('available');
     $('#unit_condition').val('new');
     $('#unit_description').val('');
-    $('#unitCountGroup').show();  // show unit count on Add
+    $('#unitCountGroup').show();
     $('#unitModal').modal('show');
 });
 
@@ -107,14 +107,23 @@ $(document).on('click', '.btnEdit', function () {
     // Save (Add or Edit)
     $('#btnSaveUnit').click(function () {
         var id          = $('#unit_id').val();
+
+        //Re-enable dropdown to read value (even if disabled)
+        $('#unit_item_id').prop('disable', false);
+
         var item_id     = $('#unit_item_id').val();
-        var unit_no     = $('#unit_no').val();
+        var unit_count     = $('#unit_count').val() || 1;
         var status      = $('#unit_status').val();
         var condition   = $('#unit_condition').val();
         var description = $('#unit_description').val().trim();
 
-        if (!item_id || !unit_no) {
-            Swal.fire('Warning', 'Please fill in required fields.', 'warning');
+        if (!item_id) {
+            Swal.fire('Warning', 'Please select an item', 'warning');
+            return;
+        }
+
+        if(!id &&(!unit_count || unit_count < 1)){
+            Swal.fire('Warning', 'Please enter number of units','warning');
             return;
         }
 

@@ -140,9 +140,11 @@
                         <div class="form-group col-6 mb-2">
                             <div class="field-wrap">
                                 <label>Status</label>
-                                <select class="form-control" id="status">
-                                    <option value="available">Available</option>
-                                </select>
+                                <input type="text"
+                                    class="form-control"
+                                    id="status"
+                                    value="available"
+                                    readonly>
                             </div>
                         </div>
                         <div class="form-group col-6 mb-2">
