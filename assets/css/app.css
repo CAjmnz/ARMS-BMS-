@@ -43,6 +43,11 @@ body {
     height: 120px;
     object-fit: contain;
 }
+.card{
+    flex: 1;
+    background: var(--navy);
+}
+
 
 .sidebar-nav {
     flex: 1;
@@ -135,6 +140,7 @@ body {
 .sidebar-collapsed .sidebar-footer {
     display: none;
 }
+
 
 /* Topbar expands when sidebar collapses */
 .topbar-expanded {

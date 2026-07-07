@@ -8,7 +8,7 @@ class Items extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Item_model');
-        $this->load->library('session');
+        $this->load->library('session','encryption');
         $this->load->helper('url');
 
 

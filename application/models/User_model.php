@@ -34,7 +34,7 @@ class User_model extends CI_Model {
     {
         $locked_until = date('Y-m-d H:i:s', strtotime('+30 seconds'));
         $this->db->where('username',$username);
-        $this->db->update('user', ['locked_until' => $locked_until ]);
+        $this->db->update('users', ['locked_until' => $locked_until ]);
     }
 
     //Reset attempts after successful login 
