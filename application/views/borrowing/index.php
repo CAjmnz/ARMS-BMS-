@@ -78,14 +78,17 @@
             <thead style="background:#f8f9fa;">
                 <tr>
                     <th>#</th>
+                    <th>Borrower's Id</th>
+                    <th>Borrower's name</th>
                     <th>Item Name</th>
-                    <th>Unit.No</th>
-                    <th>Status</th>
-                    <th>Condition</th>
-                    <th>Description</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                    <th class="text-center">Action</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Condition Before Borrowing</th>
+                    <th>Borrowed Date </th>
+                    <th>Due date</th>
+                    <th>Borrowing status</th>
+                    <th>Released by</th>
+                    
                 </tr>
             </thead>
             <tbody></tbody>
@@ -94,8 +97,7 @@
 
 </div>
 
-<!-- Add/Edit Modal -->
- 
+
 <!-- Add/Edit Modal -->
 <div class="modal fade" id="unitModal" tabindex="-1">
     <div class="modal-dialog">
