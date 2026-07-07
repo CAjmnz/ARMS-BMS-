@@ -18,21 +18,47 @@
 			<div class="row justify-content-center">
 			</div>
 			<div class="row justify-content-center">
-			    <div class="col-md-12 col-lg-10" style="min-height: 700px;">
+				<div class="col-md-12 col-lg-10" style="min-height: 700px;">
 					<div class="wrap d-md-flex">
 						<div class="img" style="background-image: url(<?= base_url('assets/images/bg-1.png') ?>);">
-					    </div>
+						</div>
 						<div class="login-wrap p-4 p-md-5">
 							<div class="d-flex">
 								<div class="w-100">
-								<h3 class="mb-4">Sign In</h3>
+									<h3 class="mb-4">Sign In</h3>
 								</div>
 							</div>
 							<form action="<?= site_url('auth/login') ?>" method="POST" class="signin-form">
 								<?php if ($this->session->flashdata('error')): ?>
-									<div class="alert alert-danger">
+									<div class="alert alert-danger" id="errorAlert">
 										<?= $this->session->flashdata('error') ?>
 									</div>
+								<?php endif; ?>
+
+								<?php if ($this->session->flashdata('locked_until')): ?>
+									<div class="alert alert-warning" id="lockAlert">
+										<i class="fas fa-lock"></i>
+										Account locked. Try again in <strong id="countdown">30</strong> second(s).
+									</div>
+									<script>
+										var lockedUntil = new Date("<?= $this->session->flashdata('locked_until') ?>").getTime();
+
+										var countdown = setInterval(function() {
+											var now = new Date().getTime();
+											var remaining = Math.ceil((lockedUntil - now) / 1000);
+
+											if (remaining <= 0) {
+												clearInterval(countdown);
+												document.getElementById('lockAlert').innerHTML =
+													'<i class="fas fa-unlock"></i> Account unlocked! You may try again.';
+												document.getElementById('lockAlert').className = 'alert alert-success';
+												document.querySelector('.signin-form button[type="submit"]').disabled = false;
+											} else {
+												document.getElementById('countdown').innerText = remaining;
+												document.querySelector('.signin-form button[type="submit"]').disabled = true;
+											}
+										}, 1000);
+									</script>
 								<?php endif; ?>
 								<div class="form-group mb-3">
 									<label class="label">Username</label>
