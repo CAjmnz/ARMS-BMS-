@@ -7,11 +7,30 @@
     <!-- Page Header -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <h4 style="margin:0; font-weight:700; color:#333;">Item Management &rsaquo; Itemized</h4>
-        <button class="btn btn-success btn-sm" id="btnAddUnit">
-            <i class="fas fa-plus"></i> Add Unit
-        </button>
-    </div>
+        <div style="display:flex; gap:8px;">
 
+            <!-- Bulk Delete — hidden until select mode -->
+            <button class="btn btn-danger btn-sm d-none" id="btnBulkDelete">
+                <i class="fas fa-trash"></i> Delete Selected (<span id="selectedCount">0</span>)
+            </button>
+
+            <!-- Cancel Select — hidden until select mode -->
+            <button class="btn btn-secondary btn-sm d-none" id="btnCancelSelect">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+
+            <!-- Select Button -->
+            <button class="btn btn-warning btn-sm" id="btnSelect">
+                <i class="fas fa-check-square"></i> Select
+            </button>
+
+            <!-- Add Unit -->
+            <button class="btn btn-success btn-sm" id="btnAddUnit">
+                <i class="fas fa-plus"></i> Add Unit
+            </button>
+
+        </div>
+    </div>
     <!-- Flash Messages -->
     <?php if ($this->session->flashdata('success')): ?>
         <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
@@ -19,8 +38,8 @@
     <?php if ($this->session->flashdata('error')): ?>
         <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
     <?php endif; ?>
- 
-    
+
+
     <!-- Filters -->
     <div style="background:#fff; border-radius:8px; padding:15px; margin-bottom:20px; border:1px solid #e3e6f0;">
         <form id="filterForm">
@@ -77,6 +96,9 @@
         <table class="table table-bordered table-hover" id="itemizedTable">
             <thead style="background:#f8f9fa;">
                 <tr>
+                    <th class="checkbox-col" style="display:none; width:40px;">
+                        <input type="checkbox" id="selectAll">
+                    </th>
                     <th>#</th>
                     <th>Item Name</th>
                     <th>Unit.No</th>
@@ -95,7 +117,7 @@
 </div>
 
 <!-- Add/Edit Modal -->
- 
+
 <!-- Add/Edit Modal -->
 <div class="modal fade" id="unitModal" tabindex="-1">
     <div class="modal-dialog">
@@ -127,7 +149,7 @@
                 <div class="form-group" id="unitCountGroup">
                     <label>Number of Units to Add <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" id="unit_count"
-                           placeholder="How many units?" min="1" value="1">
+                        placeholder="How many units?" min="1" value="1">
                     <small class="text-muted">
                         Each unit will be auto-numbered sequentially.
                     </small>
@@ -166,7 +188,7 @@
                 <div class="form-group">
                     <label>Description</label>
                     <textarea class="form-control" id="unit_description" rows="3"
-                              placeholder="e.g. Laptop unit - minor scratches"></textarea>
+                        placeholder="e.g. Laptop unit - minor scratches"></textarea>
                 </div>
 
             </div>

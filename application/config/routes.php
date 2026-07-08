@@ -67,6 +67,7 @@ $route['itemized/store'] = 'itemized/store';
 $route['itemized/get/(:num)'] = 'itemized/get/$1';
 $route['itemized/update/(:num)'] = 'itemized/update/$1';
 $route['itemized/delete/(:num)'] = 'itemized/delete/$1';
+$route['itemized/bulk_delete'] = 'itemized/bulk_delete';
 //borrowing
 $route['borrowing']         = 'borrowing/index';
 

@@ -252,6 +252,7 @@ class Borrowing extends CI_Controller
             </div>';
 
             $data[] = [
+            
                 $i++,
                 htmlspecialchars($unit->item_name),
                 $unit->unit_no,
