@@ -83,8 +83,9 @@ body {
 /* ─── Topbar ─────────────────────────────────── */
 #topbar {
     height: 65px;
+    position: sticky;
     background: #ffffff !important;
-    margin-left: 220px;
+    margin-left: 230px;
     display: flex;
     align-items: center;
     padding: 0 25px;

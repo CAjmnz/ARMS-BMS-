@@ -254,9 +254,7 @@ class Itemized extends CI_Controller
             </div>';
 
             $data[] = [
-                '<td class="checkbox-td" style="display:none;">
-        <input type="checkbox" class="rowCheckbox" value="' . $unit->id . '">
-    </td>',
+                '<input type="checkbox" class="rowCheckbox" value="' . $unit->id . '">',
                 $i++,
                 htmlspecialchars($unit->item_name),
                 $unit->unit_no,
