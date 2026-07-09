@@ -83,16 +83,21 @@ body {
 /* ─── Topbar ─────────────────────────────────── */
 #topbar {
     height: 65px;
-    position: sticky;
+    position: fixed;
+    top: 0;
+    left: 230px;        /* ← use left not margin-left */
+    right: 0;
     background: #ffffff !important;
-    margin-left: 230px;
     display: flex;
     align-items: center;
     padding: 0 25px;
     border-bottom: 3px solid var(--royal-blue);
     justify-content: space-between;
-    transition: none !important;
+    z-index: 1000; 
+    transition: left 0.3s ease;
 }
+
+
 
 #topbar:hover {
     background: #ffffff !important;
@@ -143,10 +148,7 @@ body {
 }
 
 
-/* Topbar expands when sidebar collapses */
-.topbar-expanded {
-    margin-left: 0 !important;
-}
+
 
 /* Main content expands when sidebar collapses */
 .main-expanded {
@@ -167,13 +169,13 @@ body {
 }
 /* ─── Main Content ───────────────────────────── */
 #main-content {
-    margin-left: 230px; 
-    padding: 28px 28px 40px;
-    transition: margin-left 0.25s ease;
+    margin-left: 230px;
+    margin-top: 65px;
     padding: 25px;
     min-height: calc(100vh - 65px);
-    margin-top: 20px;
+    transition: margin-left 0.3s ease;
 }
+
 
 #main-content.expanded { margin-left: 68px; }
 /*─── Responsive ───────────────────────────── */
