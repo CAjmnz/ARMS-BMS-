@@ -20,20 +20,20 @@ class Borrowing_model extends CI_Model
     private function _base_query()
     {
         $this->db->select('
-            borrowing_items.id,
-            borrowing_items.condition_before,
-            borrowing_items.item_status,
-            borrowings.id as borrowing_id,
-            borrowings.date_released,
-            borrowings.due_date,
-            borrowings.status as borrowing_status,
-            borrowers.id_number,
-            borrowers.full_name as borrower_name,
-            items.item_name,
-            items.category,
-            itemized.unit_no,
-            users.full_name as released_by_name
-        ');
+        borrowing_items.id,
+        borrowing_items.condition_before,
+        borrowing_items.item_status,
+        borrowings.id as borrowing_id,
+        borrowings.date_released,
+        borrowings.due_date,
+        borrowings.status as borrowing_status,
+        borrowers.id_number,
+        borrowers.full_name as borrower_name,
+        items.item_name,
+        items.category,
+        itemized.unit_no,
+        users.username as released_by_name
+    ');
         $this->db->from($this->table);
         $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
         $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');

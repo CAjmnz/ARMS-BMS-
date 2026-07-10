@@ -69,7 +69,8 @@ $route['itemized/update/(:num)'] = 'itemized/update/$1';
 $route['itemized/delete/(:num)'] = 'itemized/delete/$1';
 $route['itemized/bulk_delete'] = 'itemized/bulk_delete';
 //borrowing
-$route['borrowing']         = 'borrowing/index';
+$route['borrowing']            = 'Borrowing/index';
+$route['borrowing/ajax_list']  = 'Borrowing/ajax_list';
 
 $route['items/sync_itemized'] = 'items/sync_itemized';
 
