@@ -65,77 +65,84 @@ class Borrowing extends CI_Controller
             $filters
         );
 
-        $data = [];
-
-        $i = $start + 1;
-
         foreach ($borrowings as $row) {
 
-            switch ($row->status) {
-
-                case 'Pending':
-                    $badge = '<span class="badge badge-secondary">Pending</span>';
-                    break;
-
-                case 'Released':
-                    $badge = '<span class="badge badge-warning">Released</span>';
-                    break;
-
-                case 'Returned':
-                    $badge = '<span class="badge badge-success">Returned</span>';
-                    break;
-
-                case 'Overdue':
-                    $badge = '<span class="badge badge-danger">Overdue</span>';
-                    break;
-
-                case 'Cancelled':
-                    $badge = '<span class="badge badge-dark">Cancelled</span>';
-                    break;
-
-                default:
-                    $badge = '<span class="badge badge-light">'.$row->status.'</span>';
-            }
-
-            $action = '
-            <div class="dropdown">
-                <button class="btn btn-secondary btn-sm dropdown-toggle"
-                        data-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                </button>
-
-                <div class="dropdown-menu">
-
-                    <button class="dropdown-item btnView"
-                            data-id="'.$row->id.'">
-                        <i class="fas fa-eye"></i> View
-                    </button>
-
-                    <button class="dropdown-item btnReturn"
-                            data-id="'.$row->id.'">
-                        <i class="fas fa-undo"></i> Return
-                    </button>
-
-                </div>
-            </div>';
-
-            $data[] = [
-
-                $i++,
-
-                $row->borrower_id,
-                $row->borrower_name,
-                $row->item_name,
-                $row->category,
-                $row->quantity,
-                $row->condition_before,
-                date('M d, Y', strtotime($row->borrow_date)),
-                date('M d, Y', strtotime($row->due_date)),
-                $badge,
-                $row->released_by,
-                $action
-            ];
+        switch ($row->status) {
+    
+            case 'Pending':
+                $badge = '<span class="badge badge-secondary">Pending</span>';
+                break;
+    
+            case 'Released':
+                $badge = '<span class="badge badge-warning">Released</span>';
+                break;
+    
+            case 'Returned':
+                $badge = '<span class="badge badge-success">Returned</span>';
+                break;
+    
+            case 'Overdue':
+                $badge = '<span class="badge badge-danger">Overdue</span>';
+                break;
+    
+            case 'Cancelled':
+                $badge = '<span class="badge badge-dark">Cancelled</span>';
+                break;
+    
+            default:
+                $badge = '<span class="badge badge-light">'.$row->status.'</span>';
         }
+    
+        $action = '
+        <div class="dropdown">
+            <button class="btn btn-secondary btn-sm dropdown-toggle"
+                data-toggle="dropdown">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+    
+            <div class="dropdown-menu">
+    
+                <button class="dropdown-item btnView"
+                    data-id="'.$row->id.'">
+                    <i class="fas fa-eye"></i> View
+                </button>
+    
+                <button class="dropdown-item btnReturn"
+                    data-id="'.$row->id.'">
+                    <i class="fas fa-undo"></i> Return
+                </button>
+    
+            </div>
+        </div>';
+    
+        $data[] = [
+    
+            $i++,
+    
+            htmlspecialchars($row->borrower_id),
+    
+            htmlspecialchars($row->borrower_name),
+    
+            htmlspecialchars($row->item_name . ' #'.$row->unit_no),
+    
+            htmlspecialchars($row->category),
+    
+            1,
+    
+            ucfirst($row->condition_before),
+    
+            date('M d, Y', strtotime($row->borrow_date)),
+    
+            date('M d, Y', strtotime($row->due_date)),
+    
+            $badge,
+    
+            htmlspecialchars($row->released_by),
+    
+            $action
+    
+        ];
+    }
 
         echo json_encode([
             'draw'            => (int)$draw,

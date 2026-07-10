@@ -6,18 +6,18 @@ $(document).ready(function () {
     var dateToFilter    = '';
 
     // Destroy if already initialized
-    if ($.fn.DataTable.isDataTable('#itemizedTable')) {
-        $('#itemizedTable').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#borrowingTable')) {
+        $('#borrowingTable').DataTable().destroy();
     }
 
     // Init server-side DataTable
-    var table = $('#itemizedTable').DataTable({
+    var table = $('#borrowingTable').DataTable({
         processing : true,
         serverSide : true,
         lengthMenu : [[5, 10, 25, 50], [5, 10, 25, 50]],
         pageLength : 10,
         ajax: {
-            url  : BASE_URL + 'itemized/ajax_list',
+            url  : BASE_URL + 'borrowing/ajax_list',
             type : 'POST',
             data : function (d) {
                 d.status         = statusFilter;
@@ -35,7 +35,9 @@ $(document).ready(function () {
             { data: 5 },
             { data: 6 },
             { data: 7 },
-            { data: 8, orderable: false }
+            { data: 8, orderable: false },
+            { data: 9 },
+            { data: 10 }
         ],
         order: [[0, 'desc']],
         language: {
@@ -84,7 +86,7 @@ $('#btnAddUnit').click(function () {
 $(document).on('click', '.btnEdit', function () {
     var id = $(this).data('id');
     $.ajax({
-        url      : BASE_URL + 'itemized/get/' + id,
+        url      : BASE_URL + 'borrowing/get/' + id,
         type     : 'GET',
         dataType : 'json',
         success  : function (res) {
@@ -127,7 +129,7 @@ $(document).on('click', '.btnEdit', function () {
             return;
         }
 
-        var url = id ? BASE_URL + 'itemized/update/' + id : BASE_URL + 'itemized/store';
+        var url = id ? BASE_URL + 'borrowing/update/' + id : BASE_URL + 'borrowing/store';
 
         $.post(url, {
             item_id          : item_id,
@@ -166,7 +168,7 @@ $(document).on('click', '.btnEdit', function () {
             confirmButtonText : 'Yes, delete it!'
         }).then(function (result) {
             if (result.isConfirmed) {
-                $.post(BASE_URL + 'itemized/delete/' + id, function (res) {
+                $.post(BASE_URL + 'borrowing/delete/' + id, function (res) {
                     if (res.success) {
                         Swal.fire('Deleted!', res.message, 'success').then(function () {
                             table.ajax.reload();

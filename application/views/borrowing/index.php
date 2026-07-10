@@ -88,6 +88,7 @@
                     <th>Due date</th>
                     <th>Borrowing status</th>
                     <th>Released by</th>
+                    <th>Action</th>
                     
                 </tr>
             </thead>
