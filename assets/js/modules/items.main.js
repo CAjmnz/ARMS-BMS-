@@ -14,6 +14,8 @@ $(document).ready(function () {
     var table = $('#itemsTable').DataTable({
         processing : true,
         serverSide : true,
+        responsive: true,
+        autoWidth: false,
         lengthMenu : [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],  
         pageLength : 5,  // ← default on load
         ajax: {

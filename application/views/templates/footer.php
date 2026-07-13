@@ -9,6 +9,8 @@
 <!-- 3. DataTables (needs jQuery) -->
 <script src="<?= base_url('assets/js/jquery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('assets/js/dataTables.bootstrap4.min.js') ?>"></script>
+<script src="<?= base_url('assets/js/dataTables.responsive.min.js') ?>"></script>
+<script src="<?= base_url('assets/js/responsive.bootstrap4.min.js') ?>"></script>
 <!-- 4. SweetAlert -->
 <script src="<?= base_url('assets/js/sweetalert2.all.min.js') ?>"></script>
 <!-- 5. Chart.js -->
@@ -28,7 +30,9 @@
 <script src="<?= base_url('assets/js/modules/items.main.js') ?>"></script>
 <!-- 10. itemized module-->
 <script src="<?= base_url('assets/js/modules/itemized.main.js') ?>"></script>
-<!-- 11. Users module -->
+<!-- 11. borrowing module-->
+<script src="<?= base_url('assets/js/modules/borrowing.main.js') ?>"></script>
+<!-- 12. Users module -->
 <script src="<?= base_url('assets/js/modules/users.main.js') ?>"></script>
 
 <?php if (isset($page_scripts)): ?>

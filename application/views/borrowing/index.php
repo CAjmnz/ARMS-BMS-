@@ -9,7 +9,7 @@
         <h4 style="margin:0; font-weight:700; color:#333;">Borrowing Management &rsaquo; Borrowing</h4>
         <div style="display:flex; gap:8px;">
             <button class="btn btn-success btn-sm" id="btnAddBorrowing">
-                <i class="fas fa-plus"></i> Add Unit
+                <i class="fas fa-plus"></i> Borrowing
             </button>
         </div>
     </div>
@@ -90,7 +90,86 @@
             <tbody></tbody>
         </table>
     </div>
+    <!-- Add/Edit Modal -->
+    <!-- Add Borrowing Modal -->
+    <div class="modal fade" id="borrowingModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Release Borrowing</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-</div>
+                    <!-- Borrower -->
+                    <div class="form-group">
+                        <label>Borrower <span class="text-danger">*</span></label>
+                        <select class="form-control" id="borrowing_borrower_id">
+                            <option value="">-- Select Borrower --</option>
+                            <?php foreach ($borrowers as $b): ?>
+                                <option value="<?= $b->id ?>">
+                                    <?= htmlspecialchars($b->full_name) ?> (<?= htmlspecialchars($b->id_number) ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-<?php $this->load->view('templates/footer'); ?>
+                    <!-- Item -->
+                    <div class="form-group">
+                        <label>Item <span class="text-danger">*</span></label>
+                        <select class="form-control" id="borrowing_item_id">
+                            <option value="">-- Select Item --</option>
+                            <?php foreach ($items as $item): ?>
+                                <option value="<?= $item->id ?>">
+                                    <?= htmlspecialchars($item->item_name) ?>
+                                    (Available: <?= $item->available_quantity ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <!-- Units — populated via AJAX -->
+                    <div class="form-group">
+                        <label>Available Units <span class="text-danger">*</span></label>
+                        <div id="unitCheckboxList" style="max-height:150px; overflow-y:auto; border:1px solid #ddd; border-radius:4px; padding:8px;">
+                            <span class="text-muted">Select an item first.</span>
+                        </div>
+                    </div>
+
+                    <!-- Purpose -->
+                    <div class="form-group">
+                        <label>Purpose</label>
+                        <input type="text" class="form-control" id="borrowing_purpose" placeholder="e.g. Thesis defense">
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="form-group">
+                        <label>Due Date <span class="text-danger">*</span></label>
+                        <input type="datetime-local" class="form-control" id="borrowing_due_date">
+                    </div>
+                     
+                    <!-- released by -->
+                    <div class="form-group">
+                        <label>released by <span class="text-danger">*</span></label>
+                        <select class="form-control" id="borrowing_borrower_id">
+                            <option value="">-- Select Borrower --</option>
+                            <?php foreach ($borrowers as $b): ?>
+                                <option value="<?= $b->id ?>">
+                                    <?= htmlspecialchars($b->full_name) ?> (<?= htmlspecialchars($b->id_number) ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="btnSaveBorrowing">Release</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php $this->load->view('templates/footer'); ?>

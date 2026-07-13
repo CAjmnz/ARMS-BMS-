@@ -15,6 +15,8 @@ $(document).ready(function () {
     var table = $('#itemizedTable').DataTable({
         processing : true,
         serverSide : true,
+        responsive: true,
+        autoWidth: false,
         lengthMenu : [[5, 10, 25, 50], [5, 10, 25, 50]],
         pageLength : 10,
         ajax: {

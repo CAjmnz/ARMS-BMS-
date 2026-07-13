@@ -121,4 +121,43 @@ class Borrowing_model extends CI_Model
     {
         return $this->db->delete('borrowing_items', ['id' => $id]);
     }
+    // Get available units for a given item (for the Add Borrowing form)
+    public function get_available_units($item_id)
+    {
+        $this->db->select('id, unit_no, item_condition');
+        $this->db->where('item_id', $item_id);
+        $this->db->where('status', 'available');
+        $this->db->order_by('unit_no', 'asc');
+        return $this->db->get('itemized')->result();
+    }
+
+    // Create a borrowing transaction + its items
+    public function create_borrowing($header, $unit_ids)
+    {
+        $this->db->trans_start();
+
+        $this->db->insert('borrowings', $header);
+        $borrowing_id = $this->db->insert_id();
+
+        foreach ($unit_ids as $unit_id) {
+            $unit = $this->db->get_where('itemized', ['id' => $unit_id])->row();
+
+            if ($unit) {
+                $this->db->insert('borrowing_items', [
+                    'borrowing_id'     => $borrowing_id,
+                    'unit_id'          => $unit_id,
+                    'condition_before' => $unit->item_condition,
+                    'item_status'      => 'borrowed',
+                ]);
+
+                // Flip unit to borrowed
+                $this->db->where('id', $unit_id);
+                $this->db->update('itemized', ['status' => 'borrowed']);
+            }
+        }
+
+        $this->db->trans_complete();
+
+        return $this->db->trans_status() ? $borrowing_id : false;
+    }
 }

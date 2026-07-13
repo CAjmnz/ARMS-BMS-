@@ -11,9 +11,11 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap4.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/responsive.bootstrap4.min.css') ?>">
     <!-- App CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/bootstrap-icons.min.css') ?>">
+
 
     <?php if (isset($page_styles)): ?>
         <?php foreach ($page_styles as $style): ?>
