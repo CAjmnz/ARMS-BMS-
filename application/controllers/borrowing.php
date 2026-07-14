@@ -84,14 +84,14 @@ public function ajax_list()
                 <i class="bi bi-three-dots-vertical"></i>
             </button>
             <div class="dropdown-menu">
-                <button class="dropdown-item btnView" data-id="' . $row->id . '">
+                <button class="dropdown-item btnView" data-id="' . encode_id($row->id) . '">
                     <i class="fas fa-eye"></i> View
                 </button>
-                <button class="dropdown-item btnReturn" data-id="' . $row->id . '">
+                <button class="dropdown-item btnReturn" data-id="' . encode_id($row->id) . '">
                     <i class="fas fa-undo"></i> Mark Returned
                 </button>
                 <button class="dropdown-item btnDelete"
-                    data-id="' . $row->id . '"
+                    data-id="' . encode_id($row->id) . '"
                     data-name="' . htmlspecialchars($row->item_name) . ' #' . $row->unit_no . '">
                     <i class="fas fa-trash"></i> Delete
                 </button>
@@ -186,6 +186,22 @@ public function store()
         echo json_encode(['success' => true, 'message' => count($unit_ids) . ' unit(s) released successfully.']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Failed to create borrowing record.']);
+    }
+}
+
+public function get($encoded_id)
+{
+    $id = decode_id($encoded_id);
+
+    if($id === null ){
+        echo json_encode(['success' => false,'message'=> 'Invalid request.']);
+    return;
+}
+    $unit = $this->itemized_model->get_by_id($id);
+    if($unit){
+        echo json_encode(['success' => true,'item'=> $unit]);
+    } else {
+        echo json_encode(['success' => false,'message' => 'Unit not found.']);
     }
 }
 }

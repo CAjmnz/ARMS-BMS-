@@ -209,11 +209,11 @@ class Items extends CI_Controller
                     <i class="bi bi-three-dots-vertical"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <button class="dropdown-item btnEdit" data-id="' . $item->id . '">
+                    <button class="dropdown-item btnEdit" data-id="' .encode_id($item->id) . '">
                         <i class="fas fa-edit"></i> Edit
                     </button>
                     <button class="dropdown-item btnDelete"
-                        data-id="' . $item->id . '"
+                        data-id="' . encode_id($item->id) . '"
                         data-name="' . htmlspecialchars($item->item_name) . '">
                         <i class="fas fa-trash"></i> Delete
                     </button>
@@ -270,4 +270,5 @@ class Items extends CI_Controller
     
         echo "Sync done! All items now have itemized units.";
     }
+    
 }

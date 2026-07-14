@@ -59,19 +59,19 @@ $route['dashboard']          = 'dashboard/index';
 //items routes
 $route['items']              = 'items/index';
 $route['items/ajax_list']    = 'items/ajax_list';
-$route['items/get/(:num)'] = 'items/get/$1';
+$route['items/get/(:any)'] = 'items/get/$1';
 //itemized
 $route['itemized']         = 'itemized/index';
 $route['itemized/ajax_list'] = 'itemized/ajax_list';
 $route['itemized/store'] = 'itemized/store';
-$route['itemized/get/(:num)'] = 'itemized/get/$1';
-$route['itemized/update/(:num)'] = 'itemized/update/$1';
-$route['itemized/delete/(:num)'] = 'itemized/delete/$1';
+$route['itemized/get/(:any)'] = 'itemized/get/$1';
+$route['itemized/update/(:any)'] = 'itemized/update/$1';
+$route['itemized/delete/(:any)'] = 'itemized/delete/$1';
 $route['itemized/bulk_delete'] = 'itemized/bulk_delete';
 //borrowing
 $route['borrowing']            = 'Borrowing/index';
 $route['borrowing/ajax_list']  = 'Borrowing/ajax_list';
-$route['borrowing/get_available_units/(:num)'] = 'Borrowing/get_available_units/$1';
+$route['borrowing/get_available_units/(:any)'] = 'Borrowing/get_available_units/$1';
 $route['borrowing/store']      = 'Borrowing/store';
 
 $route['items/sync_itemized'] = 'items/sync_itemized';

@@ -89,14 +89,14 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url');
+$autoload['helper'] = array('url','id_helper');
 
 /*
 | -------------------------------------------------------------------
 |  Auto-load Config files
 | -------------------------------------------------------------------
 | Prototype:
-|
+|  
 |	$autoload['config'] = array('config1', 'config2');
 |
 | NOTE: This item is intended for use ONLY if you have created custom

@@ -242,11 +242,11 @@ class Itemized extends CI_Controller
                     <i class="bi bi-three-dots-vertical"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <button class="dropdown-item btnEdit" data-id="' . $unit->id . '">
+                    <button class="dropdown-item btnEdit" data-id="' . encode_id($unit->id) . '">
                         <i class="fas fa-edit"></i> Edit
                     </button>
                     <button class="dropdown-item btnDelete"
-                        data-id="' . $unit->id . '"
+                        data-id="' . encode_id($unit->id) . '"
                         data-name="' . htmlspecialchars($unit->item_name) . ' #' . $unit->unit_no . '">
                         <i class="fas fa-trash"></i> Delete
                     </button>
