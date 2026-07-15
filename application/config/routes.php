@@ -74,6 +74,11 @@ $route['borrowing']            = 'Borrowing/index';
 $route['borrowing/ajax_list']  = 'Borrowing/ajax_list';
 $route['borrowing/get_available_units/(:any)'] = 'Borrowing/get_available_units/$1';
 $route['borrowing/store']      = 'Borrowing/store';
+$route['borrowing/get_item/(:any)']     = 'Borrowing/get_item/$1';
+$route['borrowing/mark_returned/(:any)'] = 'Borrowing/mark_returned/$1';
+//return
+$route['returns']            = 'Return_c/index';
+$route['returns/ajax_list']  = 'Return_c/ajax_list';
 
 $route['items/sync_itemized'] = 'items/sync_itemized';
 

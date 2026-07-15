@@ -32,7 +32,9 @@
 <script src="<?= base_url('assets/js/modules/itemized.main.js') ?>"></script>
 <!-- 11. borrowing module-->
 <script src="<?= base_url('assets/js/modules/borrowing.main.js') ?>"></script>
-<!-- 12. Users module -->
+<!-- 12. Returns module -->
+<script src="<?= base_url('assets/js/modules/returns.main.js') ?>"></script>
+<!-- 13. Users module -->
 <script src="<?= base_url('assets/js/modules/users.main.js') ?>"></script>
 
 <?php if (isset($page_scripts)): ?>

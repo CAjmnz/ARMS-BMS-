@@ -155,4 +155,49 @@ $('#btnSaveBorrowing').click(function () {
         Swal.fire('Error', 'Something went wrong.', 'error');
     });
 });
+// ─── Open Mark Returned Modal ───────────────────────────
+$('#borrowingTable').on('click', '.btnReturn', function () {
+    var id = $(this).data('id');
+    $('#return_borrowing_item_id').val(id);
+    $('#return_item_status').val('returned');
+    $('#return_condition_after').val('good');
+    $('#return_remarks').val('');
+    $('#returnModal').modal('show');
+});
+
+// Toggle condition dropdown based on return status
+$(document).on('change', '#return_item_status', function () {
+    if ($(this).val() === 'returned') {
+        $('#conditionAfterGroup').show();
+    } else {
+        $('#conditionAfterGroup').hide();
+    }
+});
+
+// ─── Confirm Return ──────────────────────────────────────
+$('#btnConfirmReturn').click(function () {
+    var id = $('#return_borrowing_item_id').val();
+    var itemStatus = $('#return_item_status').val();
+    var conditionAfter = $('#return_condition_after').val();
+    var remarks = $('#return_remarks').val().trim();
+
+    $.post(BASE_URL + 'borrowing/mark_returned/' + id, {
+        item_status      : itemStatus,
+        condition_after   : conditionAfter,
+        remarks           : remarks
+    }, function (res) {
+        if (res.success) {
+            $('#returnModal').modal('hide');
+            Swal.fire('Success', res.message, 'success').then(function () {
+                table.ajax.reload();
+            });
+        } else {
+            Swal.fire('Error', res.message, 'error');
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.log('Error:', xhr.responseText);
+        Swal.fire('Error', 'Something went wrong.', 'error');
+    });
+});
 });

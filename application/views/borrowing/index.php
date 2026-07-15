@@ -172,4 +172,49 @@
         </div>
     </div>
 
+    <!-- Mark Returned Modal -->
+<div class="modal fade" id="returnModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mark as Returned</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="return_borrowing_item_id">
+
+                <div class="form-group">
+                    <label>Return Status <span class="text-danger">*</span></label>
+                    <select class="form-control" id="return_item_status">
+                        <option value="returned">Returned (good condition)</option>
+                        <option value="damaged">Returned Damaged</option>
+                        <option value="lost">Lost / Not Returned</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="conditionAfterGroup">
+                    <label>Condition</label>
+                    <select class="form-control" id="return_condition_after">
+                        <option value="new">New</option>
+                        <option value="excellent">Excellent</option>
+                        <option value="good">Good</option>
+                        <option value="needs repair">Needs Repair</option>
+                        <option value="under maintenance">Under Maintenance</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Remarks</label>
+                    <textarea class="form-control" id="return_remarks" rows="2" placeholder="Optional notes"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="btnConfirmReturn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
     <?php $this->load->view('templates/footer'); ?>

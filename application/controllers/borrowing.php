@@ -205,4 +205,94 @@ public function get($encoded_id)
         echo json_encode(['success' => false,'message' => 'Unit not found.']);
     }
 }
+// Get a single borrowing_item's details (for the Mark Returned modal)
+public function get_item($id)
+{
+    $decoded_id = decode_id($id);
+
+    if ($decoded_id === null) {
+        echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+        return;
+    }
+
+    $item = $this->Borrowing_model->get_item_by_id($decoded_id);
+    if ($item) {
+        echo json_encode(['success' => true, 'item' => $item]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Record not found.']);
+    }
+}
+
+// Mark a unit as returned/damaged/lost
+public function mark_returned($id)
+{
+    $decoded_id = decode_id($id);
+
+    if ($decoded_id === null) {
+        echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+        return;
+    }
+
+    if ($this->input->method() !== 'post') {
+        redirect('borrowing');
+    }
+
+    $condition_after = $this->input->post('condition_after');
+    $item_status     = $this->input->post('item_status'); // returned | damaged | lost
+    $remarks         = trim($this->input->post('remarks'));
+
+    $borrowing_item = $this->Borrowing_model->get_item_by_id($decoded_id);
+
+    if (!$borrowing_item) {
+        echo json_encode(['success' => false, 'message' => 'Record not found.']);
+        return;
+    }
+
+    // Update the borrowing_items row
+    $this->Borrowing_model->mark_returned($decoded_id, [
+        'condition_after' => $condition_after,
+        'item_status'     => $item_status,
+        'date_returned'   => date('Y-m-d H:i:s'),
+        'received_by'     => $this->session->userdata('user_id'),   // ← add this line
+        'remarks'         => $remarks ?: null,
+    ]);
+
+    // Update the itemized unit itself
+    $this->load->model('Itemized_model');
+    $unit_status = ($item_status === 'returned') ? 'available' : $item_status; // damaged/lost carry over as-is
+
+    $this->Itemized_model->update($borrowing_item->id, [
+        'status'         => $unit_status,
+        'item_condition' => ($item_status === 'returned') ? $condition_after : 'needs repair',
+    ]);
+
+    // Sync parent item quantities
+    $this->load->model('Item_model');
+    $this->load->model('Itemized_model');
+    $unit = $this->Itemized_model->get_by_id($borrowing_item->id); // Note: this is borrowing_item's unit_id, see fix below
+    if ($unit) {
+        $item = $this->Item_model->get_by_id($unit->item_id);
+        if ($item) {
+            $new_available = $item->available_quantity;
+            $new_borrowed  = max(0, $item->borrowed_quantity - 1);
+
+            // Only bump available_quantity back up if the unit is actually usable again
+            if ($item_status === 'returned') {
+                $new_available = $item->available_quantity + 1;
+            }
+
+            $this->Item_model->update($unit->item_id, [
+                'available_quantity' => $new_available,
+                'borrowed_quantity'  => $new_borrowed,
+            ]);
+        }
+    }
+
+    // If every item in this transaction is back, close the borrowing
+    if ($this->Borrowing_model->all_items_returned($borrowing_item->borrowing_id)) {
+        $this->Borrowing_model->close_borrowing($borrowing_item->borrowing_id);
+    }
+
+    echo json_encode(['success' => true, 'message' => 'Unit marked as ' . $item_status . '.']);
+}
 }

@@ -18,9 +18,10 @@ class Borrowing_model extends CI_Model
     ];
 
     private function _base_query()
-    {
-        $this->db->select('
+{
+    $this->db->select('
         borrowing_items.id,
+        borrowing_items.unit_id,
         borrowing_items.condition_before,
         borrowing_items.item_status,
         borrowings.id as borrowing_id,
@@ -34,14 +35,14 @@ class Borrowing_model extends CI_Model
         itemized.unit_no,
         users.username as released_by_name
     ');
-        $this->db->from($this->table);
-        $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
-        $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
-        $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
-        $this->db->join('items', 'items.id = itemized.item_id', 'left');
-        $this->db->join('users', 'users.id = borrowings.released_by', 'left');
-    }
-
+    $this->db->from($this->table);
+    $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
+    $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
+    $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
+    $this->db->join('items', 'items.id = itemized.item_id', 'left');
+    $this->db->join('users', 'users.id = borrowings.released_by', 'left');
+    $this->db->where('borrowing_items.item_status', 'borrowed');   // ← only show active borrowings
+}
     // Get single borrowing_item by ID
     public function get_by_id($id)
     {
@@ -167,4 +168,37 @@ class Borrowing_model extends CI_Model
         $this->db->where('unit_id',$unit_id);
         return $this->db->count_all_results('borrowing_items') > 0;
     }
+    // Get a single borrowing_item (for the Mark Returned modal)
+public function get_item_by_id($id)
+{
+    $this->_base_query();
+    $this->db->where('borrowing_items.id', $id);
+    return $this->db->get()->row();
+}
+
+// Mark a specific borrowing_item as returned/damaged/lost
+public function mark_returned($id, $data)
+{
+    $this->db->where('id', $id);
+    return $this->db->update('borrowing_items', $data);
+}
+
+// Check if every item in a borrowing transaction has been returned
+public function all_items_returned($borrowing_id)
+{
+    $this->db->where('borrowing_id', $borrowing_id);
+    $this->db->where('item_status', 'borrowed');
+    $still_out = $this->db->count_all_results('borrowing_items');
+    return $still_out === 0;
+}
+
+// Close out the borrowing transaction once everything is back
+public function close_borrowing($borrowing_id)
+{
+    $this->db->where('id', $borrowing_id);
+    return $this->db->update('borrowings', [
+        'status'        => 'returned',
+        'date_returned' => date('Y-m-d H:i:s'),
+    ]);
+}
 }
