@@ -156,7 +156,15 @@ class Itemized extends CI_Controller
             return;
         }
 
+        // Block deletion if this unit has borrowing history
+        $this->load->model('Borrowing_model');
+        if ($this->Borrowing_model->unit_has_borrowing_history($decoded_id)) {
+            echo json_encode(['success' => false, 'message' => 'Cannot delete: this unit has borrowing history. Archive it instead if needed.']);
+            return;
+        }
+
         if ($this->Itemized_model->delete($decoded_id)) {
+
 
             $this->load->model('Item_model');
             $item = $this->Item_model->get_by_id($unit->item_id);
@@ -305,14 +313,21 @@ class Itemized extends CI_Controller
         }
 
         $this->load->model('Item_model');
+        $this->load->model('Borrowing_model');
         $deleted = 0;
+        $blocked = 0;
 
         foreach ($ids as $id) {
             $unit = $this->Itemized_model->get_by_id($id);
 
             if ($unit) {
+                // Skip units with borrowing history
+                if ($this->Borrowing_model->unit_has_borrowing_history($id)) {
+                    $blocked++;
+                    continue;
+                }
+
                 if ($this->Itemized_model->delete($id)) {
-                    // Update parent item quantity
                     $item = $this->Item_model->get_by_id($unit->item_id);
                     if ($item) {
                         $new_quantity  = max(0, $item->quantity - 1);
@@ -330,16 +345,17 @@ class Itemized extends CI_Controller
                             'available_quantity' => $new_available,
                             'borrowed_quantity'  => $new_borrowed,
                         ]);
-                        $this->Item_model->sync_status($unit->item_id);
                     }
                     $deleted++;
                 }
             }
         }
 
-        echo json_encode([
-            'success' => true,
-            'message' => $deleted . ' unit(s) deleted successfully.'
-        ]);
+        $message = $deleted . ' unit(s) deleted successfully.';
+        if ($blocked > 0) {
+            $message .= ' ' . $blocked . ' unit(s) skipped (has borrowing history).';
+        }
+
+        echo json_encode(['success' => true, 'message' => $message]);
     }
 }

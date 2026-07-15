@@ -160,4 +160,11 @@ class Borrowing_model extends CI_Model
 
         return $this->db->trans_status() ? $borrowing_id : false;
     }
+
+    //Check if a unit has any borrowing history (blocks unit deletion if  true)
+    public function unit_has_borrowing_history($unit_id)
+    {
+        $this->db->where('unit_id',$unit_id);
+        return $this->db->count_all_results('borrowing_items') > 0;
+    }
 }

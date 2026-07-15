@@ -61,8 +61,8 @@
                             <i class="bi bi-bootstrap"></i></i>borrowing
                         </a>
 
-                        <a href="<?= base_url('itemized') ?>"
-                            class="sidebar-link <?= ($current === 'itemized') ? 'active' : '' ?>">
+                        <a href="<?= base_url('returning') ?>"
+                            class="sidebar-link <?= ($current === 'returning') ? 'active' : '' ?>">
                             <i class="bi bi-arrow-return-left"></i> returning
 
                         </a>
