@@ -8,7 +8,7 @@ class Itemized extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Itemized_model');
-        $this->load->library('session');
+        $this->load->library('session', 'encryption');
         $this->load->helper('url');
 
         if (!$this->session->userdata('logged_in')) {
@@ -84,6 +84,7 @@ class Itemized extends CI_Controller
                 'available_quantity' => $new_available,
                 'borrowed_quantity'  => $new_borrowed,
             ]);
+            $this->item_model->sync_status($item_id);
 
             echo json_encode([
                 'success' => true,
@@ -96,7 +97,13 @@ class Itemized extends CI_Controller
     // Get single unit
     public function get($id)
     {
-        $unit = $this->Itemized_model->get_by_id($id);
+        $decoded_id = decode_id($id);
+
+        if ($decoded_id === null) {
+            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+            return;
+        }
+        $unit = $this->Itemized_model->get_by_id($decoded_id);
         if ($unit) {
             echo json_encode(['success' => true, 'item' => $unit]);
         } else {
@@ -107,6 +114,13 @@ class Itemized extends CI_Controller
     // Update unit
     public function update($id)
     {
+        $decoded_id = decode_id($id);
+
+        if ($decoded_id === null) {
+            echo json_encode(['success' => false, 'message' => 'invalid request.']);
+            return;
+        }
+
         if ($this->input->method() !== 'post') {
             redirect('itemized');
         }
@@ -117,7 +131,8 @@ class Itemized extends CI_Controller
             'item_description'  => trim($this->input->post('item_description')),
         ];
 
-        if ($this->Itemized_model->update($id, $data)) {
+
+        if ($this->Itemized_model->update($decoded_id, $data)) {
             echo json_encode(['success' => true, 'message' => 'Unit updated successfully.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to update unit.']);
@@ -127,31 +142,33 @@ class Itemized extends CI_Controller
     // Delete unit
     public function delete($id)
     {
-        // Get the unit first so we know which item it belongs to
-        $unit = $this->Itemized_model->get_by_id($id);
+        $decoded_id = decode_id($id);
+
+        if ($decoded_id === null) {
+            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+            return;
+        }
+
+        $unit = $this->Itemized_model->get_by_id($decoded_id);
 
         if (!$unit) {
             echo json_encode(['success' => false, 'message' => 'Unit not found.']);
             return;
         }
 
-        // Delete the unit
-        if ($this->Itemized_model->delete($id)) {
+        if ($this->Itemized_model->delete($decoded_id)) {
 
-            // Update parent item quantity
             $this->load->model('Item_model');
             $item = $this->Item_model->get_by_id($unit->item_id);
 
             if ($item) {
                 $new_quantity = max(0, $item->quantity - 1);
 
-                // Only decrease available_quantity if unit was available
                 $new_available = $item->available_quantity;
                 if ($unit->status === 'available') {
                     $new_available = max(0, $item->available_quantity - 1);
                 }
 
-                // Only decrease borrowed_quantity if unit was borrowed
                 $new_borrowed = $item->borrowed_quantity;
                 if ($unit->status === 'borrowed') {
                     $new_borrowed = max(0, $item->borrowed_quantity - 1);
@@ -169,7 +186,6 @@ class Itemized extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'Failed to delete unit.']);
         }
     }
-
 
     // AJAX list for server-side DataTables
     public function ajax_list()
@@ -247,7 +263,7 @@ class Itemized extends CI_Controller
                     </button>
                     <button class="dropdown-item btnDelete"
                         data-id="' . encode_id($unit->id) . '"
-                        data-name="' . htmlspecialchars($unit->item_name) . ' #' . $unit->unit_no . '">
+                        data-name="' . htmlspecialchars($unit->item_name) . ' #' . encode_id($unit->unit_no) . '">
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
@@ -314,6 +330,7 @@ class Itemized extends CI_Controller
                             'available_quantity' => $new_available,
                             'borrowed_quantity'  => $new_borrowed,
                         ]);
+                        $this->Item_model->sync_status($unit->item_id);
                     }
                     $deleted++;
                 }

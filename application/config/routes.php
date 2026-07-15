@@ -60,6 +60,7 @@ $route['dashboard']          = 'dashboard/index';
 $route['items']              = 'items/index';
 $route['items/ajax_list']    = 'items/ajax_list';
 $route['items/get/(:any)'] = 'items/get/$1';
+$route['items/repair_statuses'] = 'items/repair_statuses';   
 //itemized
 $route['itemized']         = 'itemized/index';
 $route['itemized/ajax_list'] = 'itemized/ajax_list';

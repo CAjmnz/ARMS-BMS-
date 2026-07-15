@@ -179,6 +179,7 @@ public function store()
                         'available_quantity' => max(0, $item->available_quantity - 1),
                         'borrowed_quantity'  => $item->borrowed_quantity + 1,
                     ]);
+                    $this->Item_model->sync_status($unit->item_id);
                 }
             }
         }

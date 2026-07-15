@@ -8,7 +8,7 @@ class Items extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Item_model');
-        $this->load->library('session','encryption');
+        $this->load->library('session', 'encryption');
         $this->load->helper('url');
 
 
@@ -80,20 +80,34 @@ class Items extends CI_Controller
     //get individual item
     public function get($id)
     {
-        $item = $this->Item_model->get_by_id($id);
+        $decoded_id = decode_id($id);
+
+        if ($decoded_id === null) {
+            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+            return;
+        }
+        $item = $this->Item_model->get_by_id($decoded_id);
         if ($item) {
             echo json_encode(['success' => true, 'item' => $item]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Item not found.']);
         }
     }
+
     // update item
     public function update($id)
     {
+        $decoded_id = decode_id($id);
+
+        if ($decoded_id === null) {
+            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+            return;
+        }
+
         if ($this->input->method() !== 'post') {
             redirect('items');
         }
-        
+
         $new_quantity = (int) $this->input->post('quantity');
 
         $data = [
@@ -107,52 +121,62 @@ class Items extends CI_Controller
             'location'           => trim($this->input->post('location')),
         ];
 
-        $this->item_model->update($id, $data);
-        
-        //Sync itemized
-        $this->load->model('itemized_model');
-        $current_count = $this->itemized_model->count_by_item_id($id);
+        $this->Item_model->update($decoded_id, $data);
 
-        if($new_quantity > $current_count) {
-            //Add more units
-            $last_unit_no = $this->itemized_model->get_last_unit_no($id);
-            $item  = $this->item_model->get_by_id($id);
-            $units = []; 
+        // Sync itemized
+        $this->load->model('Itemized_model');
+        $current_count = $this->Itemized_model->count_by_item_id($decoded_id);
 
-        for($i = $current_count + 1; $i <= $new_quantity; $i++){
-            $last_unit_no++;
-            $units[] = [
-            'item_id'   => $id,
-            'unit_no'   => $last_unit_no,
-            'status'    => 'available',
-            'item'      => 'new',
-            'item_description' => $item->item_name. 'unit'.$last_unit_no,
-            ];
-        }
-        $this->itemized_model->insert_batch($units);
-        
+        if ($new_quantity > $current_count) {
+            // Add more units
+            $last_unit_no = $this->Itemized_model->get_last_unit_no($decoded_id);
+            $item  = $this->Item_model->get_by_id($decoded_id);
+            $units = [];
 
-        } elseif ($new_quantity < $current_count){
+            for ($i = $current_count + 1; $i <= $new_quantity; $i++) {
+                $last_unit_no++;
+                $units[] = [
+                    'item_id'          => $decoded_id,
+                    'unit_no'          => $last_unit_no,
+                    'status'           => 'available',
+                    'item_condition'   => 'new',
+                    'item_description' => $item->item_name . ' unit ' . $last_unit_no,
+                ];
+            }
+            $this->Itemized_model->insert_batch($units);
+        } elseif ($new_quantity < $current_count) {
             // Remove extra units
-            $this->itemized_model->delete_extra_units($id, $new_quantity);
+            $this->Itemized_model->delete_extra_units($decoded_id, $new_quantity);
         }
-        
-        // if equal — no change needed
-       
-            echo json_encode(['success' => true, 'message' => 'Item updated successfully.']);
-       
+
+        echo json_encode(['success' => true, 'message' => 'Item updated successfully.']);
     }
 
     //Delete item 
-    public function delete($id)
-    {
-        if ($this->Item_model->delete($id)) {
-            echo json_encode(['success' => true, 'message' => 'item deleted successfully.']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to delete Item.']);
-        }
+// Delete unit
+// Delete item
+public function delete($id)
+{
+    $decoded_id = decode_id($id);
+
+    if ($decoded_id === null) {
+        echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+        return;
     }
 
+    $item = $this->Item_model->get_by_id($decoded_id);
+
+    if (!$item) {
+        echo json_encode(['success' => false, 'message' => 'Item not found.']);
+        return;
+    }
+
+    if ($this->Item_model->delete($decoded_id)) {
+        echo json_encode(['success' => true, 'message' => 'Item deleted successfully.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to delete Item.']);
+    }
+}
     // Logout
     public function logout()
     {
@@ -209,7 +233,7 @@ class Items extends CI_Controller
                     <i class="bi bi-three-dots-vertical"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <button class="dropdown-item btnEdit" data-id="' .encode_id($item->id) . '">
+                    <button class="dropdown-item btnEdit" data-id="' . encode_id($item->id) . '">
                         <i class="fas fa-edit"></i> Edit
                     </button>
                     <button class="dropdown-item btnDelete"
@@ -246,13 +270,15 @@ class Items extends CI_Controller
             'data'            => $data,
         ]);
     }
-    public function sync_itemized() {
+
+    public function sync_itemized()
+    {
         $this->load->model('Itemized_model');
         $items = $this->Item_model->get_all();
-    
+
         foreach ($items as $item) {
             $existing = $this->Itemized_model->count_by_item_id($item->id);
-    
+
             if ($existing === 0 && $item->quantity > 0) {
                 $units = [];
                 for ($i = 1; $i <= $item->quantity; $i++) {
@@ -267,8 +293,13 @@ class Items extends CI_Controller
                 $this->Itemized_model->insert_batch($units);
             }
         }
-    
+
         echo "Sync done! All items now have itemized units.";
     }
-    
+
+    public function repair_statuses()
+    {
+        $fixed = $this->Item_model->repair_all_statuses();
+        echo json_encode(['success' => true, 'message' => $fixed . ' item(s) had their status corrected.']);
+    }
 }

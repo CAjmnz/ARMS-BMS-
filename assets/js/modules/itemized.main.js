@@ -132,7 +132,7 @@ $(document).ready(function () {
     });
 
     // ─── Edit Modal ───────────────────────────────────────
-    $(document).on('click', '.btnEdit', function () {
+    $('#itemizedTable').on('click', '.btnEdit', function () {
         var id = $(this).data('id');
         $.ajax({
             url      : BASE_URL + 'itemized/get/' + id,
@@ -200,7 +200,7 @@ $(document).ready(function () {
     });
 
     // ─── Single Delete ────────────────────────────────────
-    $(document).on('click', '.btnDelete', function () {
+    $('#itemizedTable').on('click', '.btnDelete', function () {
         var id   = $(this).data('id');
         var name = $(this).data('name');
 

@@ -35,12 +35,46 @@ class Item_model extends CI_Model
     {
         return $this->db->insert($this->table, $data);
     }
-    //update item
+    // Update item — automatically keeps status in sync with quantity counts
     public function update($id, $data)
     {
         $this->db->where('id', $id);
-        return $this->db->update($this->table, $data);
+        $result = $this->db->update('items', $data);
+
+        // Only recalculate status if this update touched quantity fields
+        if ($result && (isset($data['available_quantity']) || isset($data['quantity']) || isset($data['borrowed_quantity']))) {
+            $this->sync_status($id);
+        }
+
+        return $result;
     }
+
+    // Recalculate and persist status based on current available_quantity
+    private function sync_status($item_id)
+    {
+        $item = $this->get_by_id($item_id);
+        if (!$item) {
+            return false;
+        }
+
+        if ($item->quantity <= 0) {
+            $status = 'unavailable';
+        } elseif ($item->available_quantity <= 0) {
+            $status = 'unavailable';
+        } elseif ($item->available_quantity >= $item->quantity) {
+            $status = 'available';
+        } else {
+            $status = 'in-use';
+        }
+
+        // Avoid infinite loop / unnecessary write if status already correct
+        if ($item->status !== $status) {
+            $this->db->where('id', $item_id);
+            $this->db->update('items', ['status' => $status]);
+        }
+    }
+
+
     //delete item
     public function delete($id)
     {
@@ -126,4 +160,31 @@ class Item_model extends CI_Model
             $this->db->group_end();
         }
     }
+    // One-time repair — recalculate status for ALL items based on current quantities
+    public function repair_all_statuses()
+    {
+        $items = $this->db->get($this->table)->result();
+        $fixed = 0;
+
+        foreach ($items as $item){
+            if($item->quantity <= 0) {
+                $correct_status = 'unavailable';
+            } elseif ($item->available_quantity >= $item->quantity)
+            {
+                $correct_status = 'available';
+
+            } else {
+                $correct_status = 'in-use';
+            }
+
+            if ($item->status !== $correct_status){
+
+            $this->db->where('id',$item->id);
+            $this->db->update($this->table,['status' => $correct_status]);
+            $fixed ++;
+       }
+
+    }
+   return $fixed;
+}
 }

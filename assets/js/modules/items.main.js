@@ -88,7 +88,7 @@ $(document).ready(function () {
     });
 
     // Open Edit Modal
-    $(document).on('click', '.btnEdit', function () {
+    $('#itemsTable').on('click', '.btnEdit', function () {
         var id = $(this).data('id');
         $.ajax({
             url      : BASE_URL + 'items/get/' + id,
@@ -97,7 +97,7 @@ $(document).ready(function () {
             success  : function (res) {
                 if (res.success) {
                     $('#modalTitle').text('Edit Item');
-                    $('#item_id').val(res.item.id);
+                    $('#item_id').val(id);
                     $('#item_name').val(res.item.item_name);
                     $('#category').val(res.item.category);
                     $('#brand').val(res.item.brand);
@@ -165,7 +165,7 @@ $(document).ready(function () {
     });
 
     // Delete
-    $(document).on('click', '.btnDelete', function () {
+    $('#itemsTable').on('click', '.btnDelete', function () {
         var id        = $(this).data('id');
         var item_name = $(this).data('name');
 
