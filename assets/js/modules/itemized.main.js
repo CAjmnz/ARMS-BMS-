@@ -132,8 +132,8 @@ $(document).ready(function () {
     });
 
     // ─── Edit Modal ───────────────────────────────────────
-    $('#itemizedTable').on('click', '.btnEdit', function () {
-        var id = $(this).data('id');
+    $(document).on('click', '.btnEdit', function () {
+        var id = $(this).data('id');   // encoded id from data-id attribute
         $.ajax({
             url      : BASE_URL + 'itemized/get/' + id,
             type     : 'GET',
@@ -141,7 +141,7 @@ $(document).ready(function () {
             success  : function (res) {
                 if (res.success) {
                     $('#modalTitle').text('Edit Unit');
-                    $('#unit_id').val(res.item.id);
+                    $('#unit_id').val(id);   // ← use the encoded id, NOT res.item.id
                     $('#unit_item_id').val(res.item.item_id).prop('disabled', true);
                     $('#unit_status').val(res.item.status);
                     $('#unit_condition').val(res.item.item_condition);
@@ -154,7 +154,6 @@ $(document).ready(function () {
             }
         });
     });
-
     // ─── Save ─────────────────────────────────────────────
     $('#btnSaveUnit').click(function () {
         var id          = $('#unit_id').val();
