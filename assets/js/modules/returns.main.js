@@ -15,6 +15,8 @@ $(document).ready(function () {
     var table = $('#returnsTable').DataTable({
         processing : true,
         serverSide : true,
+        responsive: true,
+        autoWidth: false,
         lengthMenu : [[5, 10, 25, 50], [5, 10, 25, 50]],
         pageLength : 10,
         ajax: {
@@ -44,7 +46,7 @@ $(document).ready(function () {
             { data: 14 },
             { data: 15, orderable: false }
         ],
-        order: [[10, 'desc']],
+        order: [[0, 'desc']],
         language: {
             emptyTable : 'No returned items found.',
             processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'

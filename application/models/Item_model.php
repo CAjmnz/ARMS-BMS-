@@ -166,25 +166,52 @@ class Item_model extends CI_Model
         $items = $this->db->get($this->table)->result();
         $fixed = 0;
 
-        foreach ($items as $item){
-            if($item->quantity <= 0) {
+        foreach ($items as $item) {
+            if ($item->quantity <= 0) {
                 $correct_status = 'unavailable';
-            } elseif ($item->available_quantity >= $item->quantity)
-            {
+            } elseif ($item->available_quantity >= $item->quantity) {
                 $correct_status = 'available';
-
             } else {
                 $correct_status = 'in-use';
             }
 
-            if ($item->status !== $correct_status){
+            if ($item->status !== $correct_status) {
 
-            $this->db->where('id',$item->id);
-            $this->db->update($this->table,['status' => $correct_status]);
-            $fixed ++;
-       }
-
+                $this->db->where('id', $item->id);
+                $this->db->update($this->table, ['status' => $correct_status]);
+                $fixed++;
+            }
+        }
+        return $fixed;
     }
-   return $fixed;
-}
+    // Recalculate available_quantity/borrowed_quantity/quantity from actual itemized unit counts
+    public function recalculate_from_itemized($item_id)
+    {
+        $total     = $this->db->where('item_id', $item_id)->count_all_results('itemized');
+        $available = $this->db->where('item_id', $item_id)->where('status', 'available')->count_all_results('itemized');
+        $borrowed  = $this->db->where('item_id', $item_id)->where('status', 'borrowed')->count_all_results('itemized');
+
+        $this->db->where('id', $item_id);
+        $this->db->update('items', [
+            'quantity'           => $total,
+            'available_quantity' => $available,
+            'borrowed_quantity'  => $borrowed,
+        ]);
+
+        // This will also trigger sync_status() via update() — but we bypassed update() here
+        // to avoid double-counting logic, so call it explicitly:
+        $this->sync_status($item_id);
+
+        return true;
+    }
+
+    // One-time repair — recalculate counts for ALL items based on actual itemized units
+    public function recalculate_all_from_itemized()
+    {
+        $items = $this->db->get($this->table)->result();
+        foreach ($items as $item) {
+            $this->recalculate_from_itemized($item->id);
+        }
+        return count($items);
+    }
 }

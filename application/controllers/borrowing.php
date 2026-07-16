@@ -238,7 +238,7 @@ public function mark_returned($id)
     }
 
     $condition_after = $this->input->post('condition_after');
-    $item_status     = $this->input->post('item_status'); // returned | damaged | lost
+    $item_status     = $this->input->post('item_status');
     $remarks         = trim($this->input->post('remarks'));
 
     $borrowing_item = $this->Borrowing_model->get_item_by_id($decoded_id);
@@ -253,30 +253,28 @@ public function mark_returned($id)
         'condition_after' => $condition_after,
         'item_status'     => $item_status,
         'date_returned'   => date('Y-m-d H:i:s'),
-        'received_by'     => $this->session->userdata('user_id'),   // ← add this line
+        'received_by'     => $this->session->userdata('user_id'),
         'remarks'         => $remarks ?: null,
     ]);
 
     // Update the itemized unit itself
     $this->load->model('Itemized_model');
-    $unit_status = ($item_status === 'returned') ? 'available' : $item_status; // damaged/lost carry over as-is
+    $unit_status = ($item_status === 'returned') ? 'available' : $item_status;
 
-    $this->Itemized_model->update($borrowing_item->id, [
+    $this->Itemized_model->update($borrowing_item->unit_id, [
         'status'         => $unit_status,
         'item_condition' => ($item_status === 'returned') ? $condition_after : 'needs repair',
     ]);
 
     // Sync parent item quantities
     $this->load->model('Item_model');
-    $this->load->model('Itemized_model');
-    $unit = $this->Itemized_model->get_by_id($borrowing_item->id); // Note: this is borrowing_item's unit_id, see fix below
+    $unit = $this->Itemized_model->get_by_id($borrowing_item->unit_id);
     if ($unit) {
         $item = $this->Item_model->get_by_id($unit->item_id);
         if ($item) {
             $new_available = $item->available_quantity;
             $new_borrowed  = max(0, $item->borrowed_quantity - 1);
 
-            // Only bump available_quantity back up if the unit is actually usable again
             if ($item_status === 'returned') {
                 $new_available = $item->available_quantity + 1;
             }

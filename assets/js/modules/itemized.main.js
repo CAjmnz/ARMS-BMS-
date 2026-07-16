@@ -41,7 +41,7 @@ $(document).ready(function () {
             { data: 8 },                                     // Updated At
             { data: 9, orderable: false }                    // Action
         ],
-        order: [[1, 'asc']],
+        order: [[0, 'desc']],
         language: {
             emptyTable : 'No units found.',
             processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'

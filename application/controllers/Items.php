@@ -297,9 +297,9 @@ public function delete($id)
         echo "Sync done! All items now have itemized units.";
     }
 
-    public function repair_statuses()
+    public function repair_quantities()
     {
-        $fixed = $this->Item_model->repair_all_statuses();
-        echo json_encode(['success' => true, 'message' => $fixed . ' item(s) had their status corrected.']);
+        $fixed = $this->Item_model->recalculate_all_from_itemized();
+        echo json_encode(['success' => true, 'message' => $fixed . ' item(s) recalculated from itemized units.']);
     }
 }
