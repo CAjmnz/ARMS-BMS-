@@ -2,63 +2,114 @@
 <?php $this->load->view('templates/sidebar'); ?>
 <?php $this->load->view('templates/topbar'); ?>
 
-<link rel="stylesheet" href="<?= base_url('assets/css/users.css') ?>">
-
-<!-- Chart data -->
-<input type="hidden" id="chart_status_data" value='<?= $chart_status_data ?>'>
-<input type="hidden" id="chart_role_data"   value='<?= $chart_role_data ?>'>
-<input type="hidden" id="chart_log_labels"  value='<?= $chart_log_labels ?>'>
-<input type="hidden" id="chart_log_counts"  value='<?= $chart_log_counts ?>'>
-<input type="hidden" id="chart_birth_data"  value='<?= $chart_birth_data ?>'>
-
 <div id="main-content">
 
-    <?php if (!empty($flash_error)): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?= htmlspecialchars($flash_error) ?>
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        </div>
-    <?php endif; ?>
+    <h4 style="font-weight:700; color:#333; margin-bottom:20px;">Dashboard</h4>
 
-    <?php if (!empty($flash_success)): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?= htmlspecialchars($flash_success) ?>
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:4px solid #4e73df;">
+                <div style="font-size:13px; color:#888;">Total Item Types</div>
+                <div style="font-size:28px; font-weight:700;"><?= $summary['total_item_types'] ?></div>
+            </div>
         </div>
-    <?php endif; ?>
-
-    <!-- Welcome Banner -->
-    <div class="welcome-banner">
-        <div class="wb-text">
-            <h2>
-                Welcome back,
-                <?= htmlspecialchars($username) ?>!
-            </h2>
+        <div class="col-md-3 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:4px solid #1cc88a;">
+                <div style="font-size:13px; color:#888;">Available Units</div>
+                <div style="font-size:28px; font-weight:700;"><?= $summary['available_units'] ?></div>
+            </div>
         </div>
- 
-
-        <!-- Avatar — photo or initials -->
-        <div class="wb-avatar">
-            <?php
-                $pp      = $profile_picture ?? null;
-                $pp_path = $pp ? FCPATH . $pp : null;
-            ?>
-            <?php if (!empty($pp) && file_exists($pp_path)): ?>
-                <img src="<?= base_url($pp) ?>?v=<?= time() ?>"
-                     alt="Avatar"
-                     style="width:60px;height:60px;border-radius:50%;
-                            object-fit:cover;border:3px solid #fff;">
-            <?php else: ?>
-                <?= strtoupper(substr($username, 0, 1)) ?>
-            <?php endif; ?>
+        <div class="col-md-3 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:4px solid #f6c23e;">
+                <div style="font-size:13px; color:#888;">Currently Borrowed</div>
+                <div style="font-size:28px; font-weight:700;"><?= $summary['borrowed_units'] ?></div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:4px solid #e74a3b;">
+                <div style="font-size:13px; color:#888;">Overdue</div>
+                <div style="font-size:28px; font-weight:700;"><?= $summary['overdue_count'] ?></div>
+            </div>
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
+                <div style="font-size:13px; color:#888;">Total Units</div>
+                <div style="font-size:22px; font-weight:700;"><?= $summary['total_units'] ?></div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
+                <div style="font-size:13px; color:#888;">Returned Today</div>
+                <div style="font-size:22px; font-weight:700;"><?= $summary['returned_today'] ?></div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
+                <div style="font-size:13px; color:#888;">Active Borrowers</div>
+                <div style="font-size:22px; font-weight:700;"><?= $summary['total_borrowers'] ?></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
+                <h6 style="font-weight:600; margin-bottom:15px;">Items by Category</h6>
+                <canvas id="categoryChart" height="220"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
+                <h6 style="font-weight:600; margin-bottom:15px;">Borrowing Trend (Last 7 Days)</h6>
+                <canvas id="trendChart" height="220"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
+        <h6 style="font-weight:600; margin-bottom:15px;">Recent Activity</h6>
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Action</th>
+                    <th>Borrower</th>
+                    <th>Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($activity)): ?>
+                    <tr><td colspan="4" class="text-center text-muted">No recent activity.</td></tr>
+                <?php else: ?>
+                    <?php foreach ($activity as $log): ?>
+                        <tr>
+                            <td><?= date('M d, Y h:i A', strtotime($log->action_date)) ?></td>
+                            <td>
+                                <?php
+                                $labels = [
+                                    'borrowed' => '<span class="badge badge-warning">Borrowed</span>',
+                                    'returned' => '<span class="badge badge-primary">Returned</span>',
+                                    'damaged'  => '<span class="badge badge-danger">Damaged</span>',
+                                    'lost'     => '<span class="badge badge-dark">Lost</span>',
+                                ];
+                                echo $labels[$log->action_type] ?? ucfirst($log->action_type);
+                                ?>
+                            </td>
+                            <td><?= htmlspecialchars($log->borrower_name) ?></td>
+                            <td><?= htmlspecialchars($log->item_name) ?> #<?= $log->unit_no ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 
-<!-- Page JS -->
-<script src="<?= base_url('assets/js/modules/dashboard.main.js') ?>"></script>
-
 <?php $this->load->view('templates/footer'); ?>
-

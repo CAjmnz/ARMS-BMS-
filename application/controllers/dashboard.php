@@ -1,35 +1,52 @@
-<?php
-defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('Dashboard_model');
         $this->load->library('session');
         $this->load->helper('url');
-        
-  
 
-     // CI3 way of checking session (not $_SESSION)
-       if(!$this->session->userdata('logged_in')){
-		   redirect('auth');
-	   }  
-	}
+        if (!$this->session->userdata('logged_in')) {
+            redirect('auth');
+        }
+    }
+
     public function index()
     {
-        $data['username'] = $this->session->userdata('username');
-		$this->load->view('dashboard/index',$data);
+        $data['title']      = 'Dashboard - ARMS-BMS';
+        $data['page_label'] = 'Dashboard';
+        $data['summary']    = $this->Dashboard_model->get_summary();
+        $data['activity']   = $this->Dashboard_model->get_recent_activity();
+
+        $this->load->view('dashboard/index', $data);
     }
 
-
-    // Logout
-    public function logout()
+    // AJAX — chart data for category breakdown
+    public function chart_categories()
     {
-        $this->session->sess_destroy();
-        redirect('auth');
+        $data = $this->Dashboard_model->get_category_breakdown();
+        $labels = [];
+        $values = [];
+        foreach ($data as $row) {
+            $labels[] = $row->category;
+            $values[] = (int) $row->total_quantity;
+        }
+        echo json_encode(['labels' => $labels, 'values' => $values]);
+    }
+
+    // AJAX — chart data for borrowing trend
+    public function chart_trend()
+    {
+        $trend = $this->Dashboard_model->get_borrowing_trend(7);
+        $labels = [];
+        $values = [];
+        foreach ($trend as $date => $count) {
+            $labels[] = date('M d', strtotime($date));
+            $values[] = $count;
+        }
+        echo json_encode(['labels' => $labels, 'values' => $values]);
     }
 }
-
-

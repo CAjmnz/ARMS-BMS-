@@ -56,6 +56,8 @@ $route['auth/login']         = 'auth/login';
 $route['auth/logout']        = 'auth/logout';
 //dashboard routes
 $route['dashboard']          = 'dashboard/index';
+$route['dashboard/chart_categories'] = 'dashboard/chart_categories';
+$route['dashboard/chart_trend']      = 'dashboard/chart_trend';
 //items routes
 $route['items']              = 'items/index';
 $route['items/ajax_list']    = 'items/ajax_list';
