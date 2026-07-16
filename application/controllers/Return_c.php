@@ -112,4 +112,22 @@ class Return_c extends CI_Controller
             'data'            => $data,
         ]);
     }
+
+    public function get_details($id)
+    {
+        $decoded_id = decode_id($id);
+
+        if($decoded_id === null) {
+            echo json_encode(['success' => false,'message'=>'Invalid request.']);
+            return;
+        }
+
+        $details = $this->Return_model->get_full_details($decoded_id);
+
+        if ($details) {
+            echo json_encode(['success' => true, 'item' => $details]);
+        } else {
+            echo json_encode(['success' => false,'message' =>'Record not found']);
+        }
+    }
 }

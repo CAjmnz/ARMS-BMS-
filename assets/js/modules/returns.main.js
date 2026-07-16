@@ -69,4 +69,43 @@ $(document).ready(function () {
         table.ajax.reload();
     });
 
+    $('#returnsTable').on('click', '.btnView', function () {
+        var id = $(this).data('id');
+    
+        $.get(BASE_URL + 'returns/get_details/' + id, function (res) {
+            if (res.success) {
+                var d = res.item;
+    
+                $('#d_borrower_name').text(d.borrower_name || '-');
+                $('#d_id_number').text(d.id_number || '-');
+                $('#d_borrower_type').text(d.borrower_type || '-');
+                $('#d_contact').text(d.contact_number || '-');
+                $('#d_email').text(d.email || '-');
+    
+                $('#d_item_name').text(d.item_name || '-');
+                $('#d_category').text(d.category || '-');
+                $('#d_unit_no').text(d.unit_no || '-');
+                $('#d_brand_model').text((d.brand || '-') + ' / ' + (d.Model || '-'));
+                $('#d_serial').text(d.serial_number || '-');
+    
+                $('#d_txn').text('TXN-' + String(d.borrowing_id).padStart(5, '0'));
+                $('#d_purpose').text(d.purpose || '-');
+                $('#d_date_requested').text(d.date_requested ? new Date(d.date_requested).toLocaleString() : '-');
+                $('#d_date_released').text(d.date_released ? new Date(d.date_released).toLocaleString() : '-');
+                $('#d_due_date').text(d.due_date ? new Date(d.due_date).toLocaleString() : '-');
+                $('#d_released_by').text(d.released_by_name || '-');
+                $('#d_condition_before').text(d.condition_before || '-');
+    
+                $('#d_item_status').text(d.item_status || '-');
+                $('#d_date_returned').text(d.date_returned ? new Date(d.date_returned).toLocaleString() : '-');
+                $('#d_condition_after').text(d.condition_after || '-');
+                $('#d_received_by').text(d.received_by_name || '-');
+                $('#d_remarks').text(d.remarks || '-');
+    
+                $('#detailsModal').modal('show');
+            } else {
+                Swal.fire('Error', res.message, 'error');
+            }
+        }, 'json');
+    });
 });

@@ -79,6 +79,7 @@ $route['borrowing/mark_returned/(:any)'] = 'Borrowing/mark_returned/$1';
 //return
 $route['returns']            = 'Return_c/index';
 $route['returns/ajax_list']  = 'Return_c/ajax_list';
+$route['returns/get_details/(:any)'] = 'Return_c/get_details/$1';
 
 $route['items/sync_itemized'] = 'items/sync_itemized';
 

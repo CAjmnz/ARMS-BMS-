@@ -96,4 +96,46 @@ class Return_model extends CI_Model
             $this->db->group_end();
         }
     }
+    // Get full detail for one borrowing_item record (borrow + return info combined)
+public function get_full_details($id)
+{
+    $this->db->select('
+        borrowing_items.id,
+        borrowing_items.condition_before,
+        borrowing_items.condition_after,
+        borrowing_items.item_status,
+        borrowing_items.date_returned,
+        borrowing_items.remarks,
+        borrowings.id as borrowing_id,
+        borrowings.purpose,
+        borrowings.status as borrowing_status,
+        borrowings.date_requested,
+        borrowings.date_released,
+        borrowings.due_date,
+        borrowers.id_number,
+        borrowers.full_name as borrower_name,
+        borrowers.borrower_type,
+        borrowers.contact_number,
+        borrowers.email,
+        items.item_name,
+        items.category,
+        items.brand,
+        items.Model,
+        items.serial_number,
+        itemized.unit_no,
+        released_user.username as released_by_name,
+        received_user.username as received_by_name
+    ');
+    $this->db->from($this->table);
+    $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
+    $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
+    $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
+    $this->db->join('items', 'items.id = itemized.item_id', 'left');
+    $this->db->join('users as released_user', 'released_user.id = borrowings.released_by', 'left');
+    $this->db->join('users as received_user', 'received_user.id = borrowing_items.received_by', 'left');
+    $this->db->where('borrowing_items.id', $id);
+
+    return $this->db->get()->row();
+}
+
 }

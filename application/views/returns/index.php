@@ -66,6 +66,62 @@
         </table>
     </div>
 
+    <!--<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Borrowing & Return Details</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <h6 class="text-muted" style="border-bottom:1px solid #eee; padding-bottom:5px;">Borrower Information</h6>
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Name:</strong> <span id="d_borrower_name">-</span></div>
+                    <div class="col-md-3"><strong>ID No:</strong> <span id="d_id_number">-</span></div>
+                    <div class="col-md-3"><strong>Type:</strong> <span id="d_borrower_type">-</span></div>
+                    <div class="col-md-6"><strong>Contact:</strong> <span id="d_contact">-</span></div>
+                    <div class="col-md-6"><strong>Email:</strong> <span id="d_email">-</span></div>
+                </div>
+
+                <h6 class="text-muted" style="border-bottom:1px solid #eee; padding-bottom:5px;">Item Information</h6>
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Item:</strong> <span id="d_item_name">-</span></div>
+                    <div class="col-md-3"><strong>Category:</strong> <span id="d_category">-</span></div>
+                    <div class="col-md-3"><strong>Unit No:</strong> <span id="d_unit_no">-</span></div>
+                    <div class="col-md-6"><strong>Brand/Model:</strong> <span id="d_brand_model">-</span></div>
+                    <div class="col-md-6"><strong>Serial No:</strong> <span id="d_serial">-</span></div>
+                </div>
+
+                <h6 class="text-muted" style="border-bottom:1px solid #eee; padding-bottom:5px;">Borrowing Details</h6>
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Transaction:</strong> <span id="d_txn">-</span></div>
+                    <div class="col-md-6"><strong>Purpose:</strong> <span id="d_purpose">-</span></div>
+                    <div class="col-md-4"><strong>Date Requested:</strong> <span id="d_date_requested">-</span></div>
+                    <div class="col-md-4"><strong>Date Released:</strong> <span id="d_date_released">-</span></div>
+                    <div class="col-md-4"><strong>Due Date:</strong> <span id="d_due_date">-</span></div>
+                    <div class="col-md-6"><strong>Released By:</strong> <span id="d_released_by">-</span></div>
+                    <div class="col-md-6"><strong>Condition Before:</strong> <span id="d_condition_before">-</span></div>
+                </div>
+
+                <h6 class="text-muted" style="border-bottom:1px solid #eee; padding-bottom:5px;">Return Details</h6>
+                <div class="row mb-3">
+                    <div class="col-md-4"><strong>Return Status:</strong> <span id="d_item_status">-</span></div>
+                    <div class="col-md-4"><strong>Date Returned:</strong> <span id="d_date_returned">-</span></div>
+                    <div class="col-md-4"><strong>Condition After:</strong> <span id="d_condition_after">-</span></div>
+                    <div class="col-md-6"><strong>Received By:</strong> <span id="d_received_by">-</span></div>
+                    <div class="col-md-12"><strong>Remarks:</strong> <span id="d_remarks">-</span></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php $this->load->view('templates/footer'); ?>
