@@ -4,9 +4,9 @@
     --royal-blue:  #2563B8;
     --green:       #22A94F;
     --light-blue:  #a8c0e8;
-    --page-bg:     #f4f6f9;
-    --card-bg:     #ffffff;
-    --card-border: #e3e6f0;
+    --page-bg:     #e8eef5f6;
+    --card-bg:     #f1f1f8;
+    --card-border: #ccd4ec;
     --text-dark:   #1B3A6B;
     --text-muted:  #6c757d;
 }
@@ -497,4 +497,56 @@ body {
 .modal-title {
     font-weight: 600;
     font-size: 16px;
+}
+
+/* ─── Notification ──────────────────────────────────── */
+.notifPill {
+    border: 1px solid #e3e6f0;
+    background: #fff;
+    color: #555;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.notifPill:hover {
+    background: #f8f9fa;
+}
+.notifPill.active {
+    background: #e74a3b;
+    color: #fff;
+    border-color: #e74a3b;
+}
+.notifCard {
+    background: #fff;
+    border: 1px solid #e3e6f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.notifTitle {
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 4px;
+}
+.notifSub {
+    font-size: 13px;
+    color: #777;
+}
+.notifDate {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 4px;
+}
+.notifValue {
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    margin-left: 20px;
 }

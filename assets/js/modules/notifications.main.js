@@ -1,12 +1,23 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
-    function refreshNotifBadge(){
-        $.get(BASE_URL + 'notifications/get_count',function(res)) {
-            if(res.success)
-        }
+    // Filter pills — only runs on the notifications page
+    if ($('#notifList').length > 0) {
+        $('.notifPill').on('click', function () {
+            $('.notifPill').removeClass('active');
+            $(this).addClass('active');
+
+            var filter = $(this).data('filter');
+
+            if (filter === 'all') {
+                $('.notifCard').show();
+            } else {
+                $('.notifCard').hide();
+                $('.notifCard[data-type="' + filter + '"]').show();
+            }
+        });
     }
-})$(document).ready(function () {
 
+    // (existing bell badge polling code stays below, unchanged)
     function refreshNotifBadge() {
         $.get(BASE_URL + 'notifications/get_count', function (res) {
             if (res.success) {
@@ -20,10 +31,7 @@ $(document).ready(function(){
         }, 'json');
     }
 
-    // Run immediately on page load
     refreshNotifBadge();
-
-    // Poll every 60 seconds
     setInterval(refreshNotifBadge, 60000);
 
 });
