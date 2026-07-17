@@ -22,9 +22,31 @@ $page_label      = isset($page_label) ? $page_label : 'Dashboard';
     <!-- Right — Clock + Avatar -->
     <div class="topbar-right">
 
+        <!-- Notification Bell-->
+         <a href="<?=  base_url('notifications') ?>" id="notifBell"
+         style="position:relative; margin-right:16px; color:#1B3A6B; font-size:18px;">
+        <i class="fas fa-bell"></i> <span id="notifBadge" style="
+            display:none;
+            position:absolute;
+            top:-6px;
+            right:-8px;
+            background:#e74a3b;
+            color:#fff;
+            font-size:10px;
+            font-weight:700;
+            min-width:16px;
+            height:16px;
+            border-radius:8px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:0 4px;
+        ">0</span>
+        </a>
+
         <!-- Clock -->
         <span id="topbarClock"></span>
-
+        
         <!-- Avatar Dropdown -->
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-decoration-none"

@@ -25,7 +25,7 @@
 <!-- 7. App core -->
 <script src="<?= base_url('assets/js/app.js') ?>"></script>
 <!-- 8. Dashboard module -->
-
+<script src="<?= base_url('assets/js/modules/dashboard.main.js') ?>"></script>
 <!-- 9. items module-->
 <script src="<?= base_url('assets/js/modules/items.main.js') ?>"></script>
 <!-- 10. itemized module-->
@@ -36,8 +36,8 @@
 <script src="<?= base_url('assets/js/modules/returns.main.js') ?>"></script>
 <!-- 13. Users module -->
 <script src="<?= base_url('assets/js/modules/users.main.js') ?>"></script>
-<!-- 14. Users module -->
-<script src="<?= base_url('assets/js/modules/dashboard.main.js') ?>"></script>
+<!-- 14. Notification module(global  — runs on every page)-->
+<script src="<?= base_url('assets/js/modules/notification.main.js') ?>"></script>
 
 <?php if (isset($page_scripts)): ?>
     <?php foreach ($page_scripts as $script): ?>

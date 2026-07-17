@@ -5,6 +5,7 @@
 <div id="main-content">
 
     <h4 style="font-weight:700; color:#333; margin-bottom:20px;">Dashboard</h4>
+    
 
     <!-- Summary Cards -->
     <div class="row mb-4">
@@ -39,18 +40,22 @@
             <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
                 <div style="font-size:13px; color:#888;">Total Units</div>
                 <div style="font-size:22px; font-weight:700;"><?= $summary['total_units'] ?></div>
+                <a href="itemized">units</a>
+                
             </div>
         </div>
         <div class="col-md-4 mb-3">
             <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
                 <div style="font-size:13px; color:#888;">Returned Today</div>
                 <div style="font-size:22px; font-weight:700;"><?= $summary['returned_today'] ?></div>
+                <a href="returns">Return</a>
             </div>
         </div>
         <div class="col-md-4 mb-3">
             <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
                 <div style="font-size:13px; color:#888;">Active Borrowers</div>
                 <div style="font-size:22px; font-weight:700;"><?= $summary['total_borrowers'] ?></div>
+                <a href="borrowing">borrowers</a>
             </div>
         </div>
     </div>

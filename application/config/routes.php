@@ -83,6 +83,9 @@ $route['borrowing/mark_returned/(:any)'] = 'Borrowing/mark_returned/$1';
 $route['returns']            = 'Return_c/index';
 $route['returns/ajax_list']  = 'Return_c/ajax_list';
 $route['returns/get_details/(:any)'] = 'Return_c/get_details/$1';
+//notification 
+$route['notifications'] = 'notification/index';
+$route['notifications/get_count'] = 'notification/get_count';
 
 $route['items/sync_itemized'] = 'items/sync_itemized';
 
