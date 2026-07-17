@@ -48,7 +48,15 @@ $(document).ready(function () {
             processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'
         }
     });
+ // ─── Auto-apply filter from URL (e.g. from a notification click) ──
+ var urlParams = new URLSearchParams(window.location.search);
+ var initialFilter = urlParams.get('filter');
 
+ if (initialFilter) {
+     itemStatusFilter = initialFilter;
+     $('select[name="status"]').val(initialFilter);
+     table.ajax.reload();
+ }
     // ─── Filters ─────────────────────────────────────────
     $('#filterForm').on('submit', function (e) {
         e.preventDefault();

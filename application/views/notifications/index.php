@@ -19,31 +19,35 @@
 
         <?php foreach ($overdue as $row): ?>
             <?php $days = floor((time() - strtotime($row->due_date)) / 86400); ?>
-            <div class="notifCard" data-type="overdue" style="border-left:4px solid #e74a3b;">
-                <div>
-                    <div class="notifTitle">Overdue</div>
-                    <div class="notifSub"><?= htmlspecialchars($row->borrower_name) ?> (<?= htmlspecialchars($row->id_number) ?>)</div>
-                    <div class="notifSub"><?= htmlspecialchars($row->item_name) ?> #<?= $row->unit_no ?></div>
-                    <div class="notifDate">Due: <?= date('M d, Y h:i A', strtotime($row->due_date)) ?></div>
+            <a href="<?= base_url('borrowing?filter=overdue') ?>" style="text-decoration:none; color:inherit;">
+                <div class="notifCard" data-type="overdue" style="border-left:4px solid #e74a3b; cursor:pointer;">
+                    <div>
+                        <div class="notifTitle">Overdue</div>
+                        <div class="notifSub"><?= htmlspecialchars($row->borrower_name) ?> (<?= htmlspecialchars($row->id_number) ?>)</div>
+                        <div class="notifSub"><?= htmlspecialchars($row->item_name) ?> #<?= $row->unit_no ?></div>
+                        <div class="notifDate">Due: <?= date('M d, Y h:i A', strtotime($row->due_date)) ?></div>
+                    </div>
+                    <div class="notifValue" style="color:#e74a3b;">
+                        <?= $days ?> day<?= $days != 1 ? 's' : '' ?> late
+                    </div>
                 </div>
-                <div class="notifValue" style="color:#e74a3b;">
-                    <?= $days ?> day<?= $days != 1 ? 's' : '' ?> late
-                </div>
-            </div>
+            </a>
         <?php endforeach; ?>
 
         <?php foreach ($due_soon as $row): ?>
-            <div class="notifCard" data-type="due_soon" style="border-left:4px solid #f6c23e;">
-                <div>
-                    <div class="notifTitle">Due Soon</div>
-                    <div class="notifSub"><?= htmlspecialchars($row->borrower_name) ?> (<?= htmlspecialchars($row->id_number) ?>)</div>
-                    <div class="notifSub"><?= htmlspecialchars($row->item_name) ?> #<?= $row->unit_no ?></div>
-                    <div class="notifDate">Due: <?= date('M d, Y h:i A', strtotime($row->due_date)) ?></div>
+            <a href="<?= base_url('borrowing?filter=due_soon') ?>" style="text-decoration:none; color:inherit;">
+                <div class="notifCard" data-type="due_soon" style="border-left:4px solid #f6c23e; cursor:pointer;">
+                    <div>
+                        <div class="notifTitle">Due Soon</div>
+                        <div class="notifSub"><?= htmlspecialchars($row->borrower_name) ?> (<?= htmlspecialchars($row->id_number) ?>)</div>
+                        <div class="notifSub"><?= htmlspecialchars($row->item_name) ?> #<?= $row->unit_no ?></div>
+                        <div class="notifDate">Due: <?= date('M d, Y h:i A', strtotime($row->due_date)) ?></div>
+                    </div>
+                    <div class="notifValue" style="color:#f6c23e;">
+                        Due within 24h
+                    </div>
                 </div>
-                <div class="notifValue" style="color:#f6c23e;">
-                    Due within 24h
-                </div>
-            </div>
+            </a>
         <?php endforeach; ?>
 
         <?php if (empty($overdue) && empty($due_soon)): ?>

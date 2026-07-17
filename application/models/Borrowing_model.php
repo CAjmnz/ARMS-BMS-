@@ -84,7 +84,16 @@ class Borrowing_model extends CI_Model
     private function _apply_filters($filters = [])
     {
         if (!empty($filters['item_status'])) {
-            $this->db->where('borrowing_items.item_status', $filters['item_status']);
+            if ($filters['item_status'] === 'overdue') {
+                $this->db->where('borrowing_items.item_status', 'borrowed');
+                $this->db->where('borrowings.due_date <', date('Y-m-d H:i:s'));
+            } elseif ($filters['item_status'] === 'due_soon') {
+                $this->db->where('borrowing_items.item_status', 'borrowed');
+                $this->db->where('borrowings.due_date >=', date('Y-m-d H:i:s'));
+                $this->db->where('borrowings.due_date <=', date('Y-m-d H:i:s', strtotime('+24 hours')));
+            } else {
+                $this->db->where('borrowing_items.item_status', $filters['item_status']);
+            }
         }
         if (!empty($filters['borrowing_status'])) {
             $this->db->where('borrowings.status', $filters['borrowing_status']);
@@ -96,7 +105,6 @@ class Borrowing_model extends CI_Model
             $this->db->where('DATE(borrowings.date_released) <=', $filters['date_to']);
         }
     }
-
     // Private — apply search
     private function _apply_search($search = '')
     {
