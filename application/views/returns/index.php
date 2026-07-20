@@ -66,7 +66,7 @@
         </table>
     </div>
 
-    <!--<!-- Details Modal -->
+    <!-- Details Modal -->
 <div class="modal fade" id="detailsModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

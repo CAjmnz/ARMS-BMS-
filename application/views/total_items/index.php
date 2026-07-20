@@ -4,33 +4,15 @@
 
 <div id="main-content">
 
-    <h4 style="font-weight:700; color:#333; margin-bottom:20px;">Dashboard</h4>
+    <h4 style="font-weight:700; color:#333; margin-bottom:20px;">Total Items Summary </h4>
     
 
     <!-- Summary Cards -->
     <div class="row mb-4">
         <div class="col-md-3 mb-3">
-            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:12px solid #4e73df;">
+            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:4px solid #4e73df;">
                 <div style="font-size:13px; color:#888;">Total Item Types</div>
                 <div style="font-size:28px; font-weight:700;"><?= $summary['total_item_types'] ?></div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:12px solid #1cc88a;">
-                <div style="font-size:13px; color:#888;">Available Units</div>
-                <div style="font-size:28px; font-weight:700;"><?= $summary['available_units'] ?></div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:12px solid #f6c23e;">
-                <div style="font-size:13px; color:#888;">Currently Borrowed</div>
-                <div style="font-size:28px; font-weight:700;"><?= $summary['borrowed_units'] ?></div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; border-left:12px solid #e74a3b;">
-                <div style="font-size:13px; color:#888;">Overdue</div>
-                <div style="font-size:28px; font-weight:700;"><?= $summary['overdue_count'] ?></div>
             </div>
         </div>
     </div>
@@ -44,20 +26,6 @@
                 
             </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
-                <div style="font-size:13px; color:#888;">Returned Today</div>
-                <div style="font-size:22px; font-weight:700;"><?= $summary['returned_today'] ?></div>
-                <a href="returns">Return</a>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
-                <div style="font-size:13px; color:#888;">Active Borrowers</div>
-                <div style="font-size:22px; font-weight:700;"><?= $summary['total_borrowers'] ?></div>
-                <a href="borrowing">borrowers</a>
-            </div>
-        </div>
     </div>
 
     <!-- Charts -->
@@ -68,13 +36,6 @@
                 <canvas id="categoryChart" height="220"></canvas>
             </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
-                <h6 style="font-weight:600; margin-bottom:15px;">Borrowing Trend (Last 7 Days)</h6>
-                <canvas id="trendChart" height="220"></canvas>
-            </div>
-        </div>
-    </div>
 
     <!-- Recent Activity -->
     <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
