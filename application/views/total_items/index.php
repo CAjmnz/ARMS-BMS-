@@ -33,7 +33,7 @@
         <div class="col-md-6 mb-3">
             <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
                 <h6 style="font-weight:600; margin-bottom:15px;">Items by Category</h6>
-                <canvas id="categoryChart" height="220"></canvas>
+                <canvas id="categoryChart" height="70"></canvas>
             </div>
         </div>
 

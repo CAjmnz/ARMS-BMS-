@@ -88,6 +88,8 @@ $route['notifications'] = 'notification/index';
 $route['notifications/get_count'] = 'notification/get_count';
 
 $route['items/sync_itemized'] = 'items/sync_itemized';
+//filter page
+$route['total_items'] = 'total_items/index';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
