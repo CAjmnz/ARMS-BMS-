@@ -4,54 +4,55 @@ class Reservation_model extends CI_Model
 {
     private $table = 'reservation_items';
 
-    // Searchable/sortable columns for DataTables
     private $columns = [
-        0  => 'borrowers.id_number',
-        1  => 'borrowers.full_name',
-        2  => 'items.item_name',
-        3  => 'items.category',
-        4  => 'reservations.reservation_date',
-        5  => 'reservations.due_status',
-        6  => 'reservations.status',
+        0 => 'borrowers.id_number',
+        1 => 'borrowers.full_name',
+        2 => 'items.item_name',
+        3 => 'items.category',
+        4 => 'reservations.reservation_date',
+        5 => 'reservations.due_date',
+        6 => 'reservations.status',
     ];
 
     private function _base_query()
     {
-    $this->db->select('
-        reservation_items.id,
-        reservation_items.unit_id,
-        reservation_items.status as item_status,
-        reservations_id as reservation_id,
-        reservations.date_requested,
-        reservations.due_date,
-        reservations.status as reservation_status,
-        reservations.purpose,
-        borrowers.id_number,
-        borrowers.full_name as borrower_name,
-        items.item_name,
-        items.category,
-        itemized.unit_no,
-        users.username as released_by_name
-    ');
-    $this->db->from($this->table);
-    $this->db->join('reservations', 'reservations.id = reservation_items.reservation_id', 'left');
-    $this->db->join('borrowers', 'borrowers.id = reservations.borrower_id', 'left');
-    $this->db->join('itemized', 'itemized.id = reservation_items.unit_id', 'left');
-    $this->db->join('items', 'items.id = itemized.item_id', 'left');
-    $this->db->join('users', 'users.id = reservations.requested_by', 'left');
-    $this->db->where('reservation_items.status', 'reserved');
+        $this->db->select('
+            reservation_items.id,
+            reservation_items.unit_id,
+            reservation_items.status as item_status,
+            reservations.id as reservation_id,
+            reservations.date_requested,
+            reservations.reservation_date,
+            reservations.due_date,
+            reservations.status as reservation_status,
+            reservations.purpose,
+            borrowers.id_number,
+            borrowers.full_name as borrower_name,
+            items.item_name,
+            items.category,
+            itemized.unit_no,
+            users.username as reserved_by_name
+        ');
+        $this->db->from($this->table);
+        $this->db->join('reservations', 'reservations.id = reservation_items.reservation_id', 'left');
+        $this->db->join('borrowers', 'borrowers.id = reservations.borrower_id', 'left');
+        $this->db->join('itemized', 'itemized.id = reservation_items.unit_id', 'left');
+        $this->db->join('items', 'items.id = itemized.item_id', 'left');
+        $this->db->join('users', 'users.id = reservations.requested_by', 'left');
+        $this->db->where('reservation_items.status', 'reserved');
     }
 
-    public function get_item_by_item($id)
+    public function get_item_by_id($id)
     {
         $this->_base_query();
-        $this->db->where('reservation_items.id',$id);
+        $this->db->where('reservation_items.id', $id);
         return $this->db->get()->row();
     }
 
+
     public function count_total()
     {
-        $this->base_query();
+        $this->_base_query();
         return $this->db->count_all_results();
     }
 
@@ -63,13 +64,13 @@ class Reservation_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    public function get_datatables($limit,$start, $search = '', $order_col = 0, $order_dir = 'asc', $filters = [])
+    public function get_datatables($limit, $start, $search = '', $order_col = 0, $order_dir = 'asc', $filters = [])
     {
         $this->_base_query();
         $this->_apply_filters($filters);
         $this->_apply_search($search);
  
-        $col = isset($this->columns[$order_col])? $this->column[$order_col]: 'reservation.reservation_date';
+        $col = isset($this->columns[$order_col])? $this->columns[$order_col]: 'reservations.reservation_date';
         $this->db->order_by($col, $order_dir);
         $this->db->limit($limit, $start);
 
@@ -100,10 +101,10 @@ class Reservation_model extends CI_Model
         }
     }
     
-    private function get_available_unit($item_id)
+    public function get_available_units($item_id)
     {
         $this->db->select('id,unit_no, item_condition');
-        $this->db->where('item_id, $item_id');
+        $this->db->where('item_id', $item_id);
         $this->db->where('status','available');
         $this->db->order_by('unit_no','asc');
         return $this->db->get('itemized')->result();
@@ -153,13 +154,14 @@ class Reservation_model extends CI_Model
     }
     public function get_items_for_reservation($reservation_id)
     {
-        return $this
+        return $this ->db->get_where('reservation_items',[
+            'reservation_id' => $reservation_id,
+            'status'         => 'reserved',
+        ])->result();
     }
     public function mark_items_released($reservation_id)
     {
-
+       $this->db->where('id', $reservation_id);
+       return $this->db->update('reservations',['status'=> 'released']);
     }
-
-
-
 }

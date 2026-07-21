@@ -132,7 +132,7 @@ $(document).ready(function () {
     });
 
     // ─── Edit Modal ───────────────────────────────────────
-    $(document).on('click', '.btnEdit', function () {
+    $('#itemizedTable').on('click', '.btnEdit', function () {
         var id = $(this).data('id');   // encoded id from data-id attribute
         $.ajax({
             url      : BASE_URL + 'itemized/get/' + id,
