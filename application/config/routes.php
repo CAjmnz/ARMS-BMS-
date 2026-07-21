@@ -83,6 +83,9 @@ $route['borrowing/mark_returned/(:any)'] = 'Borrowing/mark_returned/$1';
 $route['returns']            = 'Return_c/index';
 $route['returns/ajax_list']  = 'Return_c/ajax_list';
 $route['returns/get_details/(:any)'] = 'Return_c/get_details/$1';
+//reservation
+$route['reservation']        ='Reservation/index';
+
 //notification 
 $route['notifications'] = 'notification/index';
 $route['notifications/get_count'] = 'notification/get_count';
@@ -90,6 +93,7 @@ $route['notifications/get_count'] = 'notification/get_count';
 $route['items/sync_itemized'] = 'items/sync_itemized';
 //filter page
 $route['total_items'] = 'total_items/index';
+
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -38,6 +38,9 @@
 <script src="<?= base_url('assets/js/modules/users.main.js') ?>"></script>
 <!-- 14. Notification module(global  — runs on every page)-->
 <script src="<?= base_url('assets/js/modules/notifications.main.js') ?>"></script>
+<!-- 15. Reservation module -->
+<script src="<?= base_url('assets/js/modules/reservation.main.js') ?>"></script>
+
 
 <?php if (isset($page_scripts)): ?>
     <?php foreach ($page_scripts as $script): ?>

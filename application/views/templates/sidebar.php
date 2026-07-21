@@ -66,6 +66,11 @@
                             <i class="bi bi-arrow-return-left"></i> returning
 
                         </a>
+                        <a href="<?= base_url('reservation') ?>"
+                            class="sidebar-link <?= ($current === 'reservation') ? 'active' : '' ?>">
+                            <i class="bi bi-arrow-return-left"></i> reservation
+
+                        </a>
                     </div>
                 </div>
             </div>
