@@ -72,6 +72,7 @@
             <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
                 <h6 style="font-weight:600; margin-bottom:15px;">Borrowing Trend (Last 7 Days)</h6>
                 <canvas id="trendChart" height="220"></canvas>
+                
             </div>
         </div>
     </div>
