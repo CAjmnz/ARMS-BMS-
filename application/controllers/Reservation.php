@@ -163,7 +163,8 @@ class Reservation extends CI_Controller
             'reservation_date' => date('Y-m-d H:i:s', strtotime($reservation_date)),
             'due_date'         => date('Y-m-d H:i:s', strtotime($due_date)),
         ];
-
+    
+    
         $reservation_id = $this->Reservation_model->create_reservation($header, $unit_ids);
 
         if ($reservation_id) {
