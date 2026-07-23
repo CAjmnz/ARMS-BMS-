@@ -36,6 +36,7 @@ class Return_c extends CI_Controller
 
         $filters = [
             'item_status' => $this->input->post('item_status'),
+            'date_type'   => $this->input->post('date_type'),
             'date_from'   => $this->input->post('date_from'),
             'date_to'     => $this->input->post('date_to'),
         ];

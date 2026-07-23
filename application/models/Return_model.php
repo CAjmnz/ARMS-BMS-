@@ -77,11 +77,28 @@ class Return_model extends CI_Model
         if (!empty($filters['item_status'])) {
             $this->db->where('borrowing_items.item_status', $filters['item_status']);
         }
+
+        // Determine which date column to filter on
+        $date_field = 'borrowing_items.date_returned'; // default
+        if (!empty($filters['date_type'])) {
+            switch ($filters['date_type']) {
+                case 'borrowed_date':
+                    $date_field = 'borrowings.date_released';
+                    break;
+                case 'due_date':
+                    $date_field = 'borrowings.due_date';
+                    break;
+                case 'return_date':
+                    $date_field = 'borrowing_items.date_returned';
+                    break;
+            }
+        }
+
         if (!empty($filters['date_from'])) {
-            $this->db->where('DATE(borrowing_items.date_returned) >=', $filters['date_from']);
+            $this->db->where("DATE({$date_field}) >=", $filters['date_from']);
         }
         if (!empty($filters['date_to'])) {
-            $this->db->where('DATE(borrowing_items.date_returned) <=', $filters['date_to']);
+            $this->db->where("DATE({$date_field}) <=", $filters['date_to']);
         }
     }
 
@@ -97,9 +114,9 @@ class Return_model extends CI_Model
         }
     }
     // Get full detail for one borrowing_item record (borrow + return info combined)
-public function get_full_details($id)
-{
-    $this->db->select('
+    public function get_full_details($id)
+    {
+        $this->db->select('
         borrowing_items.id,
         borrowing_items.condition_before,
         borrowing_items.condition_after,
@@ -126,16 +143,15 @@ public function get_full_details($id)
         released_user.username as released_by_name,
         received_user.username as received_by_name
     ');
-    $this->db->from($this->table);
-    $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
-    $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
-    $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
-    $this->db->join('items', 'items.id = itemized.item_id', 'left');
-    $this->db->join('users as released_user', 'released_user.id = borrowings.released_by', 'left');
-    $this->db->join('users as received_user', 'received_user.id = borrowing_items.received_by', 'left');
-    $this->db->where('borrowing_items.id', $id);
+        $this->db->from($this->table);
+        $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
+        $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
+        $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
+        $this->db->join('items', 'items.id = itemized.item_id', 'left');
+        $this->db->join('users as released_user', 'released_user.id = borrowings.released_by', 'left');
+        $this->db->join('users as received_user', 'received_user.id = borrowing_items.received_by', 'left');
+        $this->db->where('borrowing_items.id', $id);
 
-    return $this->db->get()->row();
-}
-
+        return $this->db->get()->row();
+    }
 }

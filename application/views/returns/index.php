@@ -21,6 +21,14 @@
                     </select>
                 </div>
                 <div class="col-md-2">
+                    <label style="font-size:13px;">Filter by date</label>
+                    <select name="date_type" class="form-control form-control-sm">
+                        <option value="return_date">Return Date</option>
+                        <option value="borrowed_date">Borrowed Date</option>
+                        <option value="due_date">Due Date</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <label style="font-size:13px;">Date From</label>
                     <input type="date" name="date_from" class="form-control form-control-sm">
                 </div>

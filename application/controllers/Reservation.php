@@ -145,6 +145,15 @@ class Reservation extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'Please fill in all required fields.']);
             return;
         }
+        // Block reservation dates in the past
+        if (strtotime($reservation_date) < time()){
+            echo json_encode(['success' => false, 'message' => 'Reservation date cannot be in the past.']);
+            return;
+        }
+        //Block due date earlier then reservation date
+        if (strtotime($due_date) < strtotime($reservation_date)) {
+            echo json_encode(['success' => false,'message' => 'Return date cannot be earlier than the reservation date.']);
+        }
 
         $header = [
             'borrower_id'      => $borrower_id,

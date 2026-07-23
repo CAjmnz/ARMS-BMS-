@@ -155,6 +155,11 @@ public function store()
         echo json_encode(['success' => false, 'message' => 'Please set a due date.']);
         return;
     }
+    //Block due dates in the past
+    if(strtotime($due_date) < time()){
+        echo json_encode(['success' => false, 'message' =>'Due date cannot be in the past.']);
+        return;
+    }
 
     $header = [
         'borrower_id'    => $borrower_id,

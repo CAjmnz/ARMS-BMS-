@@ -69,16 +69,24 @@ $(document).ready(function () {
         table.ajax.reload();
     });
 
-    // ─── Open Add Modal ──────────────────────────────────
-    $('#btnAddReservation').click(function () {
-        $('#res_borrower_id').val('');
-        $('#res_item_id').val('');
-        $('#res_reservation_date').val('');
-        $('#res_due_date').val('');
-        $('#res_purpose').val('');
-        $('#resUnitCheckboxList').html('<span class="text-muted">Select an item first.</span>');
-        $('#reservationModal').modal('show');
-    });
+// ─── Open Add Modal ──────────────────────────────────
+$('#btnAddReservation').click(function () {
+    $('#res_borrower_id').val('');
+    $('#res_item_id').val('');
+    $('#res_reservation_date').val('');
+    $('#res_due_date').val('');
+    $('#res_purpose').val('');
+    $('#resUnitCheckboxList').html('<span class="text-muted">Select an item first.</span>');
+
+    // Prevent selecting a reservation/due date in the past
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // adjust for local time
+    var minDateTime = now.toISOString().slice(0, 16); // format: YYYY-MM-DDTHH:MM
+    $('#res_reservation_date').attr('min', minDateTime);
+    $('#res_due_date').attr('min', minDateTime);
+
+    $('#reservationModal').modal('show');
+});
 
     // ─── Load available units ────────────────────────────
     $(document).on('change', '#res_item_id', function () {
@@ -125,6 +133,21 @@ $(document).ready(function () {
         if (!borrowerId || unitIds.length === 0 || !reservationDate || !dueDate) {
             Swal.fire('Warning', 'Please fill in all required fields and select at least one unit.', 'warning');
             return;
+        }
+
+        var now = new Date();
+        var resDate = new Date(reservationDate);
+        var dueDateObj = new Date(dueDate);
+
+        if(resDate < now){
+            Swal.fire('Warning', 'Reservation date cannot be in the past.','warning');
+            return;
+        }
+
+        if(dueDateObj < resDate){
+            Swal.fire('Warning', 'Return date cannot be earlier than the reservation date.',
+                'warning');
+                return;
         }
 
         $.post(BASE_URL + 'reservation/store', {

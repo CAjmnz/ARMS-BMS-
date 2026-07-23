@@ -134,13 +134,13 @@
                     <label>Pick up Date <span class="text-danger">*</span></label>
                     <input type="datetime-local" class="form-control" id="res_reservation_date">
                 </div>
-
+                
                 <!-- Return / Due Date -->
                 <div class="form-group">
                     <label>Return Date <span class="text-danger">*</span></label>
                     <input type="datetime-local" class="form-control" id="res_due_date">
                 </div>
-
+                
                 <!-- Purpose -->
                 <div class="form-group">
                     <label>Purpose</label>

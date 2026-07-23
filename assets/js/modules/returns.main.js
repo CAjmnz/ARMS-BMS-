@@ -5,6 +5,7 @@ $(document).ready(function () {
     }
 
     var statusFilter   = '';
+    var dateTypeFilter = '';
     var dateFromFilter = '';
     var dateToFilter   = '';
 
@@ -24,6 +25,7 @@ $(document).ready(function () {
             type : 'POST',
             data : function (d) {
                 d.item_status = statusFilter;
+                d.date_type   = dateTypeFilter;
                 d.date_from   = dateFromFilter;
                 d.date_to     = dateToFilter;
             }
@@ -56,6 +58,7 @@ $(document).ready(function () {
     $('#filterForm').on('submit', function (e) {
         e.preventDefault();
         statusFilter   = $('select[name="item_status"]').val() || '';
+        dateTypeFilter = $('select[name="date_type"]').val()   || '';
         dateFromFilter = $('input[name="date_from"]').val()    || '';
         dateToFilter   = $('input[name="date_to"]').val()      || '';
         table.ajax.reload();
@@ -63,9 +66,11 @@ $(document).ready(function () {
 
     $('#btnReset').on('click', function () {
         $('select[name="item_status"]').val('');
+        $('select[name="date_status"]').val('');
         $('input[name="date_from"]').val('');
         $('input[name="date_to"]').val('');
         statusFilter   = '';
+        dateTypeFilter = '';
         dateFromFilter = '';
         dateToFilter   = '';
         table.ajax.reload();
