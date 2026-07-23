@@ -87,27 +87,27 @@ class Dashboard_model extends CI_Model
         return $this->db->get('items')->result();
     }
 
-    // ─── Chart: Borrowing Trend (last 7 days) ──────────
-    public function get_borrowing_trend($days = 7)
+    // ─── Chart: Borrowing Trend (last 12 month) ──────────
+    public function get_borrowing_trend($months = 12)
     {
-        $start_date = date('Y-m-d', strtotime("-{$days} days"));
-
-        $this->db->select("DATE(date_released) as day, COUNT(*) as total");
-        $this->db->where('DATE(date_released) >=', $start_date);
-        $this->db->group_by('DATE(date_released)');
-        $this->db->order_by('day', 'asc');
+        $start_date = date('Y-m-01', strtotime("-{$months} months"));
+    
+        $this->db->select("DATE_FORMAT(date_released, '%Y-%m') as month, COUNT(*) as total");
+        $this->db->where('date_released >=', $start_date);
+        $this->db->group_by("DATE_FORMAT(date_released, '%Y-%m')");
+        $this->db->order_by('month', 'asc');
         $results = $this->db->get('borrowings')->result();
-
-        // Fill in missing days with 0 so the chart doesn't have gaps
+    
+        // Fill in missing months with 0 so the chart doesn't have gaps
         $trend = [];
-        for ($i = $days - 1; $i >= 0; $i--) {
-            $date = date('Y-m-d', strtotime("-{$i} days"));
-            $trend[$date] = 0;
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $month = date('Y-m', strtotime("-{$i} months"));
+            $trend[$month] = 0;
         }
         foreach ($results as $row) {
-            $trend[$row->day] = (int) $row->total;
+            $trend[$row->month] = (int) $row->total;
         }
-
+    
         return $trend;
     }
 }

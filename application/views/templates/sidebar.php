@@ -61,16 +61,18 @@
                             <i class="bi bi-bootstrap"></i></i>borrowing
                         </a>
 
-                        <a href="<?= base_url('returns') ?>"
-                            class="sidebar-link <?= ($current === 'returns') ? 'active' : '' ?>">
-                            <i class="bi bi-arrow-return-left"></i> returning
-
-                        </a>
                         <a href="<?= base_url('reservation') ?>"
                             class="sidebar-link <?= ($current === 'reservation') ? 'active' : '' ?>">
                             <i class="bi bi-arrow-return-left"></i> reservation
 
                         </a>
+
+                        <a href="<?= base_url('returns') ?>"
+                            class="sidebar-link <?= ($current === 'returns') ? 'active' : '' ?>">
+                            <i class="bi bi-archive"></i> returning
+
+                        </a>
+
                     </div>
                 </div>
             </div>

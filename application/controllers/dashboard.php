@@ -40,11 +40,11 @@ class Dashboard extends CI_Controller
     // AJAX — chart data for borrowing trend
     public function chart_trend()
     {
-        $trend = $this->Dashboard_model->get_borrowing_trend(7);
+        $trend = $this->Dashboard_model->get_borrowing_trend(12);
         $labels = [];
         $values = [];
-        foreach ($trend as $date => $count) {
-            $labels[] = date('M d', strtotime($date));
+        foreach ($trend as $month => $count) {
+            $labels[] = date('M Y', strtotime($month . '-01'));
             $values[] = $count;
         }
         echo json_encode(['labels' => $labels, 'values' => $values]);

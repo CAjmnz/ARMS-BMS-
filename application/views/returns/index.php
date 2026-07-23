@@ -68,7 +68,7 @@
 
     <!-- Details Modal -->
 <div class="modal fade" id="detailsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Borrowing & Return Details</h5>
@@ -96,6 +96,7 @@
                     <div class="col-md-6"><strong>Serial No:</strong> <span id="d_serial">-</span></div>
                 </div>
 
+                 
                 <h6 class="text-muted" style="border-bottom:1px solid #eee; padding-bottom:5px;">Borrowing Details</h6>
                 <div class="row mb-3">
                     <div class="col-md-6"><strong>Transaction:</strong> <span id="d_txn">-</span></div>
@@ -115,6 +116,7 @@
                     <div class="col-md-6"><strong>Received By:</strong> <span id="d_received_by">-</span></div>
                     <div class="col-md-12"><strong>Remarks:</strong> <span id="d_remarks">-</span></div>
                 </div>
+
 
             </div>
             <div class="modal-footer">
