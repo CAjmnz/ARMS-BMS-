@@ -6,8 +6,10 @@ class User extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Dashboard_model');
+        $this->load->model('System_user_model');
         $this->load->library('session');
         $this->load->helper('url');
+       
 
         if (!$this->session->userdata('logged_in')) {
             redirect('auth');

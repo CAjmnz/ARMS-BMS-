@@ -95,45 +95,52 @@
                             <input type="text" class="form-control" id="brand" >
                         </div>
                         <div class="form-group col-6 mb-2">
-                            <label>Employee_type</label>
+                            <label>Employee_Department</label>
                             <input type="text" class="form-control" id="model" >
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-6 md-2">
-                            <label>Employee_company"</label>
+                            <label>Employee_company</label>
                             <input type="text" class="form-control" id="serial_number" placeholder="Serial number">
                         </div>
                         <div class="form-group col-6 mb-6">
-                            <label>Employee_dept</label>
+                            <label>Business Unit</label>
                             <input type="number" class="form-control" id="quantity" placeholder="Quantity" min="0">
                         </div>
                     </div>
                     <div class="form-row">
-                      
-                   
+                        <div class="form-group col-6 md-2">
+                            <label>Employee_Type</label>
+                            <input type="text" class="form-control" id="serial_number" placeholder="Serial number">
+                        </div>
+                        <div class="form-group col-6 mb-6">
+                            <label>Employee Status</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" min="0">
+                        </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group col-6 mb-2">
                             <div class="field-wrap">
-                                <label>employee_bunit</label>
-                                <input type="text"
-                                    class="form-control"
-                                    id="status"
-                                    value="available"
-                                    readonly>
-                            </div>
+                                <label>role</label>
+                                <select class="form-control" id="role">
+    <option value="User">User</option>
+    <option value="Admin">Admin</option>
+</select>
                         </div>
                         <div class="form-group col-6 mb-2">
                             <div class="field-wrap">
-                                <label>Status</label>
-                                <select class="form-control" id="location">
-                                    <option value="it_sys/dev_cabinet">Admin</option>
-                                    <option value="training_room">User</option>
-                                </select>
+                                <label>Account Status</label>
+                                <select class="form-control" id="account_status">
+    <option value="Active">Active</option>
+    <option value="Inactive">Inactive</option>
+</select>
                             </div>
                         </div>
-                    </div>
+    </div>
+
+    </div>
                 </div> <!-- ← modal-body closes HERE -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
