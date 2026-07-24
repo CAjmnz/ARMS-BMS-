@@ -19,6 +19,9 @@ class Dashboard_model extends CI_Model
         // Currently borrowed units
         $summary['borrowed_units'] = $this->db->where('status', 'borrowed')->count_all_results('itemized');
 
+        // Current Reserved units
+        $summary['reserved_units'] = $this->db->where('status', 'reserved')->count_all_results('reservation_items');
+
         // Overdue — borrowed + due_date passed
         $this->db->where('borrowing_items.item_status', 'borrowed');
         $this->db->where('borrowings.due_date <', date('Y-m-d H:i:s'));

@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/responsive.bootstrap4.min.css') ?>">
     <!-- App CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/bootstrap-icons.min.css') ?>"
+    <link rel="stylesheet" href="<?= base_url('assets/css/bootstrap-icons.min.css') ?>">
 
 
     <?php if (isset($page_styles)): ?>

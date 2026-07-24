@@ -94,6 +94,9 @@ $route['items/sync_itemized'] = 'items/sync_itemized';
 //filter page
 $route['total_items'] = 'total_items/index';
 
+//users page
+$route['users'] = 'user/index';
+
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
