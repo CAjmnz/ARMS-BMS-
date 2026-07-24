@@ -98,4 +98,51 @@ function searchEmployee(keyword)
         }
        
     });
+    // ─── Add button click — open modal, auto-fill fields ────
+$(document).on('click', '.btnAddEmployee', function () {
+    var emp = JSON.parse($(this).attr('data-emp'));
+
+    $('#system_user_id').val('');
+    $('#employee_id').val(emp.employee_id);
+    $('#employee_name').val(emp.employee_name);
+    $('#employee_position').val(emp.employee_position);
+    $('#employee_dept').val(emp.employee_dept);
+    $('#employee_company').val(emp.employee_company || '');
+    $('#employee_bunit').val(emp.employee_bunit);
+    $('#employee_type').val(emp.employee_type);
+    $('#employee_status').val(emp.employee_status);
+    $('#role').val('User');
+    $('#account_status').val('Active');
+
+    $('#userModal').modal('show');
+});
+
+// ─── Save User ────────────────────────────────────────────
+$('#btnSaveUser').on('click', function () {
+    var payload = {
+        employee_id       : $('#employee_id').val(),
+        employee_name      : $('#employee_name').val(),
+        employee_position  : $('#employee_position').val(),
+        employee_dept      : $('#employee_dept').val(),
+        employee_company   : $('#employee_company').val(),
+        employee_bunit     : $('#employee_bunit').val(),
+        employee_type      : $('#employee_type').val(),
+        employee_status    : $('#employee_status').val(),
+        role               : $('#role').val(),
+        account_status     : $('#account_status').val()
+    };
+
+    $.post(BASE_URL + 'user/save_user', payload, function (res) {
+        if (res.success) {
+            $('#userModal').modal('hide');
+            Swal.fire('Success', res.message, 'success');
+        } else {
+            Swal.fire('Error', res.message, 'error');
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.log('Error:', xhr.responseText);
+        Swal.fire('Error', 'Something went wrong.', 'error');
+    });
+});
 }

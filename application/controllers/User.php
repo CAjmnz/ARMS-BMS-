@@ -51,20 +51,33 @@ class User extends CI_Controller
         echo json_encode(['labels' => $labels, 'values' => $values]);
     }
 
-    public function search_employee()
-    {
-        $q = $this->input->get('q', TRUE);
+   // Search employees via the external RMS API — pass the API response straight through
+public function search_employee()
+{
+    $query = $this->input->get('q');
 
-        $url = 'http://172.16.161.34/api/rms/monitoring/search/name?q=' . urlencode($q);
-
-        $response = @file_get_contents($url);
-
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output($response ?: json_encode([
-                'data' => [
-                    'employee' => []
-                ]
-            ]));
+    if (empty($query)) {
+        echo json_encode(['data' => ['employee' => []]]);
+        return;
     }
+
+    $api_url = 'http://172.16.161.34/api/rms/monitoring/search/name?q=' . urlencode($query);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $api_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
+    curl_close($ch);
+
+    if ($curl_error || $http_code !== 200) {
+        echo json_encode(['data' => ['employee' => []]]);
+        return;
+    }
+
+    // Pass the API's response straight through — JS already expects this exact shape
+    echo $response;
+}
 }
