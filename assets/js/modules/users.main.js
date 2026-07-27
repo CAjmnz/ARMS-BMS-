@@ -5,12 +5,66 @@ $(document).ready(function () {
     var currentSearchRequest = null;
     var searchDebounceTimer = null;
 
+    // ─── Init DataTable (roster of added system users) ─────
+    var statusFilter = '';
+    var roleFilter    = '';
+
+    if ($.fn.DataTable.isDataTable('#usersTable')) {
+        $('#usersTable').DataTable().destroy();
+    }
+
+    var table = $('#usersTable').DataTable({
+        processing : true,
+        serverSide : true,
+        lengthMenu : [[5, 10, 25, 50], [5, 10, 25, 50]],
+        pageLength : 10,
+        ajax: {
+            url  : BASE_URL + 'user/ajax_list',
+            type : 'POST',
+            data : function (d) {
+                d.role           = roleFilter;
+                d.account_status = statusFilter;
+            }
+        },
+        columns: [
+            { data: 0, orderable: false },
+            { data: 1 },
+            { data: 2 },
+            { data: 3 },
+            { data: 4 },
+            { data: 5 },
+            { data: 6 },
+            { data: 7 },
+            { data: 8 },
+            { data: 9, orderable: false }
+        ],
+        order: [[1, 'asc']],
+        language: {
+            emptyTable : 'No system users found.',
+            processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'
+        }
+    });
+
+    $('#filterForm').on('submit', function (e) {
+        e.preventDefault();
+        roleFilter   = $('select[name="role"]').val()           || '';
+        statusFilter = $('select[name="account_status"]').val() || '';
+        table.ajax.reload();
+    });
+
+    $('#btnReset').on('click', function () {
+        $('select[name="role"]').val('');
+        $('select[name="account_status"]').val('');
+        roleFilter   = '';
+        statusFilter = '';
+        table.ajax.reload();
+    });
+
     // ─── Open modal via header "Add User" button ───────────
     $('#btnAddItem').off('click').on('click', function () {
         resetModal();
         $('#userModal').modal('show');
 
-        // Auto-focus the search field once the modal is visible
         $('#userModal').one('shown.bs.modal', function () {
             $('#modalEmployeeSearch').focus();
         });
@@ -47,20 +101,18 @@ $(document).ready(function () {
             return;
         }
 
-        // Debounce — wait 300ms after typing stops before searching
         searchDebounceTimer = setTimeout(function () {
             performSearch(keyword);
         }, 300);
     });
 
-    // ─── Barcode scanners send an Enter keypress after scanning ──
     $('#modalEmployeeSearch').on('keypress', function (e) {
         if (e.which === 13) {
             e.preventDefault();
             clearTimeout(searchDebounceTimer);
             var keyword = $(this).val().trim();
             if (keyword.length >= 2) {
-                performSearch(keyword, true); // true = auto-select if exactly one match (typical barcode behavior)
+                performSearch(keyword, true);
             }
         }
     });
@@ -88,7 +140,6 @@ $(document).ready(function () {
                     return;
                 }
 
-                // Barcode scan with exactly one exact match — auto-select immediately
                 if (autoSelectIfSingle && employees.length === 1) {
                     selectEmployee(employees[0]);
                     return;
@@ -116,7 +167,6 @@ $(document).ready(function () {
         });
     }
 
-    // ─── Click a result row to select that employee ─────────
     $(document).on('click', '.employeeResultRow', function () {
         var emp = JSON.parse($(this).attr('data-emp').replace(/&#39;/g, "'"));
         selectEmployee(emp);
@@ -159,7 +209,6 @@ $(document).ready(function () {
         return apiBase + cleanPath;
     }
 
-    // Hide the dropdown when clicking elsewhere in the modal
     $(document).on('click', function (e) {
         if (!$(e.target).closest('#modalEmployeeSearch, #employeeSearchResults').length) {
             $('#employeeSearchResults').hide();
@@ -190,7 +239,9 @@ $(document).ready(function () {
         $.post(BASE_URL + 'user/save_user', payload, function (res) {
             if (res.success) {
                 $('#userModal').modal('hide');
-                Swal.fire('Success', res.message, 'success');
+                Swal.fire('Success', res.message, 'success').then(function () {
+                    table.ajax.reload();
+                });
             } else {
                 Swal.fire('Error', res.message, 'error');
             }
@@ -198,6 +249,66 @@ $(document).ready(function () {
         .fail(function (xhr) {
             console.log('Error:', xhr.responseText);
             Swal.fire('Error', 'Something went wrong.', 'error');
+        });
+    });
+
+    // ─── Edit ────────────────────────────────────────────
+    $('#usersTable').on('click', '.btnEditUser', function () {
+        var id = $(this).data('id');
+        $.get(BASE_URL + 'user/get/' + id, function (res) {
+            if (res.success) {
+                $('#edit_user_id').val(id);
+                $('#edit_employee_name').val(res.item.employee_name);
+                $('#edit_role').val(res.item.role);
+                $('#edit_account_status').val(res.item.account_status);
+                $('#editUserModal').modal('show');
+            } else {
+                Swal.fire('Error', res.message, 'error');
+            }
+        }, 'json');
+    });
+
+    $('#btnUpdateUser').on('click', function () {
+        var id = $('#edit_user_id').val();
+        $.post(BASE_URL + 'user/update_user/' + id, {
+            role           : $('#edit_role').val(),
+            account_status : $('#edit_account_status').val()
+        }, function (res) {
+            if (res.success) {
+                $('#editUserModal').modal('hide');
+                Swal.fire('Success', res.message, 'success').then(function () {
+                    table.ajax.reload();
+                });
+            } else {
+                Swal.fire('Error', res.message, 'error');
+            }
+        }, 'json');
+    });
+
+    // ─── Delete ──────────────────────────────────────────
+    $('#usersTable').on('click', '.btnDeleteUser', function () {
+        var id   = $(this).data('id');
+        var name = $(this).data('name');
+
+        Swal.fire({
+            title: 'Delete ' + name + '?',
+            text: 'This will remove their system access.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it'
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                $.post(BASE_URL + 'user/delete/' + id, function (res) {
+                    if (res.success) {
+                        Swal.fire('Deleted!', res.message, 'success').then(function () {
+                            table.ajax.reload();
+                        });
+                    } else {
+                        Swal.fire('Error', res.message, 'error');
+                    }
+                }, 'json');
+            }
         });
     });
 

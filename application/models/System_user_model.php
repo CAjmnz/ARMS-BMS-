@@ -36,10 +36,16 @@ class System_user_model extends CI_Model
     public function get_by_employee_id($employee_id)
     {
         return $this->db
-                    ->where('employee_id', $employee_id)
-                    ->get($this->table) > 0;
+        ->where('employee_id', $employee_id)
+        ->get($this->table)
+        ->row();
     }
-
+    public function exists($employee_id)
+    {
+        return $this->db
+            ->where('employee_id', $employee_id)
+            ->count_all_results($this->table) > 0;
+    }
     /**
      * Insert new system user
      */
@@ -86,7 +92,7 @@ class System_user_model extends CI_Model
         $this->_apply_filters($filters);
         $this->_apply_search($search);
 
-        $col = isset($this->columns[$order_col]) ? $this->columns[$order_col]:'employee_name';
+        $col = isset($this->column[$order_col]) ? $this->column[$order_col]:'employee_name';
         $this->db->order_by($col,$order_dir);
         $this->db->limit($limit, $start);
 
@@ -96,7 +102,7 @@ class System_user_model extends CI_Model
     private function _apply_filters($filters = [])
     {
         if(!empty($filters['role'])){
-            $this->db->where('role',$filter['role']);
+            $this->db->where('role',$filters['role']);
         }
         if(!empty($filters['account_status'])) {
             $this->db->where('account_status', $filters['account_status']);
