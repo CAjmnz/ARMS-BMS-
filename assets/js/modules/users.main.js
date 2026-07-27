@@ -1,111 +1,112 @@
 $(document).ready(function () {
-    //Resolve the API's relative photo path into a full, usable URL 
-    function resolvePhotoUrl(relativePath){
-         if (!relativePath) return null;
-
-         var apiBase = 'http://172.16.161.34/api/rms/monitoring/';
-
-         //Strip leading "../" segments, then rebuild against the API's base path
-         var cleanPath = relativePath.replace(/^(\.\.\/)+/, '');
-
-         return apiBase + cleanPath;
-    }
-    
 
     console.log("users.main.js loaded");
 
-    // Track the in-flight request so we can cancel stale ones
     var currentSearchRequest = null;
+    var searchDebounceTimer = null;
 
-    // Use .off() before .on() to guarantee only ONE handler is ever bound,
-    // even if this script somehow runs more than once on the page.
-    $('#btnSearchEmployee').off('click').on('click', function (e) {
-        e.preventDefault();
-        console.log("Search button clicked");
+    // ─── Open modal via header "Add User" button ───────────
+    $('#btnAddItem').off('click').on('click', function () {
+        resetModal();
+        $('#userModal').modal('show');
 
-        let keyword = $('#searchEmployee').val().trim();
+        // Auto-focus the search field once the modal is visible
+        $('#userModal').one('shown.bs.modal', function () {
+            $('#modalEmployeeSearch').focus();
+        });
+    });
 
-        if (keyword === '') {
-            Swal.fire('Warning', 'Please enter an employee name.', 'warning');
+    function resetModal() {
+        $('#system_user_id').val('');
+        $('#employee_id').val('');
+        $('#employee_name').val('');
+        $('#employee_position').val('');
+        $('#employee_dept').val('');
+        $('#employee_company').val('');
+        $('#employee_bunit').val('');
+        $('#employee_type').val('');
+        $('#employee_status').val('');
+        $('#employee_photo').val('');
+        $('#role').val('User');
+        $('#account_status').val('Active');
+        $('#modalEmployeeSearch').val('');
+        $('#employeeSearchResults').hide().empty();
+        $('#employee_photo_preview').hide();
+        $('#employee_photo_placeholder').show();
+        $('#btnSaveUser').prop('disabled', true);
+    }
+
+    // ─── Live search inside modal (debounced) ───────────────
+    $('#modalEmployeeSearch').on('input', function () {
+        var keyword = $(this).val().trim();
+
+        clearTimeout(searchDebounceTimer);
+
+        if (keyword.length < 2) {
+            $('#employeeSearchResults').hide().empty();
             return;
         }
 
-        searchEmployee(keyword);
+        // Debounce — wait 300ms after typing stops before searching
+        searchDebounceTimer = setTimeout(function () {
+            performSearch(keyword);
+        }, 300);
     });
 
-    // Also allow pressing Enter in the search box
-    $('#searchEmployee').off('keypress').on('keypress', function (e) {
+    // ─── Barcode scanners send an Enter keypress after scanning ──
+    $('#modalEmployeeSearch').on('keypress', function (e) {
         if (e.which === 13) {
             e.preventDefault();
-            $('#btnSearchEmployee').trigger('click');
+            clearTimeout(searchDebounceTimer);
+            var keyword = $(this).val().trim();
+            if (keyword.length >= 2) {
+                performSearch(keyword, true); // true = auto-select if exactly one match (typical barcode behavior)
+            }
         }
     });
 
-    function searchEmployee(keyword) {
-
-        // If a previous search is still in flight, cancel it —
-        // this is what prevents an old, slow response from overwriting
-        // a newer, faster one.
+    function performSearch(keyword, autoSelectIfSingle) {
         if (currentSearchRequest !== null) {
             currentSearchRequest.abort();
         }
 
-        var tbody = $('#usersTable tbody');
-        tbody.html('<tr><td colspan="9" class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</td></tr>');
+        var $results = $('#employeeSearchResults');
+        $results.html('<div class="p-2 text-muted"><i class="fas fa-spinner fa-spin"></i> Searching...</div>').show();
 
         currentSearchRequest = $.ajax({
             url: BASE_URL + 'user/search_employee',
             type: 'GET',
             data: { q: keyword },
             dataType: 'json',
-            cache: false,   // ← prevents the browser from serving a stale cached GET response
+            cache: false,
 
             success: function (response) {
-                console.log("API response for '" + keyword + "':", response);
-
-                tbody.empty();
-
                 var employees = (response.data && response.data.employee) ? response.data.employee : [];
 
                 if (employees.length === 0) {
-                    tbody.append('<tr><td colspan="9" class="text-center">No employee found.</td></tr>');
+                    $results.html('<div class="p-2 text-muted">No employee found.</div>').show();
                     return;
                 }
 
-                $.each(employees, function (index, emp) {
-                    tbody.append(`
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>
-                                <strong>${emp.employee_name}</strong><br>
-                                <small>${emp.employee_position || ''}</small>
-                            </td>
-                            <td>${emp.employee_id || '-'}</td>
-                            <td>${emp.employee_dept || '-'}</td>
-                            <td>
-                                <span class="badge badge-success">${emp.employee_status || '-'}</span>
-                            </td>
-                            <td>${emp.employee_bunit || '-'}</td>
-                            <td>${emp.employee_type || '-'}</td>
-                            <td>
-                                <span class="badge badge-primary">User</span>
-                            </td>
-                            <td>
-                                <button class="btn btn-success btn-sm btnAddEmployee" data-emp='${JSON.stringify(emp)}'>
-                                    Add
-                                </button>
-                            </td>
-                        </tr>
-                    `);
+                // Barcode scan with exactly one exact match — auto-select immediately
+                if (autoSelectIfSingle && employees.length === 1) {
+                    selectEmployee(employees[0]);
+                    return;
+                }
+
+                var html = '';
+                employees.forEach(function (emp) {
+                    html += '<div class="employeeResultRow p-2" style="cursor:pointer; border-bottom:1px solid #f0f0f0;" data-emp=\'' + JSON.stringify(emp).replace(/'/g, "&#39;") + '\'>' +
+                        '<strong>' + emp.employee_name + '</strong><br>' +
+                        '<small class="text-muted">' + (emp.employee_id || '') + ' &middot; ' + (emp.employee_position || '') + '</small>' +
+                        '</div>';
                 });
+                $results.html(html).show();
             },
 
             error: function (xhr, status) {
-                // "abort" happens on purpose when we cancel a stale request — don't show an error for that
                 if (status !== 'abort') {
-                    console.log('Search error:', xhr.responseText);
-                    tbody.empty();
-                    tbody.append('<tr><td colspan="9" class="text-center text-danger">Search failed. Please try again.</td></tr>');
+                    $results.html('<div class="p-2 text-danger">Search failed. Please try again.</div>').show();
                 }
             },
 
@@ -115,11 +116,13 @@ $(document).ready(function () {
         });
     }
 
-    // ─── Add button click — open modal, auto-fill fields ────
-    $(document).on('click', '.btnAddEmployee', function () {
-        var emp = JSON.parse($(this).attr('data-emp'));
+    // ─── Click a result row to select that employee ─────────
+    $(document).on('click', '.employeeResultRow', function () {
+        var emp = JSON.parse($(this).attr('data-emp').replace(/&#39;/g, "'"));
+        selectEmployee(emp);
+    });
 
-        $('#system_user_id').val('');
+    function selectEmployee(emp) {
         $('#employee_id').val(emp.employee_id);
         $('#employee_name').val(emp.employee_name);
         $('#employee_position').val(emp.employee_position);
@@ -128,26 +131,39 @@ $(document).ready(function () {
         $('#employee_bunit').val(emp.employee_bunit);
         $('#employee_type').val(emp.employee_type);
         $('#employee_status').val(emp.employee_status);
-        $('#role').val('User');
-        $('#account_status').val('Active');
+        $('#employee_photo').val(emp.employee_photo || '');
+
+        $('#modalEmployeeSearch').val(emp.employee_name);
+        $('#employeeSearchResults').hide().empty();
 
         var photoUrl = resolvePhotoUrl(emp.employee_photo);
         if (photoUrl) {
-            $('#employee_photo_preview').attr('src',photoUrl).show();
+            $('#employee_photo_preview').attr('src', photoUrl).show();
             $('#employee_photo_placeholder').hide();
-
-            //if the image fail to load (broken path ), fall back to placeholder
-            $('#employee_photo_preview').off('error').on('error',function (){
+            $('#employee_photo_preview').off('error').on('error', function () {
                 $(this).hide();
                 $('#employee_photo_placeholder').show();
             });
         } else {
             $('#employee_photo_preview').hide();
-
             $('#employee_photo_placeholder').show();
         }
 
-        $('#userModal').modal('show');
+        $('#btnSaveUser').prop('disabled', false);
+    }
+
+    function resolvePhotoUrl(relativePath) {
+        if (!relativePath) return null;
+        var apiBase = 'http://172.16.161.34/api/rms/monitoring/';
+        var cleanPath = relativePath.replace(/^(\.\.\/)+/, '');
+        return apiBase + cleanPath;
+    }
+
+    // Hide the dropdown when clicking elsewhere in the modal
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('#modalEmployeeSearch, #employeeSearchResults').length) {
+            $('#employeeSearchResults').hide();
+        }
     });
 
     // ─── Save User ────────────────────────────────────────────
@@ -161,9 +177,15 @@ $(document).ready(function () {
             employee_bunit    : $('#employee_bunit').val(),
             employee_type     : $('#employee_type').val(),
             employee_status   : $('#employee_status').val(),
-            role               : $('#role').val(),
-            account_status     : $('#account_status').val()
+            employee_photo    : $('#employee_photo').val(),
+            role              : $('#role').val(),
+            account_status    : $('#account_status').val()
         };
+
+        if (!payload.employee_id) {
+            Swal.fire('Warning', 'Please select an employee first.', 'warning');
+            return;
+        }
 
         $.post(BASE_URL + 'user/save_user', payload, function (res) {
             if (res.success) {
