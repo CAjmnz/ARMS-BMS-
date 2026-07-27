@@ -62,92 +62,97 @@
             <tbody></tbody>
         </table>
     </div>
-
     <!-- Add/Edit Modal -->
-    <div class="modal fade" id="itemModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog modal-custom modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Add Employee</h5>
+                    <h5 class="modal-title" id="modalTitle">Add System User</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="item_id">
+                    <input type="hidden" id="system_user_id">
+
+
                     <div class="form-row">
                         <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>Employee_ID</label>
-                                <input type="text" class="form-control" id="item_name">
-                            </div>
+                            <label>Employee ID</label>
+                            <input type="text" class="form-control" id="employee_id" readonly>
                         </div>
                         <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>Employee_Name</label>
-                                <input type="text" class="form-control" id="item_name">
+                            <label>Employee Name</label>
+                            <input type="text" class="form-control" id="employee_name" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-12 text-center mb-3">
+                            <img id="employee_photo_preview" src="" alt="Employee Photo"
+                                style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:2px solid #e3e6f0; display:none;">
+                            <div id="employee_photo_placeholder" style="width:100px; height:100px; border-radius:50%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; margin:0 auto; color:#aaa; font-size:12px;">
+                                No Photo
                             </div>
                         </div>
                     </div>
+
+
                     <div class="form-row">
                         <div class="form-group col-6 mb-2">
-                            <label>Employee_position</label>
-                            <input type="text" class="form-control" id="brand"readonly>
+                            <label>Position</label>
+                            <input type="text" class="form-control" id="employee_position" readonly>
                         </div>
                         <div class="form-group col-6 mb-2">
-                            <label>Employee_Department</label>
-                            <input type="text" class="form-control" id="model"readonly>
+                            <label>Department</label>
+                            <input type="text" class="form-control" id="employee_dept" readonly>
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="form-group col-6 md-2">
-                            <label>Employee_company</label>
-                            <input type="text" class="form-control" id="serial_number" placeholder="Serial number"readonly>
+                        <div class="form-group col-6 mb-2">
+                            <label>Company</label>
+                            <input type="text" class="form-control" id="employee_company" readonly>
                         </div>
-                        <div class="form-group col-6 mb-6">
+                        <div class="form-group col-6 mb-2">
                             <label>Business Unit</label>
-                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" min="0"readonly>
+                            <input type="text" class="form-control" id="employee_bunit" readonly>
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="form-group col-6 md-2">
-                            <label>Employee_Type</label>
-                            <input type="text" class="form-control" id="serial_number" placeholder="Serial number" readonly>
+                        <div class="form-group col-6 mb-2">
+                            <label>Employee Type</label>
+                            <input type="text" class="form-control" id="employee_type" readonly>
                         </div>
-                        <div class="form-group col-6 mb-6">
+                        <div class="form-group col-6 mb-2">
                             <label>Employee Status</label>
-                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" min="0"readonly>
+                            <input type="text" class="form-control" id="employee_status" readonly>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>role</label>
-                                <select class="form-control" id="role">
-                                    <option value="User">User</option>
-                                    <option value="Admin">Admin</option>
-                                </select>
-                            </div>
+                            <label>Role</label>
+                            <select class="form-control" id="role">
+                                <option value="User">User</option>
+                                <option value="Admin">Admin</option>
+                            </select>
                         </div>
                         <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label>Account Status</label>
-                                <select class="form-control" id="account_status">
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
+                            <label>Account Status</label>
+                            <select class="form-control" id="account_status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
                         </div>
                     </div>
-
                 </div>
-            </div> <!-- ← modal-body closes HERE -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="btnSave">Save</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="btnSaveUser">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<?php $this->load->view('templates/footer'); ?>
+    <?php $this->load->view('templates/footer'); ?>

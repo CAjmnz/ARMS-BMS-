@@ -136,6 +136,24 @@
     z-index: 1050;
 }
 
+.modal-custom{
+    max-width:1200px;
+}
+.modal-body{
+    padding:25px 30px; 
+}
+.form-control[readonly]{
+    background:#f8f9fa;
+    color:#495057;
+    cursor:default;
+}
+.modal label{
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:5px;
+    color:#495057;
+}
+
 /* ── Action buttons ────────────────────────────────────────────────── */
 .action-btn {
     transition: all .2s ease;
