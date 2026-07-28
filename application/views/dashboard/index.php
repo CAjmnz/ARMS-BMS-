@@ -50,7 +50,7 @@
         </div>
         <div class="col-md-3 mb-2">
             <div style="background:rgba(123, 108, 224, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
-            <a href="borrowing" style="font-size:21px; color:#000; font-weight:700;"> Returned Today <br> 
+            <a href="borrowing" style="font-size:21px; color:#000; font-weight:700;"> Borrowings Today  <br> 
              <div style="font-size:30px; font-weight:700;"><?= $summary['total_borrowers'] ?></div>
             </a>
             </div>

@@ -102,7 +102,8 @@ $route['user/ajax_list'] = 'user/ajax_list';
 $route['user/get/(:any)'] = 'user/get/$1';
 $route['user/update_user/(:any)'] = 'user/update_user/$1';
 $route['user/delete/(:any)'] = 'user/delete/$1';
-$route['users/reset-password/(:num)'] = 'users/reset_password/$1';
+$route['user/reset_password/(:any)'] = 'user/reset_password/$1';
+$route['user/photo_proxy'] = 'user/photo_proxy';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
