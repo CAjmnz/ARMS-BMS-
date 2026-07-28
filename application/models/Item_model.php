@@ -50,7 +50,7 @@ class Item_model extends CI_Model
     }
 
     // Recalculate and persist status based on current available_quantity
-    private function sync_status($item_id)
+    public function sync_status($item_id)
     {
         $item = $this->get_by_id($item_id);
         if (!$item) {

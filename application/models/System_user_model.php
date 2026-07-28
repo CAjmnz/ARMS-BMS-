@@ -119,5 +119,29 @@ class System_user_model extends CI_Model
             $this->db->group_end();
         }
     }
+    public function reset_password($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->set('password',             password_hash('rms-2026', PASSWORD_DEFAULT));
+        $this->db->set('must_change_password', 1);
+        $this->db->set('password_reset_count', 'password_reset_count + 1', false); // false = no quotes, raw SQL
+        $this->db->set('updated_at',           date('Y-m-d H:i:s'));
+        return $this->db->update('users');
+    }
+    //Set/reset a user's password(hashed) and track the change 
+    public function set_password($id, $plain_password)
+    {
+        $hashed = password_hash($plain_password,PASSWORD_DEFAULT);
+
+        $user = $this->get_by_id($id);
+        $new_count = $user ? $user->password_change_count + 1:1;
+
+        return $this->db->where('id',$id)->update($this->table,[
+            'password'              => $hashed,
+            'password_change_count' => $new_count,
+            'last_password_change'  => date('Y-m-d H:i:s'),
+        ]);
+    }
+
 }
 

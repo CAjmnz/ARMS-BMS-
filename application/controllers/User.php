@@ -97,6 +97,8 @@ class User extends CI_Controller
         echo json_encode(['success' => false, 'message' => 'This employee is already added as a system user.']);
         return;
     }
+    
+    $default_password = 'bms-2026';
 
     $data = [
         'employee_id'       => $employee_id,
@@ -108,12 +110,14 @@ class User extends CI_Controller
         'employee_bunit'    => $this->input->post('employee_bunit'),
         'employee_dept'     => $this->input->post('employee_dept'),
         'employee_photo'    => $this->input->post('employee_photo'),
+        'password'          => password_hash($default_password, PASSWORD_DEFAULT),
+        'password_change_count' => 0,
         'role'              => $this->input->post('role'),
         'account_status'    => $this->input->post('account_status'),
     ];
 
     if ($this->System_user_model->insert($data)) {
-        echo json_encode(['success' => true, 'message' => 'User added successfully.']);
+        echo json_encode(['success' => true, 'message' => 'User added successfully. Default passowrd:bms-2026']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Failed to add user.']);
     }

@@ -10,6 +10,7 @@ class Itemized extends CI_Controller
         $this->load->model('Itemized_model');
         $this->load->library('session', 'encryption');
         $this->load->helper('url');
+        $this->load->model('Itemized_model', 'itemized_model');
 
         if (!$this->session->userdata('logged_in')) {
             redirect('auth');
@@ -84,8 +85,7 @@ class Itemized extends CI_Controller
                 'available_quantity' => $new_available,
                 'borrowed_quantity'  => $new_borrowed,
             ]);
-            $this->item_model->sync_status($item_id);
-
+        
             echo json_encode([
                 'success' => true,
                 'message' => $unit_count . ' unit(s) added successfully.'

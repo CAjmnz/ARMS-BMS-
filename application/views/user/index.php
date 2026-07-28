@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <h4 style="margin:0; font-weight:700; color:#333;">Employee Management</h4>
-        <button class="btn btn-success btn-sm" id="btnAddItem">
+        <button class="btn btn-success btn-sm" id="btnAddUser">
             <i class="fas fa-plus"></i> Add User
         </button>
     </div>
@@ -123,41 +123,48 @@
                     <!-- Employee Details (auto-filled, read-only) -->
                     <div class="form-row">
                         <div class="form-group col-6 mb-2">
-                            <label>Employee ID</label>
-                            <input type="text" class="form-control" id="employee_id" readonly>
+                            <label>Employee ID / Default Username</label>
+                            <input type="text" class="form-control" id="employee_id"  readonly>
                         </div>
                         <div class="form-group col-6 mb-2">
-                            <label>Employee Name</label>
-                            <input type="text" class="form-control" id="employee_name" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                            <label>Position</label>
-                            <input type="text" class="form-control" id="employee_position" readonly>
-                        </div>
-                        <div class="form-group col-6 mb-2">
-                            <label>Department</label>
-                            <input type="text" class="form-control" id="employee_dept" readonly>
+                            <div class="field-wrap">
+                                <label for="password">Password</label>
+                                <input type="text"
+                                    class="form-control"
+                                    id="password"
+                                    value="bms-2026"
+                                    readonly>
+                                <span class="field-error-icon">&#9888;<span class="error-tooltip"></span></span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-6 mb-2">
-                            <label>Company</label>
-                            <input type="text" class="form-control" id="employee_company" readonly>
+                        <label>Employee Name</label>
+                        <input type="text" class="form-control" id="employee_name" readonly>
                         </div>
                         <div class="form-group col-6 mb-2">
-                            <label>Business Unit</label>
+                        <label>Position</label>
+                        <input type="text" class="form-control" id="employee_position" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6 mb-2">
+                        <label>Department</label>
+                        <input type="text" class="form-control" id="employee_dept" readonly>
+                        </div>
+                        <div class="form-group col-6 mb-2">
+                        <label>Company</label>
+                        <input type="text" class="form-control" id="employee_company" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6 mb-2">
+                           <label>Business Unit</label>
                             <input type="text" class="form-control" id="employee_bunit" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                            <label>Employee Type</label>
-                            <input type="text" class="form-control" id="employee_type" readonly>
                         </div>
                         <div class="form-group col-6 mb-2">
                             <label>Employee Status</label>
@@ -183,6 +190,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-success" id="btnSaveUser" disabled>Save</button>
                 </div>

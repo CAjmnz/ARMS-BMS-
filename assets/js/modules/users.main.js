@@ -61,7 +61,7 @@ $(document).ready(function () {
     });
 
     // ─── Open modal via header "Add User" button ───────────
-    $('#btnAddItem').off('click').on('click', function () {
+    $('#btnAddUser').off('click').on('click', function () {
         resetModal();
         $('#userModal').modal('show');
 
