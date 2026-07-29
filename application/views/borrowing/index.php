@@ -155,19 +155,6 @@
                         <input type="datetime-local" class="form-control" id="borrowing_due_date">
                     </div>
 
-                    <!-- released by -->
-                    <div class="form-group">
-                        <label>released by <span class="text-danger">*</span></label>
-                        <select class="form-control" id="borrowing_borrower_id">
-                            <option value="">-- Select Borrower --</option>
-                            <?php foreach ($borrowers as $b): ?>
-                                <option value="<?= $b->id ?>">
-                                    <?= htmlspecialchars($b->full_name) ?> (<?= htmlspecialchars($b->id_number) ?>)
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

@@ -59,14 +59,28 @@ function performBorrowerSearch(keyword, autoSelectIfSingle) {
                 return;
             }
 
-            var html = '';
-            employees.forEach(function (emp) {
-                html += '<div class="borrowerResultRow p-2" style="cursor:pointer; border-bottom:1px solid #f0f0f0;" data-emp=\'' + JSON.stringify(emp).replace(/'/g, "&#39;") + '\'>' +
-                    '<strong>' + emp.employee_name + '</strong><br>' +
-                    '<small class="text-muted">' + (emp.employee_id || '') + ' &middot; ' + (emp.employee_position || '') + '</small>' +
-                    '</div>';
-            });
-            $results.html(html).show();
+			var html = '';
+			employees.forEach(function (emp) {
+				var photoUrl = emp.employee_photo
+					? BASE_URL + 'user/photo_proxy?path=' + encodeURIComponent(emp.employee_photo)
+					: null;
+			
+				var nameParts = (emp.employee_name || '').split(/[\s,]+/).slice(0, 2);
+				var initials = nameParts.map(function (p) { return p.charAt(0).toUpperCase(); }).join('') || '?';
+			
+				var avatarHtml = photoUrl
+					? '<img src="' + photoUrl + '" alt="Photo" style="width:32px; height:32px; border-radius:50%; object-fit:cover; flex-shrink:0;" onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:#2563B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;&quot;>' + initials + '</div>\'">'
+					: '<div style="width:32px; height:32px; border-radius:50%; background:#2563B8; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex-shrink:0;">' + initials + '</div>';
+			
+				html += '<div class="borrowerResultRow p-2" style="cursor:pointer; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; gap:10px;" data-emp=\'' + JSON.stringify(emp).replace(/'/g, "&#39;") + '\'>' +
+					avatarHtml +
+					'<div>' +
+					'<strong>' + emp.employee_name + '</strong><br>' +
+					'<small class="text-muted">' + (emp.employee_id || '') + ' &middot; ' + (emp.employee_position || '') + '</small>' +
+					'</div>' +
+					'</div>';
+			});
+			$results.html(html).show();
         },
         error: function (xhr, status) {
             if (status !== 'abort') {
@@ -119,20 +133,21 @@ function selectBorrower(emp) {
 			},
 		},
 		columns: [
-			{ data: 0, orderable: false }, // #
-			{ data: 1 }, // Borrower's Id
-			{ data: 2 }, // Borrower's name
-			{ data: 3 }, // Item Name
-			{ data: 4 }, // Category
-			{ data: 5, orderable: false }, // Quantity
-			{ data: 6 }, // Condition Before Borrowing
-			{ data: 7 }, // Borrowed Date
-			{ data: 8 }, // Due date
-			{ data: 9, orderable: false }, // Borrowing status
-			{ data: 10 }, // Released by
-			{ data: 11, orderable: false }, // Action
+			{ data: 0, orderable: false },  // #
+			{ data: 1 },                    // Borrower's Id
+			{ data: 2 },                    // Borrower's name
+			{ data: 3 },                    // Position
+			{ data: 4 },                    // Item Name
+			{ data: 5 },                    // Category
+			{ data: 6, orderable: false },  // Quantity
+			{ data: 7 },                    // Condition Before Borrowing
+			{ data: 8 },                    // Borrowed Date
+			{ data: 9 },                    // Due date
+			{ data: 10, orderable: false }, // Borrowing status
+			{ data: 11 },                   // Released by
+			{ data: 12, orderable: false }  // Action
 		],
-		order: [[7, "desc"]],
+		order: [[8, 'desc']],   // Borrowed Date is now index 8, not 7
 		language: {
 			emptyTable: "No borrowing records found.",
 			processing: '<i class="fas fa-spinner fa-spin"></i> Loading...',
@@ -175,22 +190,18 @@ function selectBorrower(emp) {
 	});
 
 	// ─── Add Borrowing Modal ───────────────────────────────
-	$("#btnAddBorrowing").click(function () {
-		$("#borrowing_borrower_id").val("");
-		$("#borrowing_item_id").val("");
-		$("#borrowing_purpose").val("");
-		$("#borrowing_due_date").val("");
-		$("#unitCheckboxList").html(
-			'<span class="text-muted">Select an item first.</span>',
-		);
-		//Prevent selecting a due date in the past
-		var now = new Date();
-		now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); //adjust for local timezone
-		var minDateTime = now.toISOString().slice(0, 16); //format:YYYY-MM-DDTHH:MM
-		$("#borrowing_due_date").attr("min", minDateTime);
-		$("unitCheckboxList").html("");
-
-		$("#borrowingModal").modal("show");
+	$('#btnAddBorrowing').click(function () {
+		$('#borrowing_borrower_employee_id').val('');
+		$('#borrowing_borrower_position').val('');
+		$('#borrowing_borrower_dept').val('');
+		$('#borrowing_borrower_photo').val('');
+		$('#borrowingBorrowerSearch').val('');
+		$('#borrowingBorrowerResults').hide().empty();
+		$('#borrowing_item_id').val('');
+		$('#borrowing_purpose').val('');
+		$('#borrowing_due_date').val('');
+		$('#unitCheckboxList').html('<span class="text-muted">Select an item first.</span>');
+		$('#borrowingModal').modal('show');
 	});
 
 	// ─── Load available units when item changes ────────────

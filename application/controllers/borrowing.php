@@ -99,17 +99,30 @@ public function ajax_list()
             </div>
         </div>';
  
+        $name_parts = preg_split('/[\s,]+/', trim($row->borrower_name ?? ''));
+        $initials = '';
+        foreach (array_slice($name_parts, 0, 2) as $part) {
+            $initials .= strtoupper(substr($part, 0, 1));
+        }
+        $initials = $initials ?: '?';
+        
         $photo_url = !empty($row->borrower_photo)
-        ? base_url('user/photo_proxy?path=' . urlencode($row->borrower_photo))
-        : base_url('assets/img/default-avatar.png');
-
-    $borrower_cell = '
-        <div style="display:flex; align-items:center; gap:10px;">
-            <img src="' . $photo_url . '" alt="Photo"
-                 style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #e3e6f0; flex-shrink:0;"
-                 onerror="this.src=\'' . base_url('assets/img/default-avatar.png') . '\'">
-            <span>' . htmlspecialchars($row->borrower_name ?? '-') . '</span>
-        </div>';
+            ? base_url('user/photo_proxy?path=' . urlencode($row->borrower_photo))
+            : null;
+        
+        if ($photo_url) {
+            $avatar_html = '<img src="' . $photo_url . '" alt="Photo"
+                style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #e3e6f0; flex-shrink:0;"
+                onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:#2563B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;&quot;>' . $initials . '</div>\'">';
+        } else {
+            $avatar_html = '<div style="width:32px; height:32px; border-radius:50%; background:#2563B8; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex-shrink:0;">' . $initials . '</div>';
+        }
+        
+        $borrower_cell = '
+            <div style="display:flex; align-items:center; gap:10px;">
+                ' . $avatar_html . '
+                <span>' . htmlspecialchars($row->borrower_name ?? '-') . '</span>
+            </div>';
 
     $data[] = [
         $i++,
