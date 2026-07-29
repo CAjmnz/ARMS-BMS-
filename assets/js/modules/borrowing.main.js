@@ -4,6 +4,94 @@ $(document).ready(function () {
 	var dateFromFilter = "";
 	var dateToFilter = "";
 
+	var borrowerSearchRequest = null;
+var borrowerDebounceTimer = null;
+
+$('#borrowingBorrowerSearch').on('input', function () {
+    var keyword = $(this).val().trim();
+    clearTimeout(borrowerDebounceTimer);
+
+    if (keyword.length < 2) {
+        $('#borrowingBorrowerResults').hide().empty();
+        return;
+    }
+
+    borrowerDebounceTimer = setTimeout(function () {
+        performBorrowerSearch(keyword);
+    }, 300);
+});
+
+$('#borrowingBorrowerSearch').on('keypress', function (e) {
+    if (e.which === 13) {
+        e.preventDefault();
+        clearTimeout(borrowerDebounceTimer);
+        var keyword = $(this).val().trim();
+        if (keyword.length >= 2) {
+            performBorrowerSearch(keyword, true);
+        }
+    }
+});
+
+function performBorrowerSearch(keyword, autoSelectIfSingle) {
+    if (borrowerSearchRequest !== null) {
+        borrowerSearchRequest.abort();
+    }
+
+    var $results = $('#borrowingBorrowerResults');
+    $results.html('<div class="p-2 text-muted"><i class="fas fa-spinner fa-spin"></i> Searching...</div>').show();
+
+    borrowerSearchRequest = $.ajax({
+        url: BASE_URL + 'user/search_employee',
+        type: 'GET',
+        data: { q: keyword },
+        dataType: 'json',
+        cache: false,
+        success: function (response) {
+            var employees = (response.data && response.data.employee) ? response.data.employee : [];
+
+            if (employees.length === 0) {
+                $results.html('<div class="p-2 text-muted">No employee found.</div>').show();
+                return;
+            }
+
+            if (autoSelectIfSingle && employees.length === 1) {
+                selectBorrower(employees[0]);
+                return;
+            }
+
+            var html = '';
+            employees.forEach(function (emp) {
+                html += '<div class="borrowerResultRow p-2" style="cursor:pointer; border-bottom:1px solid #f0f0f0;" data-emp=\'' + JSON.stringify(emp).replace(/'/g, "&#39;") + '\'>' +
+                    '<strong>' + emp.employee_name + '</strong><br>' +
+                    '<small class="text-muted">' + (emp.employee_id || '') + ' &middot; ' + (emp.employee_position || '') + '</small>' +
+                    '</div>';
+            });
+            $results.html(html).show();
+        },
+        error: function (xhr, status) {
+            if (status !== 'abort') {
+                $results.html('<div class="p-2 text-danger">Search failed.</div>').show();
+            }
+        },
+        complete: function () {
+            borrowerSearchRequest = null;
+        }
+    });
+}
+
+$(document).on('click', '.borrowerResultRow', function () {
+    var emp = JSON.parse($(this).attr('data-emp').replace(/&#39;/g, "'"));
+    selectBorrower(emp);
+});
+
+function selectBorrower(emp) {
+    $('#borrowing_borrower_employee_id').val(emp.employee_id);
+    $('#borrowing_borrower_position').val(emp.employee_position);
+    $('#borrowing_borrower_dept').val(emp.employee_dept);
+    $('#borrowing_borrower_photo').val(emp.employee_photo || '');
+    $('#borrowingBorrowerSearch').val(emp.employee_name);
+    $('#borrowingBorrowerResults').hide().empty();
+}
 	// Destroy if already initialized
 	if ($.fn.DataTable.isDataTable("#borrowingTable")) {
 		$("#borrowingTable").DataTable().destroy();
@@ -153,61 +241,61 @@ $(document).ready(function () {
 	});
 
 	// ─── Save Borrowing ─────────────────────────────────────
-	$("#btnSaveBorrowing").click(function () {
-		var borrowerId = $("#borrowing_borrower_id").val();
-		var purpose = $("#borrowing_purpose").val().trim();
-		var dueDate = $("#borrowing_due_date").val();
-		var unitIds = [];
-
-		$(".unitCheckbox:checked").each(function () {
+	$('#btnSaveBorrowing').click(function () {
+		var borrowerEmployeeId = $('#borrowing_borrower_employee_id').val();
+		var borrowerName        = $('#borrowingBorrowerSearch').val();
+		var borrowerPosition    = $('#borrowing_borrower_position').val();
+		var borrowerDept        = $('#borrowing_borrower_dept').val();
+		var borrowerPhoto       = $('#borrowing_borrower_photo').val();
+		var purpose              = $('#borrowing_purpose').val().trim();
+		var dueDate               = $('#borrowing_due_date').val();
+		var unitIds                = [];
+	
+		$('.unitCheckbox:checked').each(function () {
 			unitIds.push($(this).val());
 		});
-
-		if (!borrowerId) {
-			Swal.fire("Warning", "Please select a borrower.", "warning");
+	
+		if (!borrowerEmployeeId) {
+			Swal.fire('Warning', 'Please select a borrower.', 'warning');
 			return;
 		}
 		if (unitIds.length === 0) {
-			Swal.fire("Warning", "Please select at least one unit.", "warning");
+			Swal.fire('Warning', 'Please select at least one unit.', 'warning');
 			return;
 		}
 		if (!dueDate) {
-			Swal.fire("Warning", "Please set a due date.", "warning");
+			Swal.fire('Warning', 'Please set a due date.', 'warning');
 			return;
 		}
-		// Block due dates in the past
-		var selectedDate = new Date(dueDate);
+	
 		var now = new Date();
-		if (selectedDate < now) {
-			Swal.fire(
-				"Warning",
-				"Due date cannot be in the past. Please select today or a future date/time.",
-				"warning",
-			);
+		if (new Date(dueDate) < now) {
+			Swal.fire('Warning', 'Due date cannot be in the past.', 'warning');
 			return;
 		}
-		$.post(
-			BASE_URL + "borrowing/store",
-			{
-				borrower_id: borrowerId,
-				unit_ids: unitIds,
-				purpose: purpose,
-				due_date: dueDate,
-			},
-			function (res) {
-				if (res.success) {
-					$("#borrowingModal").modal("hide");
-					Swal.fire("Success", res.message, "success").then(function () {
-						table.ajax.reload(); // ← already refreshes right after your own save
-					});
-				} else {
-					Swal.fire("Error", res.message, "error");
-				}
-			},
-			"json",
-		).fail(function (xhr) {
-			console.log("Error:", xhr.responseText);
-			Swal.fire("Error", "Something went wrong.", "error");
+	
+		$.post(BASE_URL + 'borrowing/store', {
+			borrower_employee_id : borrowerEmployeeId,
+			borrower_name         : borrowerName,
+			borrower_position     : borrowerPosition,
+			borrower_dept         : borrowerDept,
+			borrower_photo        : borrowerPhoto,
+			unit_ids               : unitIds,
+			purpose                 : purpose,
+			due_date                 : dueDate
+		}, function (res) {
+			if (res.success) {
+				$('#borrowingModal').modal('hide');
+				Swal.fire('Success', res.message, 'success').then(function () {
+					table.ajax.reload();
+				});
+			} else {
+				Swal.fire('Error', res.message, 'error');
+			}
+		}, 'json')
+		.fail(function (xhr) {
+			console.log('Error:', xhr.responseText);
+			Swal.fire('Error', 'Something went wrong.', 'error');
 		});
 	});
 	// ─── Open Mark Returned Modal ───────────────────────────

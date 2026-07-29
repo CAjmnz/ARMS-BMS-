@@ -54,6 +54,8 @@ $route['default_controller'] = 'auth';
 $route['auth']               = 'auth/index';
 $route['auth/login']         = 'auth/login';
 $route['auth/logout']        = 'auth/logout';
+//about us
+$route['about_us']           = 'about_us/index';
 //dashboard routes
 $route['dashboard']          = 'dashboard/index';
 $route['dashboard/chart_categories'] = 'dashboard/chart_categories';

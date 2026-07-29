@@ -97,6 +97,14 @@ $page_label      = isset($page_label) ? $page_label : 'Dashboard';
                 </a>
 
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item d-flex align-items-center"
+                   href="<?= base_url('about_us') ?>"
+                   style="padding:8px 16px;font-size:14px;gap:10px;">
+                   <i class="bi bi-file-person-fill"></i>
+                    About Us
+                </a>
+
+                <div class="dropdown-divider"></div>
 
                 <a class="dropdown-item d-flex align-items-center"
                    href="<?= base_url('privacy') ?>"
@@ -106,6 +114,7 @@ $page_label      = isset($page_label) ? $page_label : 'Dashboard';
                 </a>
 
                 <div class="dropdown-divider"></div>
+
 
                 <a class="dropdown-item d-flex align-items-center"
                    href="<?= base_url('dashboard/logout') ?>"

@@ -77,6 +77,7 @@
                     <th>#</th>
                     <th>Borrower's Id</th>
                     <th>Borrower's name</th>
+                    <th>Position</th>
                     <th>Item Name</th>
                     <th>Category</th>
                     <th>Quantity</th>
@@ -105,18 +106,21 @@
                 <div class="modal-body">
 
                     <!-- Borrower -->
-                    <div class="form-group">
-                        <label>Borrower <span class="text-danger">*</span></label>
-                        <select class="form-control" id="borrowing_borrower_id">
-                            <option value="">-- Select Borrower --</option>
-                            <?php foreach ($borrowers as $b): ?>
-                                <option value="<?= $b->id ?>">
-                                    <?= htmlspecialchars($b->full_name) ?> (<?= htmlspecialchars($b->id_number) ?>)
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                    <input type="hidden" id="borrowing_borrower_employee_id">
+                    <input type="hidden" id="borrowing_borrower_position">
+                    <input type="hidden" id="borrowing_borrower_dept">
+                    <input type="hidden" id="borrowing_borrower_photo">
 
+                    <div class="form-group" style="position:relative;">
+                        <label>Borrower <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="borrowingBorrowerSearch"
+                            placeholder="Type a name/ID or scan barcode..." autocomplete="off">
+                        <div id="borrowingBorrowerResults" style="
+        display:none; position:absolute; top:100%; left:0; right:0; z-index:1060;
+        background:#fff; border:1px solid #ddd; border-radius:4px;
+        max-height:220px; overflow-y:auto; box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    "></div>
+                    </div>
                     <!-- Item -->
                     <div class="form-group">
                         <label>Item <span class="text-danger">*</span></label>

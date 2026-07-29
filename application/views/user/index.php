@@ -60,10 +60,10 @@
                     <th width="5%">#</th>
                     <th width="18%">Employee</th>
                     <th width="10%">Employee ID</th>
-                    <th width="12%">Department</th>
-                    <th width="8%">Status</th>
-                    <th width="7%">B.U.</th>
-                    <th width="9%">Type</th>
+                    <th width="12%">Position</th>
+                    <th width="8%">Department</th>
+                    <th width="7%">Status</th>
+                    <th width="9%">B.U.</th>
                     <th width="7%">Role</th>
                     <th width="10%">Account Status</th>
                     <th width="6%">Action</th>

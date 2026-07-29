@@ -76,6 +76,7 @@ public function ajax_list()
         if ($row->item_status === 'borrowed' && $row->due_date && strtotime($row->due_date) < time()) {
             $badge = '<span class="badge badge-danger">Overdue</span>';
         }
+        
 
         $action = '
         <div class="dropdown">
@@ -97,22 +98,35 @@ public function ajax_list()
                 </button>
             </div>
         </div>';
+ 
+        $photo_url = !empty($row->borrower_photo)
+        ? base_url('user/photo_proxy?path=' . urlencode($row->borrower_photo))
+        : base_url('assets/img/default-avatar.png');
 
-        $data[] = [
-            $i++,
-            htmlspecialchars($row->id_number ?? '-'),
-            htmlspecialchars($row->borrower_name ?? '-'),
-            htmlspecialchars($row->item_name) . ' #' . $row->unit_no,
-            htmlspecialchars($row->category ?? '-'),
-            1,
-            ucfirst($row->condition_before),
-            $row->date_released ? date('M d, Y h:i A', strtotime($row->date_released)) : '-',
-            $row->due_date ? date('M d, Y h:i A', strtotime($row->due_date)) : '-',
-            $badge,
-            htmlspecialchars($row->released_by_name ?? '-'),
-            $action,
-        ];
-    }
+    $borrower_cell = '
+        <div style="display:flex; align-items:center; gap:10px;">
+            <img src="' . $photo_url . '" alt="Photo"
+                 style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #e3e6f0; flex-shrink:0;"
+                 onerror="this.src=\'' . base_url('assets/img/default-avatar.png') . '\'">
+            <span>' . htmlspecialchars($row->borrower_name ?? '-') . '</span>
+        </div>';
+
+    $data[] = [
+        $i++,
+        htmlspecialchars($row->borrower_employee_id ?? '-'),
+        $borrower_cell,
+        htmlspecialchars($row->borrower_position ?? '-'),
+        htmlspecialchars($row->item_name) . ' #' . $row->unit_no,
+        htmlspecialchars($row->category ?? '-'),
+        1,
+        ucfirst($row->condition_before),
+        $row->date_released ? date('M d, Y h:i A', strtotime($row->date_released)) : '-',
+        $row->due_date ? date('M d, Y h:i A', strtotime($row->due_date)) : '-',
+        $badge,
+        htmlspecialchars($row->released_by_name ?? '-'),
+        $action,
+    ];
+}
 
     echo json_encode([
         'draw'            => (int) $draw,
@@ -136,12 +150,16 @@ public function store()
         redirect('borrowing');
     }
 
-    $borrower_id = $this->input->post('borrower_id');
+    $borrower_employee_id = $this->input->post('borrower_employee_id');
+    $borrower_name        = $this->input->post('borrower_name');
+    $borrower_position    = $this->input->post('borrower_position');
+    $borrower_dept        = $this->input->post('borrower_dept');
+    $borrower_photo       = $this->input->post('borrower_photo');
     $unit_ids    = $this->input->post('unit_ids');
     $purpose     = trim($this->input->post('purpose'));
     $due_date    = $this->input->post('due_date');
 
-    if (empty($borrower_id)) {
+    if (empty($borrower_employee_id) || empty($borrower_name)) {
         echo json_encode(['success' => false, 'message' => 'Please select a borrower.']);
         return;
     }
@@ -162,7 +180,11 @@ public function store()
     }
 
     $header = [
-        'borrower_id'    => $borrower_id,
+        'borrower_employee_id'    => $borrower_employee_id,
+        'borrower_name'           => $borrower_name,
+        'borrower_position'       => $borrower_position,
+        'borrower_dept'           => $borrower_dept,
+        'borrower_photo'          => $borrower_photo, 
         'released_by'    => $this->session->userdata('user_id'),
         'purpose'        => $purpose ?: null,
         'status'         => 'released',
