@@ -5,42 +5,45 @@ class Reservation_model extends CI_Model
     private $table = 'reservation_items';
 
     private $columns = [
-        0 => 'borrowers.id_number',
-        1 => 'borrowers.full_name',
-        2 => 'items.item_name',
-        3 => 'items.category',
-        4 => 'reservations.reservation_date',
-        5 => 'reservations.due_date',
-        6 => 'reservations.status',
-    ];
+    0 => 'reservations.borrower_employee_id',
+    1 => 'reservations.borrower_name',
+    2 => 'items.item_name',
+    3 => 'items.category',
+    4 => 'reservations.reservation_date',
+    5 => 'reservations.due_date',
+    6 => 'reservations.status',
+];
+
 
     private function _base_query()
-    {
-        $this->db->select('
-            reservation_items.id,
-            reservation_items.unit_id,
-            reservation_items.status as item_status,
-            reservations.id as reservation_id,
-            reservations.date_requested,
-            reservations.reservation_date,
-            reservations.due_date,
-            reservations.status as reservation_status,
-            reservations.purpose,
-            borrowers.id_number,
-            borrowers.full_name as borrower_name,
-            items.item_name,
-            items.category,
-            itemized.unit_no,
-            users.username as reserved_by_name
-        ');
-        $this->db->from($this->table);
-        $this->db->join('reservations', 'reservations.id = reservation_items.reservation_id', 'left');
-        $this->db->join('borrowers', 'borrowers.id = reservations.borrower_id', 'left');
-        $this->db->join('itemized', 'itemized.id = reservation_items.unit_id', 'left');
-        $this->db->join('items', 'items.id = itemized.item_id', 'left');
-        $this->db->join('users', 'users.id = reservations.requested_by', 'left');
-        $this->db->where('reservation_items.status', 'reserved');
-    }
+{
+    $this->db->select('
+        reservation_items.id,
+        reservation_items.unit_id,
+        reservation_items.status as item_status,
+        reservations.id as reservation_id,
+        reservations.date_requested,
+        reservations.reservation_date,
+        reservations.due_date,
+        reservations.status as reservation_status,
+        reservations.purpose,
+        reservations.borrower_employee_id,
+        reservations.borrower_name,
+        reservations.borrower_position,
+        reservations.borrower_dept,
+        reservations.borrower_photo,
+        items.item_name,
+        items.category,
+        itemized.unit_no,
+        users.username as reserved_by_name
+    ');
+    $this->db->from($this->table);
+    $this->db->join('reservations', 'reservations.id = reservation_items.reservation_id', 'left');
+    $this->db->join('itemized', 'itemized.id = reservation_items.unit_id', 'left');
+    $this->db->join('items', 'items.id = itemized.item_id', 'left');
+    $this->db->join('users', 'users.id = reservations.requested_by', 'left');
+    $this->db->where('reservation_items.status', 'reserved');
+}
 
     public function get_item_by_id($id)
     {
@@ -91,12 +94,12 @@ class Reservation_model extends CI_Model
 
     private function _apply_search($search = '')
     {
-        if(!empty($search)){
+        if (!empty($search)) {
             $this->db->group_start();
-            $this->db->like('borrowers.id_number',$search);
-            $this->db->or_like('borrowers.full_name',$search);
-            $this->db->or_like('items.item_name',$search);
-            $this->db->or_like('items.category',$search);
+            $this->db->like('reservations.borrower_employee_id', $search);
+            $this->db->or_like('reservations.borrower_name', $search);
+            $this->db->or_like('items.item_name', $search);
+            $this->db->or_like('items.category', $search);
             $this->db->group_end();
         }
     }
