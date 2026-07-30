@@ -29,7 +29,7 @@ class Return_model extends CI_Model
             borrowings.id as borrowing_id,
             borrowings.date_released,
             borrowings.due_date,
-            borrowings.status as borrowing_status
+            borrowings.status as borrowing_status,
             borrowings.borrower_employee_id,
             borrowings.borrower_name,
             borrowings.borrower_position,

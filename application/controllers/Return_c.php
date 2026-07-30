@@ -50,54 +50,54 @@ class Return_c extends CI_Controller
 
         foreach ($rows as $row) {
 
-            switch ($row->item_status) {
-                case 'returned':
-                    $badge = '<span class="badge badge-primary">Returned</span>';
-                    break;
-                case 'damaged':
-                    $badge = '<span class="badge badge-danger">Damaged</span>';
-                    break;
-                case 'lost':
-                    $badge = '<span class="badge badge-dark">Lost</span>';
-                    break;
-                default:
-                    $badge = '<span class="badge badge-light">' . ucfirst($row->item_status) . '</span>';
-            }
+    switch ($row->item_status) {
+        case 'returned':
+            $badge = '<span class="badge badge-primary">Returned</span>';
+            break;
+        case 'damaged':
+            $badge = '<span class="badge badge-danger">Damaged</span>';
+            break;
+        case 'lost':
+            $badge = '<span class="badge badge-dark">Lost</span>';
+            break;
+        default:
+            $badge = '<span class="badge badge-light">' . ucfirst($row->item_status) . '</span>';
+    }
 
-            $days_late = '-';
-            if ($row->due_date && $row->date_returned) {
-                $due    = strtotime($row->due_date);
-                $actual = strtotime($row->date_returned);
-                $diff   = floor(($actual - $due) / 86400);
-                $days_late = $diff > 0 ? $diff . ' day(s)' : 'On time';
-            }
+    $days_late = '-';
+    if ($row->due_date && $row->date_returned) {
+        $due    = strtotime($row->due_date);
+        $actual = strtotime($row->date_returned);
+        $diff   = floor(($actual - $due) / 86400);
+        $days_late = $diff > 0 ? $diff . ' day(s)' : 'On time';
+    }
 
-            $name_parts = preg_split('/[\s,]+/', trim($row->borrower_name ?? ''));
-            $initials = '';
-            foreach (array_slice($name_parts, 0, 2) as $part) {
-                $initials .= strtoupper(substr($part, 0, 1));
-            }
-            $initials = $initials ?: '?';
+    $name_parts = preg_split('/[\s,]+/', trim($row->borrower_name ?? ''));
+    $initials = '';
+    foreach (array_slice($name_parts, 0, 2) as $part) {
+        $initials .= strtoupper(substr($part, 0, 1));
+    }
+    $initials = $initials ?: '?';
 
-            $photo_url = !empty($row->borrower_photo)
-                ? base_url('user/photo_proxy?path=' . urlencode($row->borrower_photo))
-                : null;
+    $photo_url = !empty($row->borrower_photo)
+        ? base_url('user/photo_proxy?path=' . urlencode($row->borrower_photo))
+        : null;
 
-            if ($photo_url) {
-                $avatar_html = '<img src="' . $photo_url . '" alt="Photo"
+    if ($photo_url) {
+        $avatar_html = '<img src="' . $photo_url . '" alt="Photo"
             style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #e3e6f0; flex-shrink:0;"
             onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:#2563B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;&quot;>' . $initials . '</div>\'">';
-            } else {
-                $avatar_html = '<div style="width:32px; height:32px; border-radius:50%; background:#2563B8; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex-shrink:0;">' . $initials . '</div>';
-            }
+    } else {
+        $avatar_html = '<div style="width:32px; height:32px; border-radius:50%; background:#2563B8; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex-shrink:0;">' . $initials . '</div>';
+    }
 
-            $borrower_cell = '
+    $borrower_cell = '
         <div style="display:flex; align-items:center; gap:10px;">
             ' . $avatar_html . '
             <span>' . htmlspecialchars($row->borrower_name ?? '-') . '</span>
         </div>';
 
-            $action = '
+    $action = '
     <div class="dropdown">
         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -110,27 +110,26 @@ class Return_c extends CI_Controller
         </div>
     </div>';
 
-            $data[] = [
-                $i++,
-                'TXN-' . str_pad($row->borrowing_id, 5, '0', STR_PAD_LEFT),
-                htmlspecialchars($row->borrower_employee_id ?? '-'),
-                $borrower_cell,
-                htmlspecialchars($row->borrower_position ?? '-'),
-                htmlspecialchars($row->item_name) . ' #' . $row->unit_no,
-                htmlspecialchars($row->category ?? '-'),
-                1,
-                ucfirst($row->condition_after ?? '-'),
-                $row->date_released ? date('M d, Y h:i A', strtotime($row->date_released)) : '-',
-                $row->due_date ? date('M d, Y h:i A', strtotime($row->due_date)) : '-',
-                $row->date_returned ? date('M d, Y h:i A', strtotime($row->date_returned)) : '-',
-                $days_late,
-                $badge,
-                htmlspecialchars($row->received_by_name ?? '-'),
-                htmlspecialchars($row->remarks ?? '-'),
-                $action,
-            ];
-        }
-
+    $data[] = [
+        $i++,
+        'TXN-' . str_pad($row->borrowing_id, 5, '0', STR_PAD_LEFT),
+        htmlspecialchars($row->borrower_employee_id ?? '-'),
+        $borrower_cell,
+        htmlspecialchars($row->borrower_position ?? '-'),
+        htmlspecialchars($row->item_name) . ' #' . $row->unit_no,
+        htmlspecialchars($row->category ?? '-'),
+        1,
+        ucfirst($row->condition_after ?? '-'),
+        $row->date_released ? date('M d, Y h:i A', strtotime($row->date_released)) : '-',
+        $row->due_date ? date('M d, Y h:i A', strtotime($row->due_date)) : '-',
+        $row->date_returned ? date('M d, Y h:i A', strtotime($row->date_returned)) : '-',
+        $days_late,
+        $badge,
+        htmlspecialchars($row->received_by_name ?? '-'),
+        htmlspecialchars($row->remarks ?? '-'),
+        $action,
+    ];
+}
         echo json_encode([
             'draw'            => (int) $draw,
             'recordsTotal'    => (int) $total,

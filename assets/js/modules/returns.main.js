@@ -31,24 +31,25 @@ $(document).ready(function () {
             }
         },
         columns: [
-            { data: 0, orderable: false },
-            { data: 1 },
-            { data: 2 },
-            { data: 3 },
-            { data: 4 },
-            { data: 5 },
-            { data: 6, orderable: false },
-            { data: 7 },
-            { data: 8 },
-            { data: 9 },
-            { data: 10 },
-            { data: 11, orderable: false },
-            { data: 12 },
-            { data: 13 },
-            { data: 14 },
-            { data: 15, orderable: false }
+            { data: 0, orderable: false },  // #
+            { data: 1 },                    // Transaction Number
+            { data: 2 },                    // Borrower's Id
+            { data: 3 },                    // Borrower's name
+            { data: 4 },                    // Position
+            { data: 5 },                    // Item Name
+            { data: 6 },                    // Category
+            { data: 7 },                    // Quantity
+            { data: 8 },                    // Condition Upon Returning
+            { data: 9 },                    // Borrowed Date
+            { data: 10 },                   // Due date
+            { data: 11 },                   // Actual Return date
+            { data: 12 },                   // Days Late
+            { data: 13 },                   // Return status
+            { data: 14 },                   // Received by
+            { data: 15 },                   // Remarks
+            { data: 16, orderable: false }  // Action
         ],
-        order: [[0, 'desc']],
+        order: [[11, 'desc']],
         language: {
             emptyTable : 'No returned items found.',
             processing : '<i class="fas fa-spinner fa-spin"></i> Loading...'

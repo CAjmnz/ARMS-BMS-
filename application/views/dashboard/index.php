@@ -37,26 +37,26 @@
  
     <div class="row mb-4">
         <div class="col-md-3 mb-2">
-            <div style="background:rgba(123, 108, 224, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
+            <div style="background:rgba(108, 224, 123, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
             <a href="itemized" style="font-size:21px; color:#000; font-weight:700;" >units <br>
                 <div style="font-size:30px; font-weight:700;"><?= $summary['total_units'] ?></div></a>
             </div>
         </div>
         <div class="col-md-3 mb-2">
-            <div style="background:rgba(123, 108, 224, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
+            <div style="background:rgba(108, 224, 123, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
             <a href="returns" style="font-size:21px; color:#000; font-weight:700;"> Returned Today <br>
                 <div style="font-size:30px; font-weight:700;"><?= $summary['returned_today'] ?></div></a>
             </div>
         </div>
         <div class="col-md-3 mb-2">
-            <div style="background:rgba(123, 108, 224, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
+            <div style="background:rgba(108, 224, 123, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
             <a href="borrowing" style="font-size:21px; color:#000; font-weight:700;"> Borrowings Today  <br> 
              <div style="font-size:30px; font-weight:700;"><?= $summary['total_borrowers'] ?></div>
             </a>
             </div>
         </div>
         <div class="col-md-3 mb-2">
-            <div style="background:rgba(123, 108, 224, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
+            <div style="background:rgba(108, 224, 123, 0.17); border-radius:8px; padding:6px; border:1px solid #4e73df; ">
             <a href="reservation"style="font-size:21px; color:#000; font-weight:700;" >Reservation <br>
             <div style="font-size:30px; font-weight:700;"><?= $summary['reserved_units'] ?></div></a>
             </div>
