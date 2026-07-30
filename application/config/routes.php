@@ -87,6 +87,7 @@ $route['returns/ajax_list']  = 'Return_c/ajax_list';
 $route['returns/get_details/(:any)'] = 'Return_c/get_details/$1';
 //reservation
 $route['reservation']        ='Reservation/index';
+$route['reservation/get_available_units/(:any)'] = 'reservation/get_available_units/$1';
 
 //notification 
 $route['notifications'] = 'notification/index';

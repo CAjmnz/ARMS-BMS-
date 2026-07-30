@@ -64,7 +64,6 @@ class Return_c extends CI_Controller
                     $badge = '<span class="badge badge-light">' . ucfirst($row->item_status) . '</span>';
             }
 
-            // Days late calculation
             $days_late = '-';
             if ($row->due_date && $row->date_returned) {
                 $due    = strtotime($row->due_date);
@@ -73,24 +72,50 @@ class Return_c extends CI_Controller
                 $days_late = $diff > 0 ? $diff . ' day(s)' : 'On time';
             }
 
+            $name_parts = preg_split('/[\s,]+/', trim($row->borrower_name ?? ''));
+            $initials = '';
+            foreach (array_slice($name_parts, 0, 2) as $part) {
+                $initials .= strtoupper(substr($part, 0, 1));
+            }
+            $initials = $initials ?: '?';
+
+            $photo_url = !empty($row->borrower_photo)
+                ? base_url('user/photo_proxy?path=' . urlencode($row->borrower_photo))
+                : null;
+
+            if ($photo_url) {
+                $avatar_html = '<img src="' . $photo_url . '" alt="Photo"
+            style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #e3e6f0; flex-shrink:0;"
+            onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:#2563B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;&quot;>' . $initials . '</div>\'">';
+            } else {
+                $avatar_html = '<div style="width:32px; height:32px; border-radius:50%; background:#2563B8; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex-shrink:0;">' . $initials . '</div>';
+            }
+
+            $borrower_cell = '
+        <div style="display:flex; align-items:center; gap:10px;">
+            ' . $avatar_html . '
+            <span>' . htmlspecialchars($row->borrower_name ?? '-') . '</span>
+        </div>';
+
             $action = '
-            <div class="dropdown">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="bi bi-three-dots-vertical"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <button class="dropdown-item btnView" data-id="' . encode_id($row->id) . '">
-                        <i class="fas fa-eye"></i> View
-                    </button>
-                </div>
-            </div>';
+    <div class="dropdown">
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical"></i>
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item btnView" data-id="' . encode_id($row->id) . '">
+                <i class="fas fa-eye"></i> View
+            </button>
+        </div>
+    </div>';
 
             $data[] = [
                 $i++,
                 'TXN-' . str_pad($row->borrowing_id, 5, '0', STR_PAD_LEFT),
-                htmlspecialchars($row->id_number ?? '-'),
-                htmlspecialchars($row->borrower_name ?? '-'),
+                htmlspecialchars($row->borrower_employee_id ?? '-'),
+                $borrower_cell,
+                htmlspecialchars($row->borrower_position ?? '-'),
                 htmlspecialchars($row->item_name) . ' #' . $row->unit_no,
                 htmlspecialchars($row->category ?? '-'),
                 1,
@@ -118,8 +143,8 @@ class Return_c extends CI_Controller
     {
         $decoded_id = decode_id($id);
 
-        if($decoded_id === null) {
-            echo json_encode(['success' => false,'message'=>'Invalid request.']);
+        if ($decoded_id === null) {
+            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
             return;
         }
 
@@ -128,7 +153,7 @@ class Return_c extends CI_Controller
         if ($details) {
             echo json_encode(['success' => true, 'item' => $details]);
         } else {
-            echo json_encode(['success' => false,'message' =>'Record not found']);
+            echo json_encode(['success' => false, 'message' => 'Record not found']);
         }
     }
 }

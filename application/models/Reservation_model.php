@@ -104,6 +104,7 @@ class Reservation_model extends CI_Model
         }
     }
     
+    
     public function get_available_units($item_id)
     {
         $this->db->select('id,unit_no, item_condition');

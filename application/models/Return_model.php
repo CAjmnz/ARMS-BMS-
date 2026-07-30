@@ -6,8 +6,8 @@ class Return_model extends CI_Model
 
     private $columns = [
         0  => 'borrowings.id',
-        1  => 'borrowers.id_number',
-        2  => 'borrowers.full_name',
+        1  => 'borrowings.borrower_employee_id',
+        2  => 'borrowings.borrower_name',
         3  => 'items.item_name',
         4  => 'items.category',
         5  => 'borrowing_items.condition_after',
@@ -29,8 +29,12 @@ class Return_model extends CI_Model
             borrowings.id as borrowing_id,
             borrowings.date_released,
             borrowings.due_date,
-            borrowers.id_number,
-            borrowers.full_name as borrower_name,
+            borrowings.status as borrowing_status
+            borrowings.borrower_employee_id,
+            borrowings.borrower_name,
+            borrowings.borrower_position,
+            borrowings.borrower_dept,
+            borrowings.borrower_photo,
             items.item_name,
             items.category,
             itemized.unit_no,
@@ -38,7 +42,6 @@ class Return_model extends CI_Model
         ');
         $this->db->from($this->table);
         $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
-        $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
         $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
         $this->db->join('items', 'items.id = itemized.item_id', 'left');
         $this->db->join('users as received_user', 'received_user.id = borrowing_items.received_by', 'left');
@@ -106,8 +109,8 @@ class Return_model extends CI_Model
     {
         if (!empty($search)) {
             $this->db->group_start();
-            $this->db->like('borrowers.id_number', $search);
-            $this->db->or_like('borrowers.full_name', $search);
+            $this->db->like('borrowing.borrower_employee_id', $search);
+            $this->db->or_like('borrowings.borrower_name', $search);
             $this->db->or_like('items.item_name', $search);
             $this->db->or_like('items.category', $search);
             $this->db->group_end();
@@ -129,11 +132,11 @@ class Return_model extends CI_Model
         borrowings.date_requested,
         borrowings.date_released,
         borrowings.due_date,
-        borrowers.id_number,
-        borrowers.full_name as borrower_name,
-        borrowers.borrower_type,
-        borrowers.contact_number,
-        borrowers.email,
+        borrowings.borrower_employee_id,
+        borrowings.borrower_name,
+        borrowings.borrower_position,
+        borrowings.borrower_dept,
+        borrowings.borrower_photo,
         items.item_name,
         items.category,
         items.brand,
@@ -145,7 +148,6 @@ class Return_model extends CI_Model
     ');
         $this->db->from($this->table);
         $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
-        $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
         $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
         $this->db->join('items', 'items.id = itemized.item_id', 'left');
         $this->db->join('users as released_user', 'released_user.id = borrowings.released_by', 'left');
