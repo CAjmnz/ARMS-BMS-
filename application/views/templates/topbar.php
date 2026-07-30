@@ -170,7 +170,7 @@ $page_label = isset($page_label) && $page_label !== ''
 
                 <a
                     class="dropdown-item topbar-dropdown-item topbar-signout"
-                    href="<?= base_url('dashboard/logout') ?>"
+                    href="<?= base_url('auth/logout') ?>"
                 >
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Sign out</span>

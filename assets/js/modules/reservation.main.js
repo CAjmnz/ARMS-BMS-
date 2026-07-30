@@ -413,4 +413,32 @@ $(document).on('change', '#res_item_id', function () {
 			}
 		});
 	});
+	function formatReservationItemOption(item) {
+		if (!item.id) return item.text;
+	
+		var available = $(item.element).data('available');
+		var color;
+	
+		if (available <= 2) {
+			color = '#e74a3b';
+		} else if (available <= 5) {
+			color = '#f6c23e';
+		} else {
+			color = '#1cc88a';
+		}
+	
+		return $(
+			'<span>' + item.text +
+			' <span style="color:' + color + '; font-weight:600;">(Available: ' + available + ')</span>' +
+			'</span>'
+		);
+	}
+	
+	$('#res_item_id').select2({
+		theme: 'default',
+		dropdownParent: $('#reservationModal'),
+		templateResult: formatReservationItemOption,
+		templateSelection: formatReservationItemOption,
+		width: '100%'
+	});
 });

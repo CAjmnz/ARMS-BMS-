@@ -197,7 +197,7 @@ function selectBorrower(emp) {
 		$('#borrowing_borrower_photo').val('');
 		$('#borrowingBorrowerSearch').val('');
 		$('#borrowingBorrowerResults').hide().empty();
-		$('#borrowing_item_id').val('');
+		$('#borrowing_item_id').val('').trigger('change');
 		$('#borrowing_purpose').val('');
 		$('#borrowing_due_date').val('');
 		$('#unitCheckboxList').html('<span class="text-muted">Select an item first.</span>');
@@ -358,4 +358,33 @@ function selectBorrower(emp) {
 			Swal.fire("Error", "Something went wrong.", "error");
 		});
 	});
+	// ─── Select2 with color-coded availability ─────────────
+function formatItemOption(item) {
+    if (!item.id) return item.text;
+
+    var available = $(item.element).data('available');
+    var color, label;
+
+    if (available <= 2) {
+        color = '#e74a3b'; // red
+    } else if (available <= 5) {
+        color = '#f6c23e'; // yellow
+    } else {
+        color = '#1cc88a'; // green
+    }
+
+    return $(
+        '<span>' + item.text +
+        ' <span style="color:' + color + '; font-weight:600;">(Available: ' + available + ')</span>' +
+        '</span>'
+    );
+}
+
+$('#borrowing_item_id').select2({
+    theme: 'default',
+    dropdownParent: $('#borrowingModal'),
+    templateResult: formatItemOption,
+    templateSelection: formatItemOption,
+    width: '100%'
+});
 });

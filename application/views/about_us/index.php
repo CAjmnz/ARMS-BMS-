@@ -73,7 +73,7 @@
             </div>
 
             <p>
-                A.R.M.S (Asset Record Management System) is a
+                A.R.M.S (Alturas Record Management System) is a
                 web-based record management solution designed to
                 provide a centralized and organized way of managing
                 organizational assets and borrowing activities.

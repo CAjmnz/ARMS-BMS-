@@ -9,21 +9,41 @@ class Notification_model extends CI_Model
         $this->db->select('
             borrowing_items.id,
             borrowing_items.item_status,
-            borrowings.id as borrowing_id,
+            borrowings.id AS borrowing_id,
             borrowings.due_date,
-            borrowers.id_number,
-            borrowers.full_name as borrower_name,
+            borrowings.borrower_employee_id AS id_number,
+            borrowings.borrower_name,
+            borrowings.borrower_position,
+            borrowings.borrower_photo,
             items.item_name,
             itemized.unit_no
         ');
+    
         $this->db->from($this->table);
-        $this->db->join('borrowings', 'borrowings.id = borrowing_items.borrowing_id', 'left');
-        $this->db->join('borrowers', 'borrowers.id = borrowings.borrower_id', 'left');
-        $this->db->join('itemized', 'itemized.id = borrowing_items.unit_id', 'left');
-        $this->db->join('items', 'items.id = itemized.item_id', 'left');
-        $this->db->where('borrowing_items.item_status', 'borrowed');
+    
+        $this->db->join(
+            'borrowings',
+            'borrowings.id = borrowing_items.borrowing_id',
+            'left'
+        );
+    
+        $this->db->join(
+            'itemized',
+            'itemized.id = borrowing_items.unit_id',
+            'left'
+        );
+    
+        $this->db->join(
+            'items',
+            'items.id = itemized.item_id',
+            'left'
+        );
+    
+        $this->db->where(
+            'borrowing_items.item_status',
+            'borrowed'
+        );
     }
-
     // Items overdue right now
     public function get_overdue()
     {

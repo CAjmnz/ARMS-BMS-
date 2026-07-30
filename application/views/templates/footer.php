@@ -15,6 +15,8 @@
 <script src="<?= base_url('assets/js/sweetalert2.all.min.js') ?>"></script>
 <!-- 5. Chart.js -->
 <script src="<?= base_url('assets/js/chart.umd.min.js') ?>"></script>
+<!-- Select2 (needs jQuery) -->
+<script src="<?= base_url('assets/js/select2.min.js')?>"></script>
 
 <script>
     var BASE_URL = "<?= base_url() ?>";

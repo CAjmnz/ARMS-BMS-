@@ -12,7 +12,7 @@
     --muted: #71837d;
     --line: #e1ebe6;
     --surface: #ffffff;
-    --canvas: #f3f7f5;
+    --canvas: #dce6e1e0;
 }
 
 /* ─── Body ───────────────────────────────────── */
@@ -613,9 +613,9 @@ body {
     background: #f8f9fa;
 }
 .notifPill.active {
-    background: #e74a3b;
+    background: #3be766;
     color: #fff;
-    border-color: #e74a3b;
+    border-color: #58e73ba9;
 }
 .notifCard {
     background: var(--surface);
@@ -1714,7 +1714,7 @@ body.sidebar-collapsed #main-content {
     border: 2px solid #ffffff;
     border-radius: 10px;
 
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 800;
     line-height: 1;
 }

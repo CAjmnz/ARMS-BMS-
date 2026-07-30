@@ -20,15 +20,28 @@ $(document).ready(function () {
    $(document).on('click', '.notifCardClickable', function () {
     $('#nd_borrower').text($(this).data('borrower'));
     $('#nd_id_number').text($(this).data('id-number'));
-    $('#nd_item').text($(this).data('item') + '#' + $(this).data('unit-no'));
-    $('#nd_unit_no').text($(this).data('unit_no'));
+    $('#nd_position').text($(this).data('position'));
+    $('#nd_item').text($(this).data('item') + ' #' + $(this).data('unit-no'));
+    $('#nd_unit_no').text($(this).data('unit-no'));
     $('#nd_due_date').text($(this).data('due'));
     $('#nd_status').text($(this).data('status'));
 
-    $('#btnReturnFromNotif').data('id',$(this).data('id'));
-    $('#notifDetailsModal').modal('show')
+    var photoUrl = $(this).data('photo');
+    if (photoUrl) {
+        $('#nd_photo').attr('src', photoUrl).show();
+        $('#nd_photo_placeholder').hide();
+        $('#nd_photo').off('error').on('error', function () {
+            $(this).hide();
+            $('#nd_photo_placeholder').text($(this).closest('.notifCard').data('initials') || '?').show();
+        });
+    } else {
+        $('#nd_photo').hide();
+        $('#nd_photo_placeholder').text($(this).data('initials') || '?').show();
+    }
 
-   });
+    $('#btnReturnFromNotif').data('id', $(this).data('id'));
+    $('#notifDetailsModal').modal('show');
+});
        // ─── Open Return Modal from Details Modal ───────────
        $('#btnReturnFromNotif').on('click', function () {
         var id = $(this).data('id');

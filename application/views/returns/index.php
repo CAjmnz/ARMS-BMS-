@@ -90,10 +90,8 @@
                     <h6 class="text-muted" style="border-bottom:1px solid #eee; padding-bottom:5px;">Borrower Information</h6>
                     <div class="row mb-3">
                         <div class="col-md-6"><strong>Name:</strong> <span id="d_borrower_name">-</span></div>
-                        <div class="col-md-3"><strong>ID No:</strong> <span id="d_id_number">-</span></div>
-                        <div class="col-md-3"><strong>Type:</strong> <span id="d_borrower_type">-</span></div>
-                        <div class="col-md-6"><strong>Contact:</strong> <span id="d_contact">-</span></div>
-                        <div class="col-md-6"><strong>Email:</strong> <span id="d_email">-</span></div>
+                        <div class="col-md-3"><strong>ID No:</strong> <span id="d_borrower_employee_id">-</span></div>
+                        <div class="col-md-3"><strong>Type:</strong> <span id="d_borrower_position">-</span></div>
                     </div>
 
                     <h6 class="text-muted" style="border-bottom:1px solid #eee; padding-bottom:5px;">Item Information</h6>

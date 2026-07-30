@@ -85,8 +85,8 @@ $(document).ready(function () {
                 var d = res.item;
     
                 $('#d_borrower_name').text(d.borrower_name || '-');
-                $('#d_id_number').text(d.id_number || '-');
-                $('#d_borrower_type').text(d.borrower_type || '-');
+                $('#d_borrower_employee_id').text(d.borrower_employee_id || '-');
+                $('#d_borrower_position').text(d.borrower_position || '-');
                 $('#d_contact').text(d.contact_number || '-');
                 $('#d_email').text(d.email || '-');
     

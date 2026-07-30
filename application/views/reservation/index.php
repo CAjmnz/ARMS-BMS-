@@ -118,10 +118,12 @@
                     <select class="form-control" id="res_item_id">
                         <option value="">-- Select Item --</option>
                         <?php foreach ($items as $item): ?>
-                            <option value="<?= $item->id ?>">
-                                <?= htmlspecialchars($item->item_name) ?>
-                                (Available: <?= $item->available_quantity ?>)
-                            </option>
+                            <?php if ($item->available_quantity > 0): // skip zero-availability items entirely 
+                            ?>
+                                <option value="<?= $item->id ?>" data-available="<?= $item->available_quantity ?>">
+                                    <?= htmlspecialchars($item->item_name) ?>
+                                </option>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </select>
                 </div>
