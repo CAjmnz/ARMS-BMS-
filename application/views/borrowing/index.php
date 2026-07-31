@@ -139,9 +139,27 @@
 
                     <!-- Units — populated via AJAX -->
                     <div class="form-group">
-                        <label>Available Units <span class="text-danger">*</span></label>
+                        <label>Available Units</label>
                         <div id="unitCheckboxList" style="max-height:150px; overflow-y:auto; border:1px solid #ddd; border-radius:4px; padding:8px;">
                             <span class="text-muted">Select an item first.</span>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="btnAddToStagingList">
+                            <i class="fas fa-plus"></i> Add to List
+                        </button>
+                    </div>
+
+                    <!-- Staged items list -->
+                    <div class="form-group">
+                        <label>Items to Borrow <span class="text-danger">*</span></label>
+                        <div id="stagedItemsList" style="border:1px solid #ddd; border-radius:4px; padding:8px; min-height:50px;">
+                            <span class="text-muted" id="stagedEmptyMsg">No items added yet.</span>
+                        </div>
+                    </div>
+                    <!-- Staged item list-->
+                    <div class="form-group">
+                        <label> Item to Borrow <span class="text-danger">*</span></label>
+                        <div id="stagedItemslist" style="border:1px solid #ddd; border-radius:4px; padding:8px; min-height:50px;">
+                            <span class="text-muted" id="stagedEmptyMsg">No Items added yet.</span>
                         </div>
                     </div>
 

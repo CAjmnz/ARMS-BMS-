@@ -5,107 +5,109 @@ $(document).ready(function () {
 	var dateToFilter = "";
 
 	var borrowerSearchRequest = null;
-var borrowerDebounceTimer = null;
+	var borrowerDebounceTimer = null;
+	var stagedUnits = [];
 
-$('#borrowingBorrowerSearch').on('input', function () {
-    var keyword = $(this).val().trim();
-    clearTimeout(borrowerDebounceTimer);
+	$('#borrowingBorrowerSearch').on('input', function () {
+		var keyword = $(this).val().trim();
+		clearTimeout(borrowerDebounceTimer);
 
-    if (keyword.length < 2) {
-        $('#borrowingBorrowerResults').hide().empty();
-        return;
-    }
+		if (keyword.length < 2) {
+			$('#borrowingBorrowerResults').hide().empty();
+			return;
+		}
 
-    borrowerDebounceTimer = setTimeout(function () {
-        performBorrowerSearch(keyword);
-    }, 300);
-});
+		borrowerDebounceTimer = setTimeout(function () {
+			performBorrowerSearch(keyword);
+		}, 300);
+	});
 
-$('#borrowingBorrowerSearch').on('keypress', function (e) {
-    if (e.which === 13) {
-        e.preventDefault();
-        clearTimeout(borrowerDebounceTimer);
-        var keyword = $(this).val().trim();
-        if (keyword.length >= 2) {
-            performBorrowerSearch(keyword, true);
-        }
-    }
-});
+	$('#borrowingBorrowerSearch').on('keypress', function (e) {
+		if (e.which === 13) {
+			e.preventDefault();
+			clearTimeout(borrowerDebounceTimer);
+			var keyword = $(this).val().trim();
+			if (keyword.length >= 2) {
+				performBorrowerSearch(keyword, true);
+			}
+		}
+	});
 
-function performBorrowerSearch(keyword, autoSelectIfSingle) {
-    if (borrowerSearchRequest !== null) {
-        borrowerSearchRequest.abort();
-    }
+	function performBorrowerSearch(keyword, autoSelectIfSingle) {
+		if (borrowerSearchRequest !== null) {
+			borrowerSearchRequest.abort();
+		}
 
-    var $results = $('#borrowingBorrowerResults');
-    $results.html('<div class="p-2 text-muted"><i class="fas fa-spinner fa-spin"></i> Searching...</div>').show();
+		var $results = $('#borrowingBorrowerResults');
+		$results.html('<div class="p-2 text-muted"><i class="fas fa-spinner fa-spin"></i> Searching...</div>').show();
 
-    borrowerSearchRequest = $.ajax({
-        url: BASE_URL + 'user/search_employee',
-        type: 'GET',
-        data: { q: keyword },
-        dataType: 'json',
-        cache: false,
-        success: function (response) {
-            var employees = (response.data && response.data.employee) ? response.data.employee : [];
+		borrowerSearchRequest = $.ajax({
+			url: BASE_URL + 'user/search_employee',
+			type: 'GET',
+			data: { q: keyword },
+			dataType: 'json',
+			cache: false,
+			success: function (response) {
+				var employees = (response.data && response.data.employee) ? response.data.employee : [];
 
-            if (employees.length === 0) {
-                $results.html('<div class="p-2 text-muted">No employee found.</div>').show();
-                return;
-            }
+				if (employees.length === 0) {
+					$results.html('<div class="p-2 text-muted">No employee found.</div>').show();
+					return;
+				}
 
-            if (autoSelectIfSingle && employees.length === 1) {
-                selectBorrower(employees[0]);
-                return;
-            }
+				if (autoSelectIfSingle && employees.length === 1) {
+					selectBorrower(employees[0]);
+					return;
+				}
 
-			var html = '';
-			employees.forEach(function (emp) {
-				var photoUrl = emp.employee_photo
-					? BASE_URL + 'user/photo_proxy?path=' + encodeURIComponent(emp.employee_photo)
-					: null;
-			
-				var nameParts = (emp.employee_name || '').split(/[\s,]+/).slice(0, 2);
-				var initials = nameParts.map(function (p) { return p.charAt(0).toUpperCase(); }).join('') || '?';
-			
-				var avatarHtml = photoUrl
-					? '<img src="' + photoUrl + '" alt="Photo" style="width:32px; height:32px; border-radius:50%; object-fit:cover; flex-shrink:0;" onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:#2563B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;&quot;>' + initials + '</div>\'">'
-					: '<div style="width:32px; height:32px; border-radius:50%; background:#2563B8; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex-shrink:0;">' + initials + '</div>';
-			
-				html += '<div class="borrowerResultRow p-2" style="cursor:pointer; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; gap:10px;" data-emp=\'' + JSON.stringify(emp).replace(/'/g, "&#39;") + '\'>' +
-					avatarHtml +
-					'<div>' +
-					'<strong>' + emp.employee_name + '</strong><br>' +
-					'<small class="text-muted">' + (emp.employee_id || '') + ' &middot; ' + (emp.employee_position || '') + '</small>' +
-					'</div>' +
-					'</div>';
-			});
-			$results.html(html).show();
-        },
-        error: function (xhr, status) {
-            if (status !== 'abort') {
-                $results.html('<div class="p-2 text-danger">Search failed.</div>').show();
-            }
-        },
-        complete: function () {
-            borrowerSearchRequest = null;
-        }
-    });
-}
+				var html = '';
+				employees.forEach(function (emp) {
+					var photoUrl = emp.employee_photo
+						? BASE_URL + 'user/photo_proxy?path=' + encodeURIComponent(emp.employee_photo)
+						: null;
 
-$(document).on('click', '.borrowerResultRow', function () {
-    var emp = JSON.parse($(this).attr('data-emp').replace(/&#39;/g, "'"));
-    selectBorrower(emp);
-});
+					var nameParts = (emp.employee_name || '').split(/[\s,]+/).slice(0, 2);
+					var initials = nameParts.map(function (p) { return p.charAt(0).toUpperCase(); }).join('') || '?';
 
-function selectBorrower(emp) {
-    $('#borrowing_borrower_employee_id').val(emp.employee_id);
-    $('#borrowing_borrower_position').val(emp.employee_position);
-    $('#borrowing_borrower_dept').val(emp.employee_dept);
-    $('#borrowing_borrower_photo').val(emp.employee_photo || '');
-    $('#borrowingBorrowerSearch').val(emp.employee_name);
-    $('#borrowingBorrowerResults').hide().empty();
-}
+					var avatarHtml = photoUrl
+						? '<img src="' + photoUrl + '" alt="Photo" style="width:32px; height:32px; border-radius:50%; object-fit:cover; flex-shrink:0;" onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:#2563B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;&quot;>' + initials + '</div>\'">'
+						: '<div style="width:32px; height:32px; border-radius:50%; background:#2563B8; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex-shrink:0;">' + initials + '</div>';
+
+					html += '<div class="borrowerResultRow p-2" style="cursor:pointer; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; gap:10px;" data-emp=\'' + JSON.stringify(emp).replace(/'/g, "&#39;") + '\'>' +
+						avatarHtml +
+						'<div>' +
+						'<strong>' + emp.employee_name + '</strong><br>' +
+						'<small class="text-muted">' + (emp.employee_id || '') + ' &middot; ' + (emp.employee_position || '') + '</small>' +
+						'</div>' +
+						'</div>';
+				});
+				$results.html(html).show();
+			},
+			error: function (xhr, status) {
+				if (status !== 'abort') {
+					$results.html('<div class="p-2 text-danger">Search failed.</div>').show();
+				}
+			},
+			complete: function () {
+				borrowerSearchRequest = null;
+			}
+		});
+	}
+
+	$(document).on('click', '.borrowerResultRow', function () {
+		var emp = JSON.parse($(this).attr('data-emp').replace(/&#39;/g, "'"));
+		selectBorrower(emp);
+	});
+
+	function selectBorrower(emp) {
+		$('#borrowing_borrower_employee_id').val(emp.employee_id);
+		$('#borrowing_borrower_position').val(emp.employee_position);
+		$('#borrowing_borrower_dept').val(emp.employee_dept);
+		$('#borrowing_borrower_photo').val(emp.employee_photo || '');
+		$('#borrowingBorrowerSearch').val(emp.employee_name);
+		$('#borrowingBorrowerResults').hide().empty();
+	}
+
 	// Destroy if already initialized
 	if ($.fn.DataTable.isDataTable("#borrowingTable")) {
 		$("#borrowingTable").DataTable().destroy();
@@ -153,11 +155,14 @@ function selectBorrower(emp) {
 			processing: '<i class="fas fa-spinner fa-spin"></i> Loading...',
 		},
 	});
-	// after: var table = $('#borrowingTable').DataTable({...});
 
+	// Auto-reload every 30 seconds (skips if tab isn't active)
 	setInterval(function () {
-		table.ajax.reload(null, false);
+		if (!document.hidden) {
+			table.ajax.reload(null, false);
+		}
 	}, 30000);
+
 	// ─── Auto-apply filter from URL (e.g. from a notification click) ──
 	var urlParams = new URLSearchParams(window.location.search);
 	var initialFilter = urlParams.get("filter");
@@ -167,6 +172,7 @@ function selectBorrower(emp) {
 		$('select[name="status"]').val(initialFilter);
 		table.ajax.reload();
 	}
+
 	// ─── Filters ─────────────────────────────────────────
 	$("#filterForm").on("submit", function (e) {
 		e.preventDefault();
@@ -191,6 +197,8 @@ function selectBorrower(emp) {
 
 	// ─── Add Borrowing Modal ───────────────────────────────
 	$('#btnAddBorrowing').click(function () {
+		stagedUnits = [];
+		renderStagedList();
 		$('#borrowing_borrower_employee_id').val('');
 		$('#borrowing_borrower_position').val('');
 		$('#borrowing_borrower_dept').val('');
@@ -251,6 +259,67 @@ function selectBorrower(emp) {
 		);
 	});
 
+	// ─── Add currently selected units to the staging list ──
+	$('#btnAddToStagingList').on('click', function () {
+		var itemId = $('#borrowing_item_id').val();
+		var itemName = $('#borrowing_item_id option:selected').text();
+
+		if (!itemId) {
+			Swal.fire('Warning', 'Please select an item first.', 'warning');
+			return;
+		}
+
+		var checkedUnits = $('.unitCheckbox:checked');
+		if (checkedUnits.length === 0) {
+			Swal.fire('Warning', 'Please check at least one unit to add.', 'warning');
+			return;
+		}
+
+		checkedUnits.each(function () {
+			var unitId = $(this).val();
+			var unitLabel = $(this).next('label').text();
+
+			// Prevent duplicate adds
+			var alreadyStaged = stagedUnits.some(function (u) { return u.unit_id === unitId; });
+			if (!alreadyStaged) {
+				stagedUnits.push({
+					unit_id: unitId,
+					label: itemName + ' — ' + unitLabel
+				});
+			}
+		});
+
+		renderStagedList();
+
+		// Reset item/unit selection so user can pick a different item
+		$('#borrowing_item_id').val('').trigger('change');
+		$('#unitCheckboxList').html('<span class="text-muted">Select an item first.</span>');
+	});
+
+	function renderStagedList() {
+		var $list = $('#stagedItemsList');
+
+		if (stagedUnits.length === 0) {
+			$list.html('<span class="text-muted" id="stagedEmptyMsg">No items added yet.</span>');
+			return;
+		}
+
+		var html = '';
+		stagedUnits.forEach(function (u, index) {
+			html += '<div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0;">' +
+				'<span>' + u.label + '</span>' +
+				'<button type="button" class="btn btn-sm btn-outline-danger btnRemoveStaged" data-index="' + index + '"><i class="fas fa-times"></i></button>' +
+				'</div>';
+		});
+		$list.html(html);
+	}
+
+	$(document).on('click', '.btnRemoveStaged', function () {
+		var index = $(this).data('index');
+		stagedUnits.splice(index, 1);
+		renderStagedList();
+	});
+
 	// ─── Save Borrowing ─────────────────────────────────────
 	$('#btnSaveBorrowing').click(function () {
 		var borrowerEmployeeId = $('#borrowing_borrower_employee_id').val();
@@ -260,31 +329,27 @@ function selectBorrower(emp) {
 		var borrowerPhoto       = $('#borrowing_borrower_photo').val();
 		var purpose              = $('#borrowing_purpose').val().trim();
 		var dueDate               = $('#borrowing_due_date').val();
-		var unitIds                = [];
-	
-		$('.unitCheckbox:checked').each(function () {
-			unitIds.push($(this).val());
-		});
-	
+		var unitIds = stagedUnits.map(function (u) { return u.unit_id; });
+
 		if (!borrowerEmployeeId) {
 			Swal.fire('Warning', 'Please select a borrower.', 'warning');
 			return;
 		}
 		if (unitIds.length === 0) {
-			Swal.fire('Warning', 'Please select at least one unit.', 'warning');
+			Swal.fire('Warning', 'Please add at least one item to the list.', 'warning');
 			return;
 		}
 		if (!dueDate) {
 			Swal.fire('Warning', 'Please set a due date.', 'warning');
 			return;
 		}
-	
+
 		var now = new Date();
 		if (new Date(dueDate) < now) {
 			Swal.fire('Warning', 'Due date cannot be in the past.', 'warning');
 			return;
 		}
-	
+
 		$.post(BASE_URL + 'borrowing/store', {
 			borrower_employee_id : borrowerEmployeeId,
 			borrower_name         : borrowerName,
@@ -309,6 +374,7 @@ function selectBorrower(emp) {
 			Swal.fire('Error', 'Something went wrong.', 'error');
 		});
 	});
+
 	// ─── Open Mark Returned Modal ───────────────────────────
 	$("#borrowingTable").on("click", ".btnReturn", function () {
 		var id = $(this).data("id");
@@ -358,33 +424,35 @@ function selectBorrower(emp) {
 			Swal.fire("Error", "Something went wrong.", "error");
 		});
 	});
+
 	// ─── Select2 with color-coded availability ─────────────
-function formatItemOption(item) {
-    if (!item.id) return item.text;
+	function formatItemOption(item) {
+		if (!item.id) return item.text;
 
-    var available = $(item.element).data('available');
-    var color, label;
+		var available = $(item.element).data('available');
+		var color;
 
-    if (available <= 2) {
-        color = '#e74a3b'; // red
-    } else if (available <= 5) {
-        color = '#f6c23e'; // yellow
-    } else {
-        color = '#1cc88a'; // green
-    }
+		if (available <= 2) {
+			color = '#e74a3b'; // red
+		} else if (available <= 5) {
+			color = '#f6c23e'; // yellow
+		} else {
+			color = '#1cc88a'; // green
+		}
 
-    return $(
-        '<span>' + item.text +
-        ' <span style="color:' + color + '; font-weight:600;">(Available: ' + available + ')</span>' +
-        '</span>'
-    );
-}
+		return $(
+			'<span>' + item.text +
+			' <span style="color:' + color + '; font-weight:600;">(Available: ' + available + ')</span>' +
+			'</span>'
+		);
+	}
 
-$('#borrowing_item_id').select2({
-    theme: 'default',
-    dropdownParent: $('#borrowingModal'),
-    templateResult: formatItemOption,
-    templateSelection: formatItemOption,
-    width: '100%'
-});
+	$('#borrowing_item_id').select2({
+		theme: 'default',
+		dropdownParent: $('#borrowingModal'),
+		templateResult: formatItemOption,
+		templateSelection: formatItemOption,
+		width: '100%'
+	});
+
 });

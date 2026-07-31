@@ -9,6 +9,65 @@ $(document).ready(function () {
 
 	var reservationBorrowerSearchRequest = null;
 	var reservationBorrowerDebounceTimer = null;
+	var resStagedUnits = [];
+
+$('#btnResAddToStagingList').on('click', function () {
+    var itemId = $('#res_item_id').val();
+    var itemName = $('#res_item_id option:selected').text();
+
+    if (!itemId) {
+        Swal.fire('Warning', 'Please select an item first.', 'warning');
+        return;
+    }
+
+    var checkedUnits = $('.resUnitCheckbox:checked');
+    if (checkedUnits.length === 0) {
+        Swal.fire('Warning', 'Please check at least one unit to add.', 'warning');
+        return;
+    }
+
+    checkedUnits.each(function () {
+        var unitId = $(this).val();
+        var unitLabel = $(this).next('label').text();
+
+        var alreadyStaged = resStagedUnits.some(function (u) { return u.unit_id === unitId; });
+        if (!alreadyStaged) {
+            resStagedUnits.push({
+                unit_id: unitId,
+                label: itemName + ' — ' + unitLabel
+            });
+        }
+    });
+
+    renderResStagedList();
+
+    $('#res_item_id').val('').trigger('change');
+    $('#resUnitCheckboxList').html('<span class="text-muted">Select an item first.</span>');
+});
+
+function renderResStagedList() {
+    var $list = $('#resStagedItemsList');
+
+    if (resStagedUnits.length === 0) {
+        $list.html('<span class="text-muted" id="resStagedEmptyMsg">No items added yet.</span>');
+        return;
+    }
+
+    var html = '';
+    resStagedUnits.forEach(function (u, index) {
+        html += '<div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0;">' +
+            '<span>' + u.label + '</span>' +
+            '<button type="button" class="btn btn-sm btn-outline-danger btnRemoveResStaged" data-index="' + index + '"><i class="fas fa-times"></i></button>' +
+            '</div>';
+    });
+    $list.html(html);
+}
+
+$(document).on('click', '.btnRemoveResStaged', function () {
+    var index = $(this).data('index');
+    resStagedUnits.splice(index, 1);
+    renderResStagedList();
+});
 
 	$("#reservationBorrowerSearch").on("input", function () {
 		var keyword = $(this).val().trim();
@@ -236,7 +295,9 @@ $(document).on('change', '#res_item_id', function () {
 	});
 
 	// ─── Open Add Modal ──────────────────────────────────
-	$("#btnAddReservation").click(function () {
+	$('#btnAddReservation').click(function () {
+		resStagedUnits = [];
+		renderResStagedList();
 		$("#res_borrower_employee_id").val("");
 		$("#res_borrower_position").val("");
 		$("#res_borrower_dept").val("");
@@ -260,8 +321,8 @@ $(document).on('change', '#res_item_id', function () {
 		$("#reservationModal").modal("show");
 	});
 	// ─── Save Reservation ─────────────────────────────────
-	$("#btnSaveReservation").click(function () {
-		var borrowerEmployeeId = $("#res_borrower_employee_id").val();
+	$('#btnSaveReservation').click(function () {
+		var borrowerEmployeeId = $('#res_borrower_employee_id').val();
 		var borrowerName = $("#reservationBorrowerSearch").val();
 		var borrowerPosition = $("#res_borrower_position").val();
 		var borrowerDept = $("#res_borrower_dept").val();
@@ -269,25 +330,18 @@ $(document).on('change', '#res_item_id', function () {
 		var reservationDate = $("#res_reservation_date").val();
 		var dueDate = $("#res_due_date").val();
 		var purpose = $("#res_purpose").val().trim();
-		var unitIds = [];
+		var unitIds = resStagedUnits.map(function (u) { return u.unit_id; });
+
 
 		$(".resUnitCheckbox:checked").each(function () {
 			unitIds.push($(this).val());
 		});
 
-		if (
-			!borrowerEmployeeId ||
-			unitIds.length === 0 ||
-			!reservationDate ||
-			!dueDate
-		) {
-			Swal.fire(
-				"Warning",
-				"Please fill in all required fields and select at least one unit.",
-				"warning",
-			);
+		if (!borrowerEmployeeId || unitIds.length === 0 || !reservationDate || !dueDate) {
+			Swal.fire('Warning', 'Please fill in all required fields and add at least one item.', 'warning');
 			return;
 		}
+	
 
 		var now = new Date();
 		var resDate = new Date(reservationDate);

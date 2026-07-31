@@ -114,12 +114,11 @@
 
                 <!-- Item -->
                 <div class="form-group">
-                    <label>Item <span class="text-danger">*</span></label>
+                    <label>Item</label>
                     <select class="form-control" id="res_item_id">
                         <option value="">-- Select Item --</option>
                         <?php foreach ($items as $item): ?>
-                            <?php if ($item->available_quantity > 0): // skip zero-availability items entirely 
-                            ?>
+                            <?php if ($item->available_quantity > 0): ?>
                                 <option value="<?= $item->id ?>" data-available="<?= $item->available_quantity ?>">
                                     <?= htmlspecialchars($item->item_name) ?>
                                 </option>
@@ -130,12 +129,21 @@
 
                 <!-- Units — populated via AJAX -->
                 <div class="form-group">
-                    <label>Available Units <span class="text-danger">*</span></label>
+                    <label>Available Units</label>
                     <div id="resUnitCheckboxList" style="max-height:150px; overflow-y:auto; border:1px solid #ddd; border-radius:4px; padding:8px;">
                         <span class="text-muted">Select an item first.</span>
                     </div>
+                    <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="btnResAddToStagingList">
+                        <i class="fas fa-plus"></i> Add to List
+                    </button>
                 </div>
 
+                <div class="form-group">
+                    <label>Items to Reserve <span class="text-danger">*</span></label>
+                    <div id="resStagedItemsList" style="border:1px solid #ddd; border-radius:4px; padding:8px; min-height:50px;">
+                        <span class="text-muted" id="resStagedEmptyMsg">No items added yet.</span>
+                    </div>
+                </div>
                 <!-- Reservation (pick up) Date -->
                 <div class="form-group">
                     <label>Pick up Date <span class="text-danger">*</span></label>
