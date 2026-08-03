@@ -4,29 +4,68 @@
 <div id="main-content">
 
     <!-- Hero Welcome Card -->
-    <div style="background:linear-gradient(135deg, #1a6b4f, #0f4a35); border-radius:16px; padding:32px; margin-bottom:24px; position:relative; overflow:hidden; color:#fff;">
-        <span style="display:inline-block; background:rgba(255,255,255,0.15); font-size:11px; font-weight:600; letter-spacing:0.5px; padding:4px 12px; border-radius:20px; margin-bottom:16px;">
-            ARMS-BMS WORKSPACE
+    <?php
+$username = $this->session->userdata('username');
+
+if (!$username) {
+    $username = 'Admin';
+}
+
+$current_hour = (int) date('H');
+
+if ($current_hour < 12) {
+    $greeting = 'morning';
+} elseif ($current_hour < 18) {
+    $greeting = 'afternoon';
+} else {
+    $greeting = 'evening';
+}
+?>
+
+<div id="armsWelcomeCard">
+    <div class="decorative-circle circle-one"></div>
+    <div class="decorative-circle circle-two"></div>
+    <div class="decorative-circle circle-three"></div>
+
+    <div class="welcome-content">
+        <span class="workspace-badge">
+            ARMS-BMS Workspace
         </span>
-        <h3 style="font-weight:700; margin-bottom:6px;">
-            <?php
-            $username = $this->session->userdata('username');
-            if (!$username) {
-                $username = 'Admin';
-            }
-            ?>
-            Good <?= (date('H') < 12 ? 'morning' : (date('H') < 18 ? 'afternoon' : 'evening')) ?>, <?= htmlspecialchars($username, ENT_QUOTES, 'UTF-8') ?>.
+
+        <h3 class="welcome-title">
+            Good <?php echo $greeting; ?>,
+            <?php echo htmlspecialchars(
+                $username,
+                ENT_QUOTES,
+                'UTF-8'
+            ); ?>.
         </h3>
-        <p style="opacity:0.85; font-size:14px; margin-bottom:16px;">
+
+        <p class="welcome-description">
             Here is a clear overview of your borrowing management workspace.
         </p>
-        <div style="display:flex; align-items:center; gap:6px; font-size:13px;">
-            <span style="width:8px; height:8px; border-radius:50%; background:#4ade80; display:inline-block;"></span>
-            Last login: <strong>First login in this session</strong>
+
+        <div class="last-login">
+            <span class="status-dot"></span>
+
+            <span>
+                Last login:
+                <strong>First login in this session</strong>
+            </span>
         </div>
     </div>
 
+    <div class="welcome-illustration" aria-hidden="true">
+        <div class="folder-back"></div>
+        <div class="welcome-paper"></div>
+        <div class="welcome-paper paper-second"></div>
+        <div class="welcome-paper paper-main"></div>
+        <div class="folder-front"></div>
+    </div>
+</div>
+
     <!-- Summary Cards -->
+    <h2 class="existing-dashboard-title text-center">CARDS</h2>
     <div class="row mb-4">
         <div class="col-md-3 mb-3">
             <a href="<?= base_url('summary/items') ?>" style="text-decoration:none; color:inherit;">
@@ -100,8 +139,27 @@
             </a>
         </div>
     </div>
+    <div class="col-md-3 mb-3">
+        <a href="<?= base_url('summary/available') ?>" style="text-decoration:none; color:inherit;">
+            <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #48bb78; display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
+                <div style="display:flex; gap:12px;">
+                    <div style="width:38px; height:38px; border-radius:10px; background:#e6f9ee; color:#2f855a; display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:12px; color:#888;">Available Items</div>
+                        <div style="font-size:22px; font-weight:700;"><?= $summary['available_units'] ?></div>
+                        <div style="font-size:11px; color:#aaa;">View All</div>
+                    </div>
+                </div>
+                <i class="fas fa-arrow-right" style="color:#ccc; margin-top:6px;"></i>
+            </div>
+        </a>
+    </div>
+
 
     <!-- Charts -->
+    <h2 class="dashboard-page-title text-center">ANALYTICS</h2>
     <div class="row mb-4 dashboard-charts-row">
         <div class="col-md-6 mb-3">
             <div class="dashboard-chart-card">
@@ -143,7 +201,7 @@
             <?php endif; ?>
         </div>
     </div>
-
+    <h2 class="existing-dashboard-title text-center">UPDATES</h2>
     <!-- Due today and low-stock tables -->
     <div class="row dashboard-status-row mb-4">
         <div class="col-lg-7 mb-3 mb-lg-0">
@@ -259,6 +317,7 @@
     </div>
 
     <!-- Recent Activity -->
+    <h2 class="existing-dashboard-title text-center">ACTIVITIES</h2>
     <div style="background:#fff; border-radius:12px; padding:20px; border:1px solid #e3e6f0;">
         <h6 style="font-weight:600; margin-bottom:15px;">Recent Activity</h6>
         <table class="table table-sm table-hover">

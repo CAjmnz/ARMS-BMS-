@@ -5,8 +5,8 @@
 /* Full sidebar logo */
 #sidebar .sidebar-brand img {
     display: block !important;
-    width: 80px;
-    height: 95px;
+    width: 70px;
+    height: 70px;
     max-width: 110%;
     object-fit: contain;
     object-position: center;

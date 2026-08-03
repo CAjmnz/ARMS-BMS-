@@ -160,4 +160,10 @@ class Itemized_model extends CI_Model
             $this->db->delete($this->table, ['item_id' => $item_id]);
     }
 }
+public function get_status_breakdown()
+{
+    $this->db->select('status, COUNT(*) as total');
+    $this->db->group_by('status');
+    return $this->db->get('itemized')->result();
+}
 }

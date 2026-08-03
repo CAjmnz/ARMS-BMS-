@@ -10,7 +10,44 @@
         </a>
     </div>
 
+    <!-- Metric Card -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #4299e1;">
+                <div style="font-size:12px; color:#888;">Total Units</div>
+                <div style="font-size:28px; font-weight:700;"><?= $total_units ?></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Breakdown mini-table -->
+    <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0; margin-bottom:20px;">
+        <h6 style="font-weight:600; margin-bottom:15px;">Status Breakdown</h6>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($status_breakdown)): ?>
+                    <tr><td colspan="2" class="text-center text-muted">No units found.</td></tr>
+                <?php else: ?>
+                    <?php foreach ($status_breakdown as $row): ?>
+                        <tr>
+                            <td><?= ucfirst(str_replace('_', ' ', $row->status)) ?></td>
+                            <td><strong><?= $row->total ?></strong></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inventory Summary Table -->
     <div style="background:#fff; border-radius:8px; padding:20px; border:1px solid #e3e6f0;">
+        <h6 style="font-weight:600; margin-bottom:15px;">Inventory Summary</h6>
         <table class="table table-bordered table-hover" id="summaryItemsTable" width="100%">
             <thead>
                 <tr>

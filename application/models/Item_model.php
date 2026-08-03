@@ -214,4 +214,27 @@ class Item_model extends CI_Model
         }
         return count($items);
     }
+    // Total available units across all items (for the Available Items card)
+public function get_total_available()
+{
+    $this->db->select_sum('available_quantity');
+    $row = $this->db->get($this->table)->row();
+    return (int) ($row->available_quantity ?? 0);
+}
+
+// Available quantity grouped by category
+public function get_category_availability()
+{
+    $this->db->select('category, SUM(available_quantity) as total_available');
+    $this->db->group_by('category');
+    return $this->db->get($this->table)->result();
+}
+
+// Items grouped by status (available / in-use / unavailable)
+public function get_status_breakdown()
+{
+    $this->db->select('status, COUNT(*) as total');
+    $this->db->group_by('status');
+    return $this->db->get($this->table)->result();
+}
 }

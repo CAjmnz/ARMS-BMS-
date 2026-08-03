@@ -113,6 +113,7 @@ $route['summary/items']    = 'summary/items';
 $route['summary/units']    = 'summary/units';
 $route['summary/borrowed'] = 'summary/borrowed';
 $route['summary/overdue']  = 'summary/overdue';
+$route['summary/available'] = 'summary/available';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

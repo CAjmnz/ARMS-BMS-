@@ -211,4 +211,18 @@ public function close_borrowing($borrowing_id)
         'date_returned' => date('Y-m-d H:i:s'),
     ]);
 }
+public function get_status_breakdown()
+{
+    $this->db->select('item_status, COUNT(*) as total');
+    $this->db->group_by('item_status');
+    return $this->db->get('borrowing_items')->result();
+}
+// Full list of currently overdue borrowing_items (not paginated — used for the Overdue summary page)
+public function get_overdue_list()
+{
+    $this->_base_query(); // already filters item_status = 'borrowed'
+    $this->db->where('borrowings.due_date <', date('Y-m-d H:i:s'));
+    $this->db->order_by('borrowings.due_date', 'asc');
+    return $this->db->get()->result();
+}
 }
