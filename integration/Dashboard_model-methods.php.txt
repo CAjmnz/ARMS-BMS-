@@ -1,0 +1,92 @@
+Add both methods below INSIDE the Dashboard_model class, immediately before
+the class's final closing brace.
+
+public function get_due_today($limit = 8)
+{
+    $limit = (int) $limit;
+
+    if ($limit < 1) {
+        $limit = 8;
+    }
+
+    $today = date('Y-m-d');
+
+    $this->db->select(
+        'borrowing_items.id AS borrowing_item_id,
+         borrowings.id AS borrowing_id,
+         borrowings.due_date,
+         borrowings.borrower_employee_id,
+         borrowings.borrower_name,
+         items.id AS item_id,
+         items.item_name,
+         itemized.id AS unit_id,
+         itemized.unit_no',
+        false
+    );
+
+    $this->db->from('borrowing_items');
+    $this->db->join(
+        'borrowings',
+        'borrowings.id = borrowing_items.borrowing_id',
+        'inner'
+    );
+    $this->db->join(
+        'itemized',
+        'itemized.id = borrowing_items.unit_id',
+        'inner'
+    );
+    $this->db->join(
+        'items',
+        'items.id = itemized.item_id',
+        'inner'
+    );
+
+    $this->db->where('borrowing_items.item_status', 'borrowed');
+    $this->db->where(
+        'DATE(borrowings.due_date) = ' . $this->db->escape($today),
+        null,
+        false
+    );
+    $this->db->order_by('borrowings.due_date', 'ASC');
+    $this->db->limit($limit);
+
+    return $this->db->get()->result();
+}
+
+public function get_low_stock_items($limit = 8)
+{
+    $limit = (int) $limit;
+
+    if ($limit < 1) {
+        $limit = 8;
+    }
+
+    $this->db->select(
+        "items.id,
+         items.item_name,
+         SUM(
+             CASE
+                 WHEN itemized.status = 'available' THEN 1
+                 ELSE 0
+             END
+         ) AS available_units",
+        false
+    );
+
+    $this->db->from('items');
+    $this->db->join(
+        'itemized',
+        'itemized.item_id = items.id',
+        'left'
+    );
+
+    $this->db->group_by('items.id');
+    $this->db->group_by('items.item_name');
+    $this->db->having('available_units >', 0);
+    $this->db->having('available_units <', 5);
+    $this->db->order_by('available_units', 'ASC');
+    $this->db->order_by('items.item_name', 'ASC');
+    $this->db->limit($limit);
+
+    return $this->db->get()->result();
+}

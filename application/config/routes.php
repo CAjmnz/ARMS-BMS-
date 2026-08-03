@@ -108,5 +108,11 @@ $route['user/delete/(:any)'] = 'user/delete/$1';
 $route['user/reset_password/(:any)'] = 'user/reset_password/$1';
 $route['user/photo_proxy'] = 'user/photo_proxy';
 
+//summary page
+$route['summary/items']    = 'summary/items';
+$route['summary/units']    = 'summary/units';
+$route['summary/borrowed'] = 'summary/borrowed';
+$route['summary/overdue']  = 'summary/overdue';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

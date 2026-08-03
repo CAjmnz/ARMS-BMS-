@@ -196,18 +196,6 @@ $borrowingMonitoringActive = in_array(
 
     </nav>
 
-    <!-- Optional Help Card -->
-    <div class="sidebar-help">
-        <strong>
-            <i class="fas fa-question-circle mr-1"></i>
-            Need assistance?
-        </strong>
-
-        <small>
-            Contact your system administrator.
-        </small>
-    </div>
-
     <!-- Sidebar Footer -->
     <div class="sidebar-footer">
         <div class="sidebar-footer-content">
