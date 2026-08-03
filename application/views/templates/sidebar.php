@@ -18,6 +18,14 @@ $borrowingMonitoringActive = in_array(
                 src="<?= base_url('assets/images/logo.png') ?>"
                 alt="ARMS-BMS Logo"
             >
+                    <span class="brand-copy">
+                        <strong>ALTURAS</strong>
+                        <br>
+                        <small1>Records Management</small1>
+                        <br>
+                        <small2>Borrowing Management</small2>
+                    </span>
+                </a>
         </div>
     </div>
 

@@ -19,7 +19,7 @@
 
     <?php foreach ($overdue as $row): ?>
     <?php $days = floor((time() - strtotime($row->due_date)) / 86400); ?>
-    <div class="notifCard notifCardClickable" data-type="overdue" style="border-left:4px solid #e74a3b; cursor:pointer;"
+    <div class="notifCard notifCardClickable" data-type="overdue" style="border-left:8px solid rgb(240, 23, 3); cursor:pointer;"
          data-id="<?= encode_id($row->id) ?>"
          data-borrower="<?= htmlspecialchars($row->borrower_name) ?>"
          data-id-number="<?= htmlspecialchars($row->id_number) ?>"
@@ -40,7 +40,7 @@
 <?php endforeach; ?>
 
 <?php foreach ($due_soon as $row): ?>
-    <div class="notifCard notifCardClickable" data-type="due_soon" style="border-left:6px solid #f6c23e; cursor:pointer;"
+    <div class="notifCard notifCardClickable" data-type="due_soon" style="border-left:8px solid rgb(252, 180, 0); cursor:pointer;"
          data-id="<?= encode_id($row->id) ?>"
          data-borrower="<?= htmlspecialchars($row->borrower_name) ?>"
          data-id-number="<?= htmlspecialchars($row->id_number) ?>"
