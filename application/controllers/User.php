@@ -2,6 +2,9 @@
 
 class User extends CI_Controller
 {
+    private $allowed_roles = array('Admin', 'User');
+    private $allowed_statuses = array('Active', 'Inactive');
+
     public function __construct()
     {
         parent::__construct();
@@ -13,6 +16,27 @@ class User extends CI_Controller
 
         if (!$this->session->userdata('logged_in')) {
             redirect('auth');
+            return;
+        }
+
+        // Employee photos are available to every authenticated account.
+        // All other user-management methods require an administrator role.
+        $method = $this->router->fetch_method();
+        $role   = (string) $this->session->userdata('role');
+
+        if ($method !== 'photo_proxy' &&
+            !in_array($role, array('Super-admin', 'Admin'), TRUE)) {
+            if ($this->input->is_ajax_request()) {
+                $this->output->set_status_header(403);
+                $this->output->set_content_type('application/json');
+                echo json_encode(array(
+                    'success' => FALSE,
+                    'message' => 'You are not authorized to manage users.'
+                ));
+                exit;
+            }
+
+            show_error('You are not authorized to manage users.', 403);
         }
     }
 
@@ -84,12 +108,22 @@ class User extends CI_Controller
     {
         if ($this->input->method() !== 'post') {
             redirect('user');
+            return;
         }
 
-        $employee_id = $this->input->post('employee_id');
+        $employee_id   = trim((string) $this->input->post('employee_id', TRUE));
+        $employee_name = trim((string) $this->input->post('employee_name', TRUE));
+        $role          = (string) $this->input->post('role', TRUE);
+        $account_status = (string) $this->input->post('account_status', TRUE);
 
-        if (empty($employee_id)) {
-            echo json_encode(['success' => false, 'message' => 'Missing employee ID.']);
+        if ($employee_id === '' || $employee_name === '') {
+            echo json_encode(['success' => false, 'message' => 'Employee ID and employee name are required.']);
+            return;
+        }
+
+        if (!in_array($role, $this->allowed_roles, TRUE) ||
+            !in_array($account_status, $this->allowed_statuses, TRUE)) {
+            echo json_encode(['success' => false, 'message' => 'Invalid role or account status.']);
             return;
         }
 
@@ -102,22 +136,22 @@ class User extends CI_Controller
 
         $data = [
             'employee_id'       => $employee_id,
-            'employee_name'     => $this->input->post('employee_name'),
-            'employee_position' => $this->input->post('employee_position'),
-            'employee_type'     => $this->input->post('employee_type'),
-            'employee_status'   => $this->input->post('employee_status'),
-            'employee_company'  => $this->input->post('employee_company'),
-            'employee_bunit'    => $this->input->post('employee_bunit'),
-            'employee_dept'     => $this->input->post('employee_dept'),
-            'employee_photo'    => $this->input->post('employee_photo'),
+            'employee_name'     => $employee_name,
+            'employee_position' => $this->input->post('employee_position', TRUE),
+            'employee_type'     => $this->input->post('employee_type', TRUE),
+            'employee_status'   => $this->input->post('employee_status', TRUE),
+            'employee_company'  => $this->input->post('employee_company', TRUE),
+            'employee_bunit'    => $this->input->post('employee_bunit', TRUE),
+            'employee_dept'     => $this->input->post('employee_dept', TRUE),
+            'employee_photo'    => $this->input->post('employee_photo', TRUE),
             'password'          => password_hash($default_password, PASSWORD_DEFAULT),
             'password_change_count' => 0,
-            'role'              => $this->input->post('role'),
-            'account_status'    => $this->input->post('account_status'),
+            'role'              => $role,
+            'account_status'    => $account_status,
         ];
 
         if ($this->System_user_model->insert($data)) {
-            echo json_encode(['success' => true, 'message' => 'User added successfully. Default passowrd:bms-2026']);
+            echo json_encode(['success' => true, 'message' => 'User added successfully. Default password: bms-2026']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add user.']);
         }
@@ -251,11 +285,21 @@ $employee_cell = '
 
         if ($this->input->method() !== 'post') {
             redirect('user');
+            return;
+        }
+
+        $role           = (string) $this->input->post('role', TRUE);
+        $account_status = (string) $this->input->post('account_status', TRUE);
+
+        if (!in_array($role, $this->allowed_roles, TRUE) ||
+            !in_array($account_status, $this->allowed_statuses, TRUE)) {
+            echo json_encode(['success' => false, 'message' => 'Invalid role or account status.']);
+            return;
         }
 
         $data = [
-            'role'           => $this->input->post('role'),
-            'account_status' => $this->input->post('account_status'),
+            'role'           => $role,
+            'account_status' => $account_status,
         ];
 
         if ($this->System_user_model->update($decoded_id, $data)) {
@@ -300,7 +344,7 @@ $employee_cell = '
         if ($this->System_user_model->set_password($decoded_id, $default_password)) {
             echo json_encode(['success' => true, 'message' => 'Password reset to default (bms-2026).']);
         } else {
-            echo json_encode(['succes' => false, 'message' => 'Failed to reset password.']);
+            echo json_encode(['success' => false, 'message' => 'Failed to reset password.']);
         }
     }
     
@@ -309,13 +353,20 @@ public function photo_proxy()
 {
     $relative_path = $this->input->get('path');
 
-    if (empty($relative_path)) {
+    if (!is_string($relative_path) || $relative_path === '') {
         show_404();
         return;
     }
 
     // Same cleanup logic as the JS resolvePhotoUrl() — strip leading ../
-    $clean_path = preg_replace('#^(\.\./)+#', '', $relative_path);
+    $clean_path = preg_replace('#^(\.\./)+#', '', str_replace('\\', '/', $relative_path));
+    $clean_path = ltrim($clean_path, '/');
+
+    if ($clean_path === '' || strpos($clean_path, '..') !== FALSE ||
+        preg_match('#^[a-z][a-z0-9+.-]*://#i', $clean_path)) {
+        show_404();
+        return;
+    }
     $api_url =  'http://172.16.161.34:8080/hrms/' . $clean_path;
 
     $ch = curl_init();
@@ -329,7 +380,8 @@ public function photo_proxy()
     $curl_error = curl_error($ch);
     curl_close($ch);
 
-    if ($curl_error || $http_code !== 200 || empty($image_data)) {
+    if ($curl_error || $http_code !== 200 || empty($image_data) ||
+        strpos((string) $content_type, 'image/') !== 0) {
         // Return a 1x1 transparent placeholder instead of a broken image icon
         header('Content-Type: image/png');
         echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=');

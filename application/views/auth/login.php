@@ -1,3 +1,7 @@
+<?php
+$login_error  = (string) $this->session->flashdata('error');
+$locked_until = (string) $this->session->flashdata('locked_until');
+?>
 <!doctype html>
 <html lang="en">
 
@@ -29,19 +33,26 @@
 								</div>
 							</div>
 							<form action="<?= site_url('auth/login') ?>" method="POST" class="signin-form">
-								<?php if ($this->session->flashdata('error')): ?>
+								<?php if ($this->config->item('csrf_protection')): ?>
+									<input
+										type="hidden"
+										name="<?= html_escape($this->security->get_csrf_token_name()) ?>"
+										value="<?= html_escape($this->security->get_csrf_hash()) ?>"
+									>
+								<?php endif; ?>
+								<?php if ($login_error !== ''): ?>
 									<div class="alert alert-danger" id="errorAlert">
-										<?= $this->session->flashdata('error') ?>
+										<?= html_escape($login_error) ?>
 									</div>
 								<?php endif; ?>
 
-								<?php if ($this->session->flashdata('locked_until')): ?>
+								<?php if ($locked_until !== ''): ?>
 									<div class="alert alert-warning" id="lockAlert">
 										<i class="fas fa-lock"></i>
 										Account locked. Try again in <strong id="countdown">30</strong> second(s).
 									</div>
 									<script>
-										var lockedUntil = new Date("<?= $this->session->flashdata('locked_until') ?>").getTime();
+										var lockedUntil = new Date(<?= json_encode($locked_until) ?>).getTime();
 
 										var countdown = setInterval(function() {
 											var now = new Date().getTime();
@@ -61,12 +72,12 @@
 									</script>
 								<?php endif; ?>
 								<div class="form-group mb-3">
-									<label class="label">Username</label>
-									<input type="text" name="username" class="form-control" placeholder="Username" required>
+									<label class="label" for="loginCredential">Username or Employee ID</label>
+									<input type="text" id="loginCredential" name="username" class="form-control" placeholder="Username or Employee ID" autocomplete="username" required autofocus>
 								</div>
 								<div class="form-group mb-3">
-									<label class="label">Password</label>
-									<input type="password" name="password" class="form-control" placeholder="Password" required>
+									<label class="label" for="loginPassword">Password</label>
+									<input type="password" id="loginPassword" name="password" class="form-control" placeholder="Password" autocomplete="current-password" required>
 								</div>
 								<div class="form-group">
 									<button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>

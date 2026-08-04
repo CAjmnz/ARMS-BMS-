@@ -723,6 +723,7 @@
         letter-spacing: 0.5px !important;
         text-align: center !important;
     }
+}
 /* =========================
    Dashboard welcome card
    ========================= */
@@ -963,4 +964,4 @@
         display: none;
     }
 }
-}
+

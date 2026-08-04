@@ -1,58 +1,68 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class User_model extends CI_Model {
+class User_model extends CI_Model
+{
+    protected $table = 'users';
 
-    public function check_login($username, $password) {
-        $this->db->where('username', $username);
-        $query = $this->db->get('users');
-        $user  = $query->row();
+    public function get_by_username($username)
+    {
+        return $this->db
+            ->where('username', $username)
+            ->get($this->table)
+            ->row();
+    }
+
+    public function check_login($username, $password)
+    {
+        $user = $this->get_by_username($username);
 
         if ($user && password_verify($password, $user->password)) {
             return $user;
         }
+
         return FALSE;
     }
 
-    //Get user by username only (no password check)
-
-    public function get_by_username($username)
-    {
-       return $this->db->get_where('users',['username' => $username])->row();
-
-    }
-
-    //Increment failed attempts
     public function increment_attempts($username)
     {
-      $this->db->where('username', $username);
-      $this->db->set('login_attempts', 'login_attempts + 1',FALSE);
-      $this->db->update('users');
-    }
-    //Lock account for 30 seconds
-    public function lock_account($username)
-    {
-        $locked_until = date('Y-m-d H:i:s', strtotime('+30 seconds'));
-        $this->db->where('username',$username);
-        $this->db->update('users', ['locked_until' => $locked_until ]);
+        return $this->db
+            ->where('username', $username)
+            ->set('login_attempts', 'login_attempts + 1', FALSE)
+            ->update($this->table);
     }
 
-    //Reset attempts after successful login 
+    public function lock_account($username, $locked_until = NULL)
+    {
+        if ($locked_until === NULL) {
+            $locked_until = time() + 30;
+        }
+
+        return $this->db
+            ->where('username', $username)
+            ->update($this->table, array(
+                'locked_until' => date('Y-m-d H:i:s', (int) $locked_until)
+            ));
+    }
+
     public function reset_attempts($username)
     {
-        $this->db->where('username', $username);
-        $this->db->update('users',[
-            'login_attempts' => 0,
-            'locked_until'   => NULL
-        ]);
+        return $this->db
+            ->where('username', $username)
+            ->update($this->table, array(
+                'login_attempts' => 0,
+                'locked_until'   => NULL
+            ));
     }
-    public function reset_password($id)
+
+    public function reset_password($id, $plain_password = 'bms-2026')
     {
-        $this->db->where('id', $id);
-        $this->db->set('password',             password_hash('rms-2026', PASSWORD_DEFAULT));
-        $this->db->set('must_change_password', 1);
-        $this->db->set('password_reset_count', 'password_reset_count + 1', false); // false = no quotes, raw SQL
-        $this->db->set('updated_at',           date('Y-m-d H:i:s'));
-        return $this->db->update('users');
+        return $this->db
+            ->where('id', (int) $id)
+            ->update($this->table, array(
+                'password'       => password_hash($plain_password, PASSWORD_DEFAULT),
+                'login_attempts' => 0,
+                'locked_until'   => NULL
+            ));
     }
 }

@@ -40,9 +40,11 @@ if ($current_hour < 12) {
                 'UTF-8'
             ); ?>.
         </h3>
+        <h3>BORROWING MANAGEMENT SYSTEM</h3>
+        
 
         <p class="welcome-description">
-            Here is a clear overview of your borrowing management workspace.
+           A submodule of the Alturas Record Management System
         </p>
 
         <div class="last-login">
