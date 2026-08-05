@@ -33,11 +33,11 @@
                     Borrower's Monitoring System
                 </h2>
 
-                <p>
-                    A centralized system designed to help manage,
-                    monitor, and organize item records and borrowing
-                    activities efficiently.
-                </p>
+                <p1>
+                   A submodule of the A.R.M.S that focus on the Monitoring of the borrowed items of the RMS.
+
+                   
+                </p1>
 
                 <div class="about-version">
                     <i class="fas fa-code-branch mr-1"></i>

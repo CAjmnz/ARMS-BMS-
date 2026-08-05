@@ -283,7 +283,11 @@
         align-items: flex-start;
         gap: 4px;
     }
-
+   
+    .p1{
+        color: rgb(15, 32, 21);
+        font-size: medium;
+    }
 }
 
 

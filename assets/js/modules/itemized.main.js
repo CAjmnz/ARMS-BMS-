@@ -226,43 +226,43 @@ $(document).ready(function () {
         });
     });
 
-    // ─── Bulk Delete ──────────────────────────────────────
-    $('#btnBulkDelete').on('click', function () {
-        var ids = [];
-        $('.rowCheckbox:checked').each(function () {
-            ids.push($(this).val());
-        });
-
-        if (ids.length === 0) {
-            Swal.fire('Warning', 'No units selected.', 'warning');
-            return;
-        }
-
-        Swal.fire({
-            title             : 'Delete ' + ids.length + ' unit(s)?',
-            text              : 'This action cannot be undone.',
-            icon              : 'warning',
-            showCancelButton  : true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor : '#6c757d',
-            confirmButtonText : 'Yes, delete all!'
-        }).then(function (result) {
-            if (result.isConfirmed) {
-                $.post(BASE_URL + 'itemized/bulk_delete', {
-                    ids: ids
-                }, function (res) {
-                    if (res.success) {
-                        Swal.fire('Deleted!', res.message, 'success').then(function () {
-                            $('#btnCancelSelect').trigger('click');
-                        });
-                    } else {
-                        Swal.fire('Error', res.message, 'error');
-                    }
-                }, 'json');
-            }
-        });
+// ─── Bulk Delete ──────────────────────────────────────
+$('#btnBulkDelete').on('click', function () {
+    var ids = [];
+    $('.rowCheckbox:checked').each(function () {
+        ids.push($(this).val());
     });
 
+    if (ids.length === 0) {
+        Swal.fire('Warning', 'No units selected.', 'warning');
+        return;
+    }
+
+    Swal.fire({
+        title             : 'Delete ' + ids.length + ' unit(s)?',
+        text              : 'This action cannot be undone.',
+        icon              : 'warning',
+        showCancelButton  : true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor : '#6c757d',
+        confirmButtonText : 'Yes, delete all!'
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            $.post(BASE_URL + 'itemized/bulk_delete', {
+                ids: ids
+            }, function (res) {
+                if (res.success) {
+                    Swal.fire('Deleted!', res.message, 'success').then(function () {
+                        $('#btnCancelSelect').trigger('click');
+                        table.ajax.reload();   // ← add this line
+                    });
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            }, 'json');
+        }
+    });
+});
     // Fix aria-hidden focus warning
     $('#unitModal').on('hidden.bs.modal', function () {
         $('body').focus();
