@@ -13,7 +13,7 @@
     --sidebar-text-strong: #ffffff;
     --sidebar-hover: rgba(255, 255, 255, 0.07);
     --sidebar-active: rgba(37, 189, 126, 0.18);
-    --sidebar-active-line: #5ee0a4;
+    --sidebar-active-line: #93c970;
 
     --topbar-shadow: 0 1px 0 rgba(6, 59, 45, 0.08);
     --soft-shadow: 0 14px 35px rgba(6, 59, 45, 0.08);
@@ -36,7 +36,7 @@ body {
     height: 120vh;
     padding: 0;
     background:
-        radial-gradient(circle at 12% 8%, rgba(37, 189, 126, 0.12), transparent 28%),
+        radial-gradient(circle at 12% 9%, rgba(37, 189, 126, 0.12), transparent 28%),
         linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 10px 0 30px rgba(6, 59, 45, 0.08);
@@ -136,7 +136,7 @@ body {
 
 .sidebar-link.active {
     background:
-        linear-gradient(90deg, rgba(37, 189, 126, 0.24), rgba(255, 255, 255, 0.06)) !important;
+        linear-gradient(90deg, rgba(161, 255, 124, 0.527), rgba(255, 255, 255, 0.06)) !important;
     color: #ffffff !important;
     box-shadow:
         inset 3px 0 0 var(--sidebar-active-line),

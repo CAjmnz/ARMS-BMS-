@@ -47,6 +47,22 @@ $(document).ready(function () {
     if (trendCanvas) {
         $.getJSON(BASE_URL + 'dashboard/chart_trend')
             .done(function (res) {
+                // Color palette – add/remove colors as needed
+                const colors = [
+                    '#003f5c', // dark blue
+                    '#2f4b7c',
+                    '#665191',
+                    '#a05195',
+                    '#d45087',
+                    '#f95d6a',
+                    '#ff7c43',
+                    '#ffa600'
+                ];
+    
+                // Automatically cycle through the palette if there are more bars than colors
+                const backgroundColors = res.values.map((_, i) => colors[i % colors.length]);
+                const borderColors = backgroundColors.map(c => c); // or use a darker version if you prefer
+    
                 new Chart(trendCanvas.getContext('2d'), {
                     type: 'bar',
                     data: {
@@ -54,8 +70,8 @@ $(document).ready(function () {
                         datasets: [{
                             label: 'Borrowings',
                             data: res.values,
-                            backgroundColor: '#10a66f' ,
-                            borderColor: '#086a4d',
+                            backgroundColor: backgroundColors,
+                            borderColor: borderColors,
                             borderWidth: 1
                         }]
                     },
@@ -102,7 +118,15 @@ $(document).ready(function () {
                         datasets: [{
                             label: 'Times Borrowed',
                             data: res.values,
-                            backgroundColor: '#10a66f',
+                            backgroundColor: [
+                                '#4e73df',
+                                '#1cc88a',
+                                '#f6c23e',
+                                '#e74a3b',
+                                '#36b9cc',
+                                '#858796',
+                                '#5a5c69'
+                            ],
                             borderColor: '#086a4d',
                             borderWidth: 1
                         }]
