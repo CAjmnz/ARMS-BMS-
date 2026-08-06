@@ -34,6 +34,7 @@
 <script src="<?= base_url('assets/js/modules/summary_borrowed.main.js') ?>"></script>
 <script src="<?= base_url('assets/js/modules/summary_overdue.main.js') ?>"></script>
 
+
 <?php if (isset($page_scripts)): ?>
     <?php foreach ($page_scripts as $script): ?>
         <script src="<?= base_url('assets/js/' . $script) ?>"></script>

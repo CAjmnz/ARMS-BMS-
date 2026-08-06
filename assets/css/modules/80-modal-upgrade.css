@@ -1,0 +1,167 @@
+/* =========================================================
+   MODAL UPGRADE
+   Palette-tinted backdrop (replaces default black) and a
+   calmer, sectioned modal layout. Requires 01-variables.css.
+   ========================================================= */
+
+/* ---------- Backdrop ---------- */
+/* Bootstrap's default .modal-backdrop is solid black at 50%
+   opacity. Override it to use the system palette with a
+   soft blur instead, so it feels part of the same design
+   rather than a generic dark overlay. */
+
+.modal-backdrop {
+    background-color: var(--green-900) !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.55 !important;
+}
+
+/* Blur what's behind the modal (falls back gracefully where
+   backdrop-filter isn't supported — the tinted overlay above
+   still works on its own). */
+.modal-open {
+    overflow: hidden;
+}
+
+.modal-backdrop {
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+/* ---------- Modal shell ---------- */
+
+.modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(58, 63, 51, 0.25);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--green-800), var(--green-900));
+    border-bottom: none;
+    padding: 20px 26px;
+}
+
+.modal-header .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.modal-header .close {
+    color: #ffffff;
+    opacity: 0.85;
+    text-shadow: none;
+    font-size: 22px;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.modal-header .close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 26px 28px;
+    background: var(--canvas);
+}
+
+.modal-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    padding: 16px 28px;
+}
+
+.modal-footer .btn {
+    border-radius: 9px;
+    font-weight: 600;
+    padding: 8px 20px;
+}
+
+/* ---------- Sectioned form layout ---------- */
+/* Wrap related fields in <div class="modal-section"> to get
+   breathing room, a soft card background, and a small label. */
+
+.modal-section {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+}
+
+.modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.modal-section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--green-700);
+    margin-bottom: 14px;
+}
+
+.modal-section-label i {
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--green-100);
+    color: var(--green-800);
+    border-radius: 7px;
+    font-size: 11px;
+}
+
+/* Form fields inside the modal */
+.modal-body .form-group {
+    margin-bottom: 14px;
+}
+
+.modal-body .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.modal-body label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.modal-body .form-control {
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    background: var(--surface);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modal-body .form-control:focus {
+    border-color: var(--green-600);
+    box-shadow: 0 0 0 3px rgba(161, 188, 152, 0.28);
+}
+
+.modal-body .form-control[readonly] {
+    background: var(--green-50);
+    color: var(--ink);
+    opacity: 0.85;
+}
+
+/* Search results dropdown inside a modal */
+.modal-body [id$="Results"] {
+    box-shadow: 0 10px 24px rgba(58, 63, 51, 0.14) !important;
+    border-radius: 10px !important;
+    border-color: var(--line) !important;
+}

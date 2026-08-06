@@ -120,7 +120,7 @@
 
 
 <!-- Add/Edit Modal -->
-<div class="modal fade" id="unitModal" tabindex="-1">
+<div class="modal fade" id="unitModal" tabindex="-1"data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

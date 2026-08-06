@@ -73,135 +73,129 @@
         </table>
     </div>
     <!-- Add/Edit Modal -->
-    <div class="modal fade" id="userModal" tabindex="-1">
-        <div class="modal-dialog modal-custom modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">MANAGE SYSTEM USERS</h5>
-                    <p>The old Users directory process, presented in the new RMS interface.</p>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="system_user_id">
-                    <input type="hidden" id="employee_photo">
+    <div class="modal fade" id="userModal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-custom modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Add System User</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="system_user_id">
+                <input type="hidden" id="employee_photo">
 
-                    <!-- Live Search -->
-                    <div class="form-group" style="position:relative;">
-                        <label>Search Employee (name, ID, or scan barcode)</label>
+                <!-- Search Section -->
+                <div class="modal-section">
+                    <div class="modal-section-label">
+                        <i class="fas fa-search"></i> Find Employee
+                    </div>
+                    <div class="form-group" style="position:relative; margin-bottom:0;">
                         <input type="text" class="form-control" id="modalEmployeeSearch"
-                            placeholder="Type a name/ID or scan barcode..." autocomplete="off">
+                               placeholder="Type a name/ID or scan barcode..." autocomplete="off">
                         <div id="employeeSearchResults" style="
-                        display:none;
-                        position:absolute;
-                        top:100%;
-                        left:0;
-                        right:0;
-                        z-index:1060;
-                        background:#fff;
-                        border:1px solid #ddd;
-                        border-radius:4px;
-                        max-height:220px;
-                        overflow-y:auto;
-                        box-shadow:0 4px 10px rgba(0,0,0,0.1);
-                    "></div>
+                            display:none;
+                            position:absolute;
+                            top:100%;
+                            left:0;
+                            right:0;
+                            z-index:1060;
+                            background:#fff;
+                            border:1px solid #ddd;
+                            border-radius:4px;
+                            max-height:220px;
+                            overflow-y:auto;
+                        "></div>
                     </div>
+                </div>
 
-                    <hr>
-
-                    <!-- Photo Preview -->
-                    <div class="form-row">
-                        <div class="col-12 text-center mb-3">
-                            <img id="employee_photo_preview" src="" alt="Employee Photo"
-                                style="width:90px; height:90px; object-fit:cover; border-radius:50%; border:2px solid #e3e6f0; display:none;">
-                            <div id="employee_photo_placeholder" style="width:90px; height:90px; border-radius:50%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; margin:0 auto; color:#aaa; font-size:11px;">
-                                No Photo
-                            </div>
-                        </div>
+                <!-- Photo Preview -->
+                <div class="text-center mb-3">
+                    <img id="employee_photo_preview" src="" alt="Photo"
+                         style="width:76px; height:76px; border-radius:50%; object-fit:cover; border:3px solid var(--green-100); display:none;">
+                    <div id="employee_photo_placeholder" style="width:76px; height:76px; border-radius:50%; background:var(--green-600); color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; margin:0 auto;">
+                        ?
                     </div>
+                </div>
 
-                    <!-- Employee Details (auto-filled, read-only) -->
+                <!-- Employee Details Section -->
+                <div class="modal-section">
+                    <div class="modal-section-label">
+                        <i class="fas fa-id-card"></i> Employee Details
+                    </div>
                     <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                            <label>Employee ID / Default Username</label>
-                            <input type="text" class="form-control" id="employee_id"  readonly>
+                        <div class="form-group col-6">
+                            <label>Employee ID</label>
+                            <input type="text" class="form-control" id="employee_id" readonly>
                         </div>
-                        <div class="form-group col-6 mb-2">
-                            <div class="field-wrap">
-                                <label for="password">Password</label>
-                                <input type="text"
-                                    class="form-control"
-                                    id="password"
-                                    value="bms-2026"
-                                    readonly>
-                                <span class="field-error-icon">&#9888;<span class="error-tooltip"></span></span>
-                            </div>
+                        <div class="form-group col-6">
+                            <label>Employee Name</label>
+                            <input type="text" class="form-control" id="employee_name" readonly>
                         </div>
                     </div>
-
                     <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                        <label>Employee Name</label>
-                        <input type="text" class="form-control" id="employee_name" readonly>
+                        <div class="form-group col-6">
+                            <label>Position</label>
+                            <input type="text" class="form-control" id="employee_position" readonly>
                         </div>
-                        <div class="form-group col-6 mb-2">
-                        <label>Position</label>
-                        <input type="text" class="form-control" id="employee_position" readonly>
+                        <div class="form-group col-6">
+                            <label>Department</label>
+                            <input type="text" class="form-control" id="employee_dept" readonly>
                         </div>
                     </div>
-
                     <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                        <label>Department</label>
-                        <input type="text" class="form-control" id="employee_dept" readonly>
+                        <div class="form-group col-6">
+                            <label>Company</label>
+                            <input type="text" class="form-control" id="employee_company" readonly>
                         </div>
-                        <div class="form-group col-6 mb-2">
-                        <label>Company</label>
-                        <input type="text" class="form-control" id="employee_company" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-6 mb-2">
-                           <label>Business Unit</label>
+                        <div class="form-group col-6">
+                            <label>Business Unit</label>
                             <input type="text" class="form-control" id="employee_bunit" readonly>
                         </div>
-                        <div class="form-group col-6 mb-2">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label>Employee Type</label>
+                            <input type="text" class="form-control" id="employee_type" readonly>
+                        </div>
+                        <div class="form-group col-6">
                             <label>Employee Status</label>
                             <input type="text" class="form-control" id="employee_status" readonly>
                         </div>
                     </div>
+                </div>
 
+                <!-- Access Section -->
+                <div class="modal-section">
+                    <div class="modal-section-label">
+                        <i class="fas fa-user-shield"></i> System Access
+                    </div>
                     <div class="form-row">
-                        <div class="form-group col-6 mb-2">
+                        <div class="form-group col-6">
                             <label>Role</label>
                             <select class="form-control" id="role">
                                 <option value="User">User</option>
                                 <option value="Admin">Admin</option>
                             </select>
                         </div>
-                        <div class="form-group col-6 mb-2">
+                        <div class="form-group col-6">
                             <label>Account Status</label>
                             <select class="form-control" id="account_status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                        <label>Password Changed</label>
-                        <input type="text" class="form-control" id="edit_password_change_count" readonly>
-                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="btnSaveUser" disabled>Save</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="btnSaveUser">Save</button>
             </div>
         </div>
     </div>
+</div>
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1">
         <div class="modal-dialog">

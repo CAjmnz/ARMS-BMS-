@@ -21,41 +21,14 @@
 
 <!-- Hero / System Introduction -->
 <div class="card-arms about-hero mb-4">
-    <div class="row align-items-center">
+    <div class="about-title">
+        <span class="about-badge">
+            ALTURAS RECORD MANAGEMENT SYSTEM
+        </span>
 
-        <div class="col-md-8">
-            <div class="about-title">
-                <span class="about-badge">
-                    A.R.M.S
-                </span>
-
-                <h2>
-                    Borrower's Monitoring System
-                </h2>
-
-                <p1>
-                   A submodule of the A.R.M.S that focus on the Monitoring of the borrowed items of the RMS.
-
-                   
-                </p1>
-
-                <div class="about-version">
-                    <i class="fas fa-code-branch mr-1"></i>
-                    Version 1.0
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 text-center">
-            <div class="about-logo-wrapper">
-                <img
-                    src="<?= base_url('assets/images/logo.png') ?>"
-                    alt="A.R.M.S Logo"
-                    class="about-logo"
-                >
-            </div>
-        </div>
-
+        <h1 class="about-main-title">
+            BORROWING MANAGEMENT SYSTEM
+        </h1>
     </div>
 </div>
 
@@ -73,17 +46,18 @@
             </div>
 
             <p>
-                A.R.M.S (Alturas Record Management System) is a
-                web-based record management solution designed to
-                provide a centralized and organized way of managing
-                organizational assets and borrowing activities.
+                A.R.M.S - B.M.S (Alturas Record Management System 
+                Borrowing Management System) 
+                A submodule of the Alturas record management system
+                designed to provide a centralized and organized way of managing
+                the borrowed assets of the team R.M.S 
             </p>
 
             <p>
                 The system allows authorized users to manage item
                 records, monitor item availability, track borrowing
                 transactions, and monitor returned items while
-                maintaining organized records.
+                maintaining organized records for the borrowed assets of the Team R.M.S.
             </p>
 
             <p class="mb-0">

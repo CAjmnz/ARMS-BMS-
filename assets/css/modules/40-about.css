@@ -1,77 +1,71 @@
+/* =========================================================
    ABOUT PAGE
    ───────────────────────────────────────────── */
 
    .about-hero {
     position: relative;
     overflow: hidden;
-    padding: 35px;
-    background: linear-gradient(
-        135deg,
-        var(--green-900) 0%,
-        var(--green-700) 100%
-    );
-    border: none;
-    color: #ffffff;
+    padding: 52px 40px;
+    background: #ffffff;                          /* white like the image */
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    color: #1a2e1a;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
 }
 
+/* Remove the old decorative circle (or keep it very subtle) */
 .about-hero::after {
-    content: "";
-    position: absolute;
-    width: 280px;
-    height: 280px;
-    border-radius: 50%;
-    right: -100px;
-    top: -120px;
-    background: rgba(255, 255, 255, 0.08);
+    content: none;                                /* disabled for clean look */
 }
 
 .about-title {
-    position: relative;
-    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
 }
 
+/* Top small line */
 .about-badge {
-    display: inline-block;
-    padding: 5px 12px;
-    margin-bottom: 12px;
-    border: 1px solid rgba(255,255,255,0.35);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 14px;
+    padding: 0;                                   /* no pill */
+    color: #4a5568;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3.8px;
+    text-transform: uppercase;
 }
 
+/* Main big title */
+.about-main-title,
+.about-title h1,
 .about-title h2 {
-    margin-bottom: 12px;
-    font-weight: 700;
+    margin: 0;
+    color: #29351f;                               /* dark green-black */
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    line-height: 1.15;
+    text-transform: uppercase;
 }
 
+/* Optional description under the title */
 .about-title p {
-    max-width: 650px;
-    margin-bottom: 15px;
-    color: rgba(255,255,255,0.85);
+    max-width: 620px;
+    margin: 18px auto 0;
+    color: #4a5568;
+    font-size: 15px;
     line-height: 1.7;
 }
 
 .about-version {
+    margin-top: 20px;
     font-size: 13px;
-    color: rgba(255,255,255,0.75);
+    color: #718096;
 }
 
-.about-logo-wrapper {
-    position: relative;
-    z-index: 2;
-}
-
-.about-logo {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.2));
-}
-
-
-/* Section titles */
+/* ---------- Keep the rest of your existing styles ---------- */
 
 .about-section-title {
     display: flex;
@@ -98,9 +92,6 @@
     font-weight: 700;
 }
 
-
-/* Purpose */
-
 .about-purpose-card {
     border-top: 4px solid var(--green-700);
 }
@@ -121,9 +112,6 @@
     color: var(--green-600);
     margin-right: 8px;
 }
-
-
-/* Feature Cards */
 
 .feature-card {
     height: 100%;
@@ -168,9 +156,6 @@
     line-height: 1.6;
 }
 
-
-/* Technology */
-
 .technology-list {
     border-top: 1px solid var(--line);
 }
@@ -196,9 +181,6 @@
 .technology-item strong {
     color: var(--green-900);
 }
-
-
-/* System Card */
 
 .about-system-card {
     display: flex;
@@ -254,28 +236,26 @@
     color: rgba(255,255,255,0.65);
 }
 
-
 /* Mobile */
-
 @media (max-width: 768px) {
-
     .about-hero {
-        padding: 25px;
+        padding: 36px 22px;
         text-align: center;
     }
 
+    .about-badge {
+        font-size: 11px;
+        letter-spacing: 2.5px;
+    }
+
+    .about-main-title,
+    .about-title h1,
+    .about-title h2 {
+        font-size: 28px;
+    }
+
     .about-title p {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .about-logo-wrapper {
-        margin-top: 25px;
-    }
-
-    .about-logo {
-        width: 110px;
-        height: 110px;
+        font-size: 14px;
     }
 
     .technology-item {
@@ -283,11 +263,4 @@
         align-items: flex-start;
         gap: 4px;
     }
-   
-    .p1{
-        color: rgb(15, 32, 21);
-        font-size: medium;
-    }
 }
-
-
