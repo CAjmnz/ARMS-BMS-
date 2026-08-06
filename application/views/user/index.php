@@ -74,27 +74,27 @@
     </div>
     <!-- Add/Edit Modal -->
     <div class="modal fade" id="userModal" tabindex="-1" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-custom modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Add System User</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="system_user_id">
-                <input type="hidden" id="employee_photo">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Add System User</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="system_user_id">
+                    <input type="hidden" id="employee_photo">
 
-                <!-- Search Section -->
-                <div class="modal-section">
-                    <div class="modal-section-label">
-                        <i class="fas fa-search"></i> Find Employee
-                    </div>
-                    <div class="form-group" style="position:relative; margin-bottom:0;">
-                        <input type="text" class="form-control" id="modalEmployeeSearch"
-                               placeholder="Type a name/ID or scan barcode..." autocomplete="off">
-                        <div id="employeeSearchResults" style="
+                    <!-- Search Section -->
+                    <div class="modal-section">
+                        <div class="modal-section-label">
+                            <i class="fas fa-search"></i> Find Employee
+                        </div>
+                        <div class="form-group" style="position:relative; margin-bottom:0;">
+                            <input type="text" class="form-control" id="modalEmployeeSearch"
+                                placeholder="Type a name/ID or scan barcode..." autocomplete="off">
+                            <div id="employeeSearchResults" style="
                             display:none;
                             position:absolute;
                             top:100%;
@@ -107,95 +107,95 @@
                             max-height:220px;
                             overflow-y:auto;
                         "></div>
-                    </div>
-                </div>
 
-                <!-- Photo Preview -->
-                <div class="text-center mb-3">
-                    <img id="employee_photo_preview" src="" alt="Photo"
-                         style="width:76px; height:76px; border-radius:50%; object-fit:cover; border:3px solid var(--green-100); display:none;">
-                    <div id="employee_photo_placeholder" style="width:76px; height:76px; border-radius:50%; background:var(--green-600); color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; margin:0 auto;">
-                        ?
+                        </div>
                     </div>
-                </div>
 
-                <!-- Employee Details Section -->
-                <div class="modal-section">
-                    <div class="modal-section-label">
-                        <i class="fas fa-id-card"></i> Employee Details
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label>Employee ID</label>
-                            <input type="text" class="form-control" id="employee_id" readonly>
+                    <!-- Employee Details Section -->
+                    <div class="modal-section">
+                        <div class="modal-section-label">
+                            <i class="fas fa-id-card"></i> Employee Details
                         </div>
-                        <div class="form-group col-6">
-                            <label>Employee Name</label>
-                            <input type="text" class="form-control" id="employee_name" readonly>
+                        <div class="form-row">
+                            <div class="text-left mb-6">
+                                <img id="employee_photo_preview" src="" alt="Photo"
+                                    style="width:78px; height:78px; border-radius:100%; object-fit:cover; border:3px solid var(--green-100); display:none;">
+                                <div id="employee_photo_placeholder" style="width:78px; height:78px; border-radius:60%; background:var(--green-600); color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; margin:0 auto;">
+                                    ?
+                                </div>
+                            </div>
+                            <div class="form-group col-2">
+                                <label>Employee ID</label>
+                                <input type="text" class="form-control" id="employee_id" readonly>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>Employee Name</label>
+                                <input type="text" class="form-control" id="employee_name" readonly>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>Employee Status</label>
+                                <input type="text" class="form-control" id="employee_status" readonly>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label>Position</label>
-                            <input type="text" class="form-control" id="employee_position" readonly>
-                        </div>
-                        <div class="form-group col-6">
-                            <label>Department</label>
-                            <input type="text" class="form-control" id="employee_dept" readonly>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label>Company</label>
-                            <input type="text" class="form-control" id="employee_company" readonly>
-                        </div>
-                        <div class="form-group col-6">
-                            <label>Business Unit</label>
-                            <input type="text" class="form-control" id="employee_bunit" readonly>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label>Employee Type</label>
-                            <input type="text" class="form-control" id="employee_type" readonly>
-                        </div>
-                        <div class="form-group col-6">
-                            <label>Employee Status</label>
-                            <input type="text" class="form-control" id="employee_status" readonly>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Access Section -->
-                <div class="modal-section">
-                    <div class="modal-section-label">
-                        <i class="fas fa-user-shield"></i> System Access
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label>Role</label>
-                            <select class="form-control" id="role">
-                                <option value="User">User</option>
-                                <option value="Admin">Admin</option>
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group col-4">
+                                <label>Position</label>
+                                <input type="text" class="form-control" id="employee_position" readonly>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>Department</label>
+                                <input type="text" class="form-control" id="employee_dept" readonly>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>Company</label>
+                                <input type="text" class="form-control" id="employee_company" readonly>
+                            </div>
+
                         </div>
-                        <div class="form-group col-6">
-                            <label>Account Status</label>
-                            <select class="form-control" id="account_status">
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group col-4">
+                                <label>Business Unit</label>
+                                <input type="text" class="form-control" id="employee_bunit" readonly>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>Employee Type</label>
+                                <input type="text" class="form-control" id="employee_type" readonly>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Access Section -->
+                    <div class="modal-section">
+                        <div class="modal-section-label">
+                            <i class="fas fa-user-shield"></i> System Access
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label>Role</label>
+                                <select class="form-control" id="role">
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-6">
+                                <label>Account Status</label>
+                                <select class="form-control" id="account_status">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="btnSaveUser">Save</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="btnSaveUser">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1">
         <div class="modal-dialog">

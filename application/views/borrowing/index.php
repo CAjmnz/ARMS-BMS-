@@ -155,13 +155,6 @@
                             <span class="text-muted" id="stagedEmptyMsg">No items added yet.</span>
                         </div>
                     </div>
-                    <!-- Staged item list-->
-                    <div class="form-group">
-                        <label> Item to Borrow <span class="text-danger">*</span></label>
-                        <div id="stagedItemslist" style="border:1px solid #ddd; border-radius:4px; padding:8px; min-height:50px;">
-                            <span class="text-muted" id="stagedEmptyMsg">No Items added yet.</span>
-                        </div>
-                    </div>
 
                     <!-- Purpose -->
                     <div class="form-group">

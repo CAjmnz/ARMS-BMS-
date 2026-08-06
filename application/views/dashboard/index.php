@@ -338,46 +338,19 @@
 
     <!-- Recent Activity -->
     <h2 class="existing-dashboard-title text-center">ACTIVITIES</h2>
-    <div style="background:#fff; border-radius:12px; padding:20px; border:1px solid #e3e6f0;">
-        <h6 style="font-weight:600; margin-bottom:15px;">Recent Activity</h6>
-        <table class="table table-sm table-hover">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Action</th>
-                    <th>Borrower</th>
-                    <th>Item</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($activity)): ?>
-                    <tr>
-                        <td colspan="4" class="text-center text-muted">No recent activity.</td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($activity as $log): ?>
-                        <tr>
-                            <td><?= date('M d, Y h:i A', strtotime($log->action_date)) ?></td>
-                            <td>
-                                <?php
-                                $labels = [
-                                    'borrowed' => '<span class="badge badge-warning">Borrowed</span>',
-                                    'returned' => '<span class="badge badge-primary">Returned</span>',
-                                    'damaged'  => '<span class="badge badge-danger">Damaged</span>',
-                                    'lost'     => '<span class="badge badge-dark">Lost</span>',
-                                ];
-                                echo isset($labels[$log->action_type])
-                                    ? $labels[$log->action_type]
-                                    : ucfirst($log->action_type);
-                                ?>
-                            </td>
-                            <td><?= htmlspecialchars($log->borrower_name) ?></td>
-                            <td><?= htmlspecialchars($log->item_name) ?> #<?= $log->unit_no ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+<div style="background:#fff; border-radius:12px; padding:20px; border:1px solid #e3e6f0;">
+    <h6 style="font-weight:600; margin-bottom:15px;">Recent Activity</h6>
+    <table class="table table-sm table-hover" id="activityTable" width="100%">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Borrower</th>
+                <th>Item</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 </div>

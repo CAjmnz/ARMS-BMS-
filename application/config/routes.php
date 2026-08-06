@@ -115,5 +115,13 @@ $route['summary/borrowed'] = 'summary/borrowed';
 $route['summary/overdue']  = 'summary/overdue';
 $route['summary/available'] = 'summary/available';
 
+//activities log 
+$route['dashboard/activity_ajax_list'] = 'dashboard/activity_ajax_list';
+
+//profile 
+$route['myprofile']                  = 'profile/index';
+$route['myprofile/update_username']  = 'profile/update_username';
+$route['myprofile/update_password']  = 'profile/update_password';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -81,6 +81,70 @@ class Dashboard_model extends CI_Model
 
         return array_slice($all, 0, $limit);
     }
+    // Shared UNION query: every borrow event + every return/damage/lost event, combined
+private function _activity_union_sql()
+{
+    return "
+        (SELECT 'borrowed' AS action_type, b.date_released AS action_date,
+                b.borrower_name AS borrower_name, i.item_name AS item_name, iz.unit_no AS unit_no
+         FROM borrowing_items bi
+         JOIN borrowings b ON b.id = bi.borrowing_id
+         JOIN itemized iz ON iz.id = bi.unit_id
+         JOIN items i ON i.id = iz.item_id
+         WHERE b.date_released IS NOT NULL)
+        UNION ALL
+        (SELECT bi.item_status AS action_type, bi.date_returned AS action_date,
+                b.borrower_name AS borrower_name, i.item_name AS item_name, iz.unit_no AS unit_no
+         FROM borrowing_items bi
+         JOIN borrowings b ON b.id = bi.borrowing_id
+         JOIN itemized iz ON iz.id = bi.unit_id
+         JOIN items i ON i.id = iz.item_id
+         WHERE bi.item_status != 'borrowed' AND bi.date_returned IS NOT NULL)
+    ";
+}
+
+public function count_activity_total()
+{
+    $sql = "SELECT COUNT(*) as total FROM (" . $this->_activity_union_sql() . ") AS activity_log";
+    $query = $this->db->query($sql);
+    return (int) $query->row()->total;
+}
+
+public function count_activity_filtered($search = '')
+{
+    $sql = "SELECT COUNT(*) as total FROM (" . $this->_activity_union_sql() . ") AS activity_log";
+    $params = [];
+
+    if (!empty($search)) {
+        $sql .= " WHERE borrower_name LIKE ? OR item_name LIKE ? OR action_type LIKE ?";
+        $like = '%' . $search . '%';
+        $params = [$like, $like, $like];
+    }
+
+    $query = $this->db->query($sql, $params);
+    return (int) $query->row()->total;
+}
+
+public function get_activity_datatables($limit, $start, $search = '', $order_col = 0, $order_dir = 'desc')
+{
+    $columns = [0 => 'action_date', 1 => 'action_type', 2 => 'borrower_name', 3 => 'item_name'];
+    $col = $columns[$order_col] ?? 'action_date';
+    $dir = strtolower($order_dir) === 'asc' ? 'ASC' : 'DESC';
+
+    $sql = "SELECT * FROM (" . $this->_activity_union_sql() . ") AS activity_log";
+    $params = [];
+
+    if (!empty($search)) {
+        $sql .= " WHERE borrower_name LIKE ? OR item_name LIKE ? OR action_type LIKE ?";
+        $like = '%' . $search . '%';
+        $params = [$like, $like, $like];
+    }
+
+    $sql .= " ORDER BY {$col} {$dir} LIMIT {$limit} OFFSET {$start}";
+
+    $query = $this->db->query($sql, $params);
+    return $query->result();
+}
 
     // ─── Chart: Items by Category ──────────────────────
     public function get_category_breakdown()
