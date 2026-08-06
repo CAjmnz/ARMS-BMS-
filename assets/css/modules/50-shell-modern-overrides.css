@@ -134,17 +134,22 @@ body {
     color: #ffffff;
 }
 
-.sidebar-link.active {
+.sidebar-link.active,
+.sidebar-accordion-toggle.active,
+.sidebar-accordion-toggle.active:focus,
+.sidebar-accordion-toggle.active:hover {
     background:
-        linear-gradient(90deg, rgba(161, 255, 124, 0.527), rgba(255, 255, 255, 0.06)) !important;
+        linear-gradient(90deg, rgba(171, 216, 154, 0.55), rgba(255, 255, 255, 0.07)) !important;
     color: #ffffff !important;
+    text-decoration: none !important;
     box-shadow:
         inset 3px 0 0 var(--sidebar-active-line),
-        0 8px 20px rgba(3, 45, 33, 0.16);
+        0 8px 20px rgba(3, 45, 33, 0.18) !important;
 }
 
-.sidebar-link.active i {
-    color: #bdf5d7;
+.sidebar-link.active i,
+.sidebar-accordion-toggle.active i {
+    color: #bdf5d7 !important;
 }
 .brand-copy {
     min-width: 0;
@@ -198,8 +203,30 @@ body {
 
 .sidebar-sublink:hover,
 .sidebar-sublink.active {
-    background: rgba(255, 255, 255, 0.055) !important;
+    background: rgba(255, 255, 255, 0.10) !important;
     color: #ffffff !important;
+    font-weight: 600;
+}
+
+.sidebar-sublink.active::before {
+    background: #93c970;
+}
+
+.sidebar-accordion-toggle .chevron {
+    margin-left: auto;
+    transition: transform 0.22s ease;
+    color: rgba(223, 247, 235, 0.58);
+}
+sidebar-accordion-toggle:not(.collapsed) .chevron,
+.sidebar-accordion-toggle.active .chevron {
+    transform: rotate(180deg);
+    color: #bdf5d7;
+}
+
+/* Make sure the accordion button itself never has Bootstrap’s default blue focus ring */
+.sidebar-accordion-toggle:focus {
+    box-shadow: none !important;
+    outline: none !important;
 }
 
 .chevron {
