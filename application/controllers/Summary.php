@@ -20,16 +20,21 @@ class Summary extends CI_Controller
 
         $data['title']      = 'Total Items - ARMS-BMS';
         $data['page_label'] = 'Summary — Total Items';
-        $data['total_units'] = $this->Itemized_model->count_total();
-        $data['status_breakdown'] = $this->Itemized_model->get_status_breakdown();
+        $data['total_items'] = $this->Item_model->count_total();
+        $data['status_breakdown'] = $this->Item_model->get_status_breakdown();
 
         $this->load->view('summary/items', $data);
     }
 
     public function units()
     {
+        $this->load->model('Itemized_model');
+
         $data['title']      = 'Total Units - ARMS-BMS';
         $data['page_label'] = 'Summary — Total Units';
+        $data['total_units'] = $this->Itemized_model->count_total();
+        $data['status_breakdown'] = $this->Itemized_model->get_status_breakdown();
+        
         $this->load->view('summary/units', $data);
     }
 

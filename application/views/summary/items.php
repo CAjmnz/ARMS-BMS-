@@ -13,9 +13,9 @@
     <!-- Metric Card -->
     <div class="row mb-4">
         <div class="col-md-3">
-            <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #4299e1;">
-                <div style="font-size:12px; color:#888;">Total Units</div>
-                <div style="font-size:28px; font-weight:700;"><?= $total_units ?></div>
+            <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #f6ad55;">
+                <div style="font-size:12px; color:#888;">Total Items</div>
+                <div style="font-size:28px; font-weight:700;"><?= $total_items ?></div>
             </div>
         </div>
     </div>

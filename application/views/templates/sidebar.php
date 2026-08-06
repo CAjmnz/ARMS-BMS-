@@ -19,9 +19,7 @@ $borrowingMonitoringActive = in_array(
                 alt="ARMS-BMS Logo"
             >
                     <span class="brand-copy">
-                        <strong>ALTURAS</strong>
-                        <br>
-                        <small1>Records Management</small1>
+                        <strong>A.R.M.S</strong>
                         <br>
                         <small2>Borrowing Management</small2>
                     </span>

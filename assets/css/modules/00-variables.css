@@ -1,20 +1,33 @@
-:root {
-    /* Main green palette */
-    --green-950: #063b2d;
-    --green-900: #07513c;
-    --green-800: #086a4d;
-    --green-700: #0a865e;
-    --green-600: #10a66f;
-    --green-500: #25bd7e;
-    --green-100: #dff7eb;
-    --green-50: #effaf4;
+/* =========================================================
+   VARIABLES
+   Root CSS custom properties used across every stylesheet.
+   Load this file FIRST, before any other CSS file.
+
+   Palette source: #778873 (sage), #A1BC98 (light sage),
+   #DCCFC0 (warm tan), #FDF6ED (cream)
+   ========================================================= */
+
+   :root {
+    /* Main sage/green palette — dark to light */
+    --green-950: #4b5f45;
+    --green-900: #607456;
+    --green-800: #6f8267;
+    --green-700: #778873;
+    --green-600: #8ca283;
+    --green-500: #a1bc98;
+    --green-100: #e6ede2;
+    --green-50: #f5f1e8;
 
     /* General colors */
-    --ink: #18322b;
-    --muted: #71837d;
-    --line: #e1ebe6;
+    --ink: #3a3f33;
+    --muted: #7d8574;
+    --line: #e5ddd0;
     --surface: #ffffff;
-    --canvas: #f3f7f5;
+    --canvas: #fdf6ed;
+
+    /* Accent (warm tan, for subtle highlights/dividers) */
+    --accent-tan: #dccfc0;
+    --accent-cream: #fdf6ed;
 
     /* Dashboard aliases */
     --dashboard-green-dark: var(--green-900);
@@ -32,16 +45,15 @@
     --topbar-height: 90px;
 
     /* Sidebar */
-    --sidebar-bg-start: #07513c;
-    --sidebar-bg-end: #063b2d;
-    --sidebar-text: rgba(239, 250, 244, 0.72);
+    --sidebar-bg-start: #607456;
+    --sidebar-bg-end: #4d5a49;
+    --sidebar-text: rgba(253, 246, 237, 0.72);
     --sidebar-text-strong: #ffffff;
-    --sidebar-hover: rgba(255, 255, 255, 0.07);
-    --sidebar-active: rgba(37, 189, 126, 0.18);
-    --sidebar-active-line: #5ee0a4;
+    --sidebar-hover: rgba(255, 255, 255, 0.08);
+    --sidebar-active: rgba(161, 188, 152, 0.22);
+    --sidebar-active-line: #a1bc98;
 
     /* Shadows */
-    --topbar-shadow: 0 1px 0 rgba(6, 59, 45, 0.08);
-    --soft-shadow: 0 14px 35px rgba(6, 59, 45, 0.08);
+    --topbar-shadow: 0 1px 0 rgba(77, 90, 73, 0.08);
+    --soft-shadow: 0 14px 35px rgba(77, 90, 73, 0.10);
 }
-

@@ -5,71 +5,71 @@
 
     <!-- Hero Welcome Card -->
     <?php
-$username = $this->session->userdata('username');
+    $username = $this->session->userdata('username');
 
-if (!$username) {
-    $username = 'Admin';
-}
+    if (!$username) {
+        $username = 'Admin';
+    }
 
-$current_hour = (int) date('H');
+    $current_hour = (int) date('H');
 
-if ($current_hour < 12) {
-    $greeting = 'morning';
-} elseif ($current_hour < 18) {
-    $greeting = 'afternoon';
-} else {
-    $greeting = 'evening';
-}
-?>
+    if ($current_hour < 12) {
+        $greeting = 'morning';
+    } elseif ($current_hour < 18) {
+        $greeting = 'afternoon';
+    } else {
+        $greeting = 'evening';
+    }
+    ?>
 
-<div id="armsWelcomeCard">
-    <div class="decorative-circle circle-one"></div>
-    <div class="decorative-circle circle-two"></div>
-    <div class="decorative-circle circle-three"></div>
+    <div id="armsWelcomeCard">
+        <div class="decorative-circle circle-one"></div>
+        <div class="decorative-circle circle-two"></div>
+        <div class="decorative-circle circle-three"></div>
 
-    <div class="welcome-content">
-        <span class="workspace-badge">
-            ARMS-BMS Workspace
-        </span>
-
-        <h3 class="welcome-title">
-            Good <?php echo $greeting; ?>,
-            <?php echo htmlspecialchars(
-                $username,
-                ENT_QUOTES,
-                'UTF-8'
-            ); ?>.
-        </h3>
-        <h3>BORROWING MANAGEMENT SYSTEM</h3>
-        
-
-        <p class="welcome-description">
-           A submodule of the Alturas Record Management System
-        </p>
-
-        <div class="last-login">
-            <span class="status-dot"></span>
-
-            <span>
-                Last login:
-                <strong>First login in this session</strong>
+        <div class="welcome-content">
+            <span class="workspace-badge">
+                ARMS-BMS Workspace
             </span>
+
+            <h3 class="welcome-title">
+                Good <?php echo $greeting; ?>,
+                <?php echo htmlspecialchars(
+                    $username,
+                    ENT_QUOTES,
+                    'UTF-8'
+                ); ?>.
+            </h3>
+            <h3>BORROWING MANAGEMENT SYSTEM</h3>
+
+
+            <p class="welcome-description">
+                A submodule of the Alturas Record Management System
+            </p>
+
+            <div class="last-login">
+                <span class="status-dot"></span>
+
+                <span>
+                    Last login:
+                    <strong>First login in this session</strong>
+                </span>
+            </div>
+        </div>
+
+        <div class="welcome-illustration" aria-hidden="true">
+            <div class="folder-back"></div>
+            <div class="welcome-paper"></div>
+            <div class="welcome-paper paper-second"></div>
+            <div class="welcome-paper paper-main"></div>
+            <div class="folder-front"></div>
         </div>
     </div>
-
-    <div class="welcome-illustration" aria-hidden="true">
-        <div class="folder-back"></div>
-        <div class="welcome-paper"></div>
-        <div class="welcome-paper paper-second"></div>
-        <div class="welcome-paper paper-main"></div>
-        <div class="folder-front"></div>
-    </div>
-</div>
 
     <!-- Summary Cards -->
     <h2 class="existing-dashboard-title text-center">CARDS</h2>
     <div class="row mb-4">
-        <div class="col-md-3 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="<?= base_url('summary/items') ?>" style="text-decoration:none; color:inherit;">
                 <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #f6ad55; display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
                     <div style="display:flex; gap:12px;">
@@ -87,7 +87,7 @@ if ($current_hour < 12) {
             </a>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="<?= base_url('summary/units') ?>" style="text-decoration:none; color:inherit;">
                 <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #4299e1; display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
                     <div style="display:flex; gap:12px;">
@@ -105,7 +105,7 @@ if ($current_hour < 12) {
             </a>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="<?= base_url('summary/borrowed') ?>" style="text-decoration:none; color:inherit;">
                 <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #48bb78; display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
                     <div style="display:flex; gap:12px;">
@@ -123,7 +123,7 @@ if ($current_hour < 12) {
             </a>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="<?= base_url('summary/overdue') ?>" style="text-decoration:none; color:inherit;">
                 <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #e53e3e; display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
                     <div style="display:flex; gap:12px;">
@@ -140,25 +140,43 @@ if ($current_hour < 12) {
                 </div>
             </a>
         </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <a href="<?= base_url('summary/available') ?>" style="text-decoration:none; color:inherit;">
-            <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid #48bb78; display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
-                <div style="display:flex; gap:12px;">
-                    <div style="width:38px; height:38px; border-radius:10px; background:#e6f9ee; color:#2f855a; display:flex; align-items:center; justify-content:center;">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <div>
-                        <div style="font-size:12px; color:#888;">Available Items</div>
-                        <div style="font-size:22px; font-weight:700;"><?= $summary['available_units'] ?></div>
-                        <div style="font-size:11px; color:#aaa;">View All</div>
-                    </div>
-                </div>
-                <i class="fas fa-arrow-right" style="color:#ccc; margin-top:6px;"></i>
-            </div>
-        </a>
-    </div>
 
+        <div class="col-md-2 mb-3">
+            <a href="<?= base_url('summary/available') ?>" style="text-decoration:none; color:inherit;">
+                <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid rgb(88, 32, 190); display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
+                    <div style="display:flex; gap:12px;">
+                        <div style="width:38px; height:38px; border-radius:10px; background:rgb(214, 192, 255); color:rgb(99, 19, 247); display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:12px; color:#888;">Available Items</div>
+                            <div style="font-size:22px; font-weight:700;"><?= $summary['available_units'] ?></div>
+                            <div style="font-size:11px; color:#aaa;">View All</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-right" style="color:#ccc; margin-top:6px;"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-2 mb-3">
+            <a href="<?= base_url('summary/available') ?>" style="text-decoration:none; color:inherit;">
+                <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid rgb(236, 176, 12); display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
+                    <div style="display:flex; gap:12px;">
+                        <div style="width:38px; height:38px; border-radius:10px; background:rgba(243, 199, 133, 0.69); color:rgb(211, 153, 5); display:flex; align-items:center; justify-content:center;">
+                         <i class="bi bi-file-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:12px; color:#888;">Available Items</div>
+                            <div style="font-size:22px; font-weight:700;"><?= $summary['available_units'] ?></div>
+                            <div style="font-size:11px; color:#aaa;">View All</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-right" style="color:#ccc; margin-top:6px;"></i>
+                </div>
+            </a>
+        </div>
+    </div>
 
     <!-- Charts -->
     <h2 class="dashboard-page-title text-center">ANALYTICS</h2>

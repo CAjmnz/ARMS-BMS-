@@ -11,6 +11,8 @@ $(document).ready(function () {
         '#5a5c69'
     ];
 
+    
+
     var categoryCanvas = document.getElementById('categoryChart');
 
     if (categoryCanvas) {
@@ -52,7 +54,7 @@ $(document).ready(function () {
                         datasets: [{
                             label: 'Borrowings',
                             data: res.values,
-                            backgroundColor: '#10a66f',
+                            backgroundColor: '#10a66f' ,
                             borderColor: '#086a4d',
                             borderWidth: 1
                         }]
