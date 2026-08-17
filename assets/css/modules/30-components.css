@@ -192,4 +192,22 @@
     height: 20px;
     color: #000;
 }
-/* ─────────────────────────────────────────────
+/* ───────────────────────────────────────────── */
+
+.doc-actions-toggle {
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid #dce8e2;
+    border-radius: 999px;
+    background: #fff;
+    color: #526660;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.doc-actions-toggle:hover {
+    border-color: #b9cec5;
+    background: #f7faf8;
+    color: #275d4c;
+}

@@ -25,11 +25,17 @@
     overflow: hidden;
 }
 
+/* Modal backdrop – green tint + real blur */
 .modal-backdrop {
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    background-color: rgba(20, 40, 25, 0.55) !important;   /* greenish tint + transparency */
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    opacity: 1 !important;                                  /* must stay 1 */
 }
 
+.modal-backdrop.show {
+    opacity: 1 !important;
+}
 /* ---------- Modal shell ---------- */
 
 .modal-content {

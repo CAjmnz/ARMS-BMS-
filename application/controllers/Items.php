@@ -228,7 +228,7 @@ public function delete($id)
             // Action dropdown
             $action = '
             <div class="dropdown">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                <button class="doc-actions-toggle" type="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bi bi-three-dots-vertical"></i>
                 </button>
