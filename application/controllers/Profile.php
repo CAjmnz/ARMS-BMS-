@@ -22,10 +22,13 @@ class Profile extends CI_Controller
         if (!$user) {
             redirect('auth');
         }
+        $this->load->model('System_user_model');//only if not already loaded elsewhere
+        $employee = $this->Profile_model->get_employee_by_username($user->username);
 
         $data['title']      = 'My Profile - ARMS-BMS';
         $data['page_label'] = 'My Profile';
         $data['user']       = $user;
+        $data['employee']   = $employee;//FALSE/null if not matching system_users row 
 
         $this->load->view('profile/index', $data);
     }

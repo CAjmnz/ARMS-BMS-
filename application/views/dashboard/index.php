@@ -142,15 +142,15 @@
         </div>
 
         <div class="col-md-2 mb-3">
-            <a href="<?= base_url('summary/available') ?>" style="text-decoration:none; color:inherit;">
+            <a href="<?= base_url('reservation') ?>" style="text-decoration:none; color:inherit;">
                 <div style="background:#fff; border-radius:12px; padding:18px; border:1px solid #e3e6f0; border-top:3px solid rgb(88, 32, 190); display:flex; justify-content:space-between; align-items:flex-start; height:100%;">
                     <div style="display:flex; gap:12px;">
                         <div style="width:38px; height:38px; border-radius:10px; background:rgb(214, 192, 255); color:rgb(99, 19, 247); display:flex; align-items:center; justify-content:center;">
                             <i class="fas fa-box-open"></i>
                         </div>
                         <div>
-                            <div style="font-size:12px; color:#888;">Available Items</div>
-                            <div style="font-size:22px; font-weight:700;"><?= $summary['available_units'] ?></div>
+                            <div style="font-size:12px; color:#888;">Reservation</div>
+                            <div style="font-size:22px; font-weight:700;"><?= $summary['reserved_units'] ?></div>
                             <div style="font-size:11px; color:#aaa;">View All</div>
                         </div>
                     </div>

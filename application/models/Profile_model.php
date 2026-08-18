@@ -27,4 +27,12 @@ class Profile_model extends CI_Model
     {
         return $this->db->where('id', $id)->update($this->table, ['password' => $hashed_password]);
     }
+    // Get the full employee record from system_users, matched by username = employee_id
+    public function get_employee_by_username($username)
+    {
+        return $this->db
+            ->where('employee_id', $username)
+            ->get('system_users')
+            ->row();
+    }
 }
